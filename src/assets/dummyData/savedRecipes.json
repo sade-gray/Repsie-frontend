@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Pineapple Pizza",
+    "imageUrl":"https://i.kinja-img.com/gawker-media/image/upload/c_fit,f_auto,g_center,q_60,w_1315/7762e80e80346b5d41abe2c65e2cf482.jpg",
+    "publisher": {
+      "name": "Obviously Sadé",
+      "publisherImageUrl": "https://characterai.io/i/300/static/avatars/uploaded/2023/2/23/Rjy8Hc5B6Asr7ihZblJTW_M8B62YrO4VN-gN7Z0qw34.webp"
+    }
+  },
+  {
+    "title": "Mario's Burger",
+    "imageUrl": "/src/assets/dummyPhotos/goodBurger.jpeg",
+    "publisher": {
+      "name": "Lario Master Chef",
+      "mageUrl": "/src/assets/dummyPhotos/spongeBaller.jpeg"
+    }
+  },
+  {
+    "title": "The Shabster Lobster",
+    "imageUrl": "/src/assets/dummyPhotos/shabsterLobster.jpg",
+    "publisher":{
+      "name": "The Shabster Cook",
+      "imageUrl": "/src/assets/dummyPhotos/monke.png"
+    }
+  }
+]
