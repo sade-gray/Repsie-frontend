@@ -18,6 +18,7 @@ export const serialize = (node: Node): string => {
 
     const children = node.children?.map((n) => serialize(n)).join("");
 
+    // @ts-ignore
     switch (node.type) {
         case "heading-one":
             return `<h1>${children}</h1>`;

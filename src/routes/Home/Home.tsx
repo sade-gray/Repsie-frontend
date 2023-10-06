@@ -11,7 +11,7 @@ export default function Home() {
                     <SavedRecipesContainer />
                 </section>
                 <section className={"recipes--feed--container"}>
-                    <h1>Recipes for you</h1>
+                    <h1>Recipes for your mom</h1>
                     {/* TODO: Make a list */}
                     <FeedRecipeCard title={"Gourmet Toastie"}
                                     imageUrl={GourmetToastie}

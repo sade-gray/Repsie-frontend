@@ -175,6 +175,7 @@ const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
     const isList = LIST_TYPES.includes(format);
 
     Transforms.unwrapNodes(editor, {
+        // @ts-ignore
         match: (n) => LIST_TYPES.includes(n.type),
         split: true,
     });
@@ -201,6 +202,7 @@ const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
 
 const isBlockActive = (editor: BaseEditor & ReactEditor, format: string) => {
     const [match] = Editor.nodes(editor, {
+        // @ts-ignore
         match: (n) => n.type === format,
     });
 
@@ -208,7 +210,7 @@ const isBlockActive = (editor: BaseEditor & ReactEditor, format: string) => {
 };
 
 const isMarkActive = (editor: BaseEditor & ReactEditor, format: string) => {
-    const marks = Editor.marks(editor);
+    const marks: any = Editor.marks(editor);
     return marks ? marks[format] === true : false;
 };
 
