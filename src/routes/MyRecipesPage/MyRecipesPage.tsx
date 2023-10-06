@@ -1,7 +1,8 @@
 import SavedRecipesContainer from "../../components/SavedRecipesContainer";
 import savedRecipes from "../../assets/dummyData/savedRecipes.json";
 import {useEffect, useState} from "react"
-import CreateRecipeButton from "../../components/CreateRecipeButton";
+import CreateRecipeButton from "./Components/CreateRecipeButton";
+import { Button, Chip } from "@mui/material";
 
 export default function MyRecipesPage() {
     const [myRecipesComponents, setMyRecipesComponents]: any = useState();
@@ -9,9 +10,11 @@ export default function MyRecipesPage() {
     useEffect(() => {
         setMyRecipesComponents(savedRecipes.map((recipe: any) => {
             return (
-                <div key={recipe['id']} className="my--recipe--item" style={{backgroundImage: `url(${recipe.imageUrl}`}}>
-                    <span className="my--recipe--item--title">{recipe.title}</span>
-                </div>
+                <Button>
+                    <div key={recipe['id']} className="my--recipe--item" style={{backgroundImage: `url(${recipe.imageUrl}`}}>
+                        <Chip label={recipe.title} variant="filled" color="secondary"/>
+                    </div>
+                </Button>
             )
         }))
         setMyRecipesComponents((prevRecipeComponents: Element[]) => {
