@@ -1,6 +1,7 @@
 import {Button, TextField, Typography} from "@mui/material";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext.tsx";
+import {redirect, useNavigate} from "react-router-dom";
 
 export default function SignUpForm() {
     const [email, setEmail] = useState("")
@@ -9,10 +10,12 @@ export default function SignUpForm() {
     // TODO: Add type.
     const { emailSignUp }: any = useAuth();
 
+    const navigate = useNavigate();
     const handleFormSubmit = (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
         emailSignUp(email, password);
+        navigate("/");
     }
 
     return (
