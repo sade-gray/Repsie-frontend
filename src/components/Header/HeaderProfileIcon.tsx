@@ -7,7 +7,7 @@ import { ListItemIcon } from "@mui/material";
 import {useAuth} from "../../contexts/AuthContext.tsx";
 
 export default function HeaderProfileIcon() {
-    const { user, signOut } = useAuth();
+    const { user, signOut }: any = useAuth();
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
     const handleLogoutClick = () => {
@@ -66,7 +66,8 @@ export default function HeaderProfileIcon() {
                             </Typography>
                         </MenuItem>
                     </Link>
-                    {user && <>
+                    {user &&
+                    <section>
                         <Divider />
                         <Link to="/myRecipes">
                             <MenuItem>
@@ -81,7 +82,7 @@ export default function HeaderProfileIcon() {
                                 </ListItemIcon>
                                     <Typography color="text">Logout</Typography>
                         </MenuItem>
-                    </>
+                    </section>
                     }
                     {!user && <>
                         <MenuItem>

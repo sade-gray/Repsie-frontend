@@ -1,7 +1,7 @@
 import {Button, TextField, Typography} from "@mui/material";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext.tsx";
-import {redirect, useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpForm() {
     const [email, setEmail] = useState("")
