@@ -54,33 +54,6 @@ const initialValue = [
 
 export default function CreateRecipePage() {
     const [value, setValue] = useState<Descendant[]>(initialValue);
-
-    const handleSaveRecipe = async () => {
-        try {
-            const response = await fetch("http://localhost:8000/recipes", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title: "Pasta",
-                    imageUrl: "./",
-                    publisher: {
-                        name: "Patriks",
-                        iconUrl: monke,
-                    },
-                    recipe: JSON.stringify(value),
-                    timeRating: 2,
-                    skillRating: 1,
-                }),
-            });
-
-            const result = await response.json();
-            console.log("Success:", result);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
     const [editor] = useState(() => withReact(withHistory(createEditor())));
     // This is the logic for rendering every node according to its type
     const renderElement = useCallback((props: any) => <Element {...props} />, []);
@@ -160,8 +133,7 @@ export default function CreateRecipePage() {
                         type='submit'
                         variant='contained'
                         size='large'
-                        startIcon={<Save />}
-                        onClick={handleSaveRecipe}>
+                        startIcon={<Save />}>
                         Save
                     </Button>
                 </div>
