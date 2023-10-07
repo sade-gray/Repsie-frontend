@@ -11,6 +11,7 @@ export default function SignUpForm() {
     const { emailSignUp }: any = useAuth();
 
     const navigate = useNavigate();
+    // TODO: Redirect only if succesful.
     const handleFormSubmit = (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
@@ -27,6 +28,7 @@ export default function SignUpForm() {
                        onChange={(e) => setEmail(e.target.value)}
                        value={email}
                        placeholder={"masterchef@gmail.com"}
+                       type={"email"}
                        variant={"filled"}
                        margin={"normal"}
                        sx={{display: "block"}}
@@ -38,6 +40,7 @@ export default function SignUpForm() {
                        label={"Password"}
                        variant={"filled"}
                        margin={"normal"}
+                       type={"password"}
             />
             <Button disabled={false} sx={{display: " block"}}
                     size={"large"}
