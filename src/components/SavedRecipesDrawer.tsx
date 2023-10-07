@@ -2,8 +2,8 @@ import {
     SwipeableDrawer,
     Box
 } from "@mui/material";
-import {useContext} from "react";
-import {DrawerContext} from "./Root.tsx";
+import { useContext } from "react";
+import { DrawerContext } from "../contexts/DrawerContext.tsx";
 import SavedRecipesContainer from "./SavedRecipesContainer.tsx";
 
 interface Props {
