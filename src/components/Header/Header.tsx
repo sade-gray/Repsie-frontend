@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {DrawerContext} from "../Root.tsx";
+import {DrawerContext} from "../../contexts/DrawerContext.tsx";
 import {useTheme, useMediaQuery} from "@mui/material";
 import {HeaderSearchBox} from "./HeaderSearchBox.tsx";
 import HeaderLogo from "./HeaderLogo.tsx";

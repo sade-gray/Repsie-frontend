@@ -7,6 +7,7 @@ import Wex from "../../assets/wex.png"
 export default function RecipePage() {
     return (
         <main className={"recipe--page"}>
+
             <div className={"recipe--container"}>
                 <h1 className={"recipe--page--title"}>Gooey Mac & Cheese</h1>
                 <img className={"recipe--image"}

@@ -4,10 +4,15 @@ import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { RestaurantMenuOutlined, Logout } from "@mui/icons-material";
 import { ListItemIcon } from "@mui/material";
+import {useAuth} from "../../contexts/AuthContext.tsx";
 
 export default function HeaderProfileIcon() {
+    const { user, signOut } = useAuth();
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
+    const handleLogoutClick = () => {
+        signOut();
+    }
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -53,26 +58,39 @@ export default function HeaderProfileIcon() {
                         }}
                     }
                 >
-                    <Link to="/">
+                    <Link to={user ? "/": "/signUp"}>
                         <MenuItem>
                             <Avatar sx={{ width: "35px", height: "35px"}}/>
-                            <Typography color="text">Profile</Typography>
+                            <Typography color="text">
+                                {user ? "Profile" : "Sign up"}
+                            </Typography>
                         </MenuItem>
                     </Link>
-                    <Divider />
-                    <Link to="/myRecipes">
+                    {user && <>
+                        <Divider />
+                        <Link to="/myRecipes">
+                            <MenuItem>
+                                    <RestaurantMenuOutlined sx={{width: "35px", height: "35px", mr:1}} color="secondary"/>
+                                    <Typography color="text">My Recipes</Typography>
+                            </MenuItem>
+                        </Link>
+                        <Divider />
+                        <MenuItem onClick={handleLogoutClick}>
+                                <ListItemIcon>
+                                    <Logout sx={{width: "35px", height: "35px", mr:1}} color="secondary" />
+                                </ListItemIcon>
+                                    <Typography color="text">Logout</Typography>
+                        </MenuItem>
+                    </>
+                    }
+                    {!user && <>
                         <MenuItem>
-                                <RestaurantMenuOutlined sx={{width: "35px", height: "35px", mr:1}} color="secondary"/>
-                                <Typography color="text">My Recipes</Typography>
+                            <ListItemIcon>
+
+                            </ListItemIcon>
                         </MenuItem>
-                    </Link>
-                    <Divider />
-                    <MenuItem>
-                        <ListItemIcon>
-                            <Logout sx={{width: "35px", height: "35px", mr:1}} color="secondary" />
-                        </ListItemIcon>
-                        <Typography color="text">Logout</Typography>
-                    </MenuItem>
+                    </>
+                    }
                 </Menu>
         </div>
     )
