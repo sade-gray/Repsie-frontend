@@ -2,7 +2,7 @@ import {
     SwipeableDrawer,
     Box
 } from "@mui/material";
-import { useDrawerContext } from "../contexts/DrawerContext.tsx";
+import { useDrawer } from "../contexts/DrawerContext.tsx";
 import SavedRecipesContainer from "./SavedRecipesContainer.tsx";
 
 interface Props {
@@ -19,7 +19,7 @@ export default function SavedRecipesDrawer(props: Props) {
     // The logic for turning the saved recipes data into react components
 
     // TODO: Add specific type to this context
-    const {drawerOpen, setDrawerOpen}: any = useDrawerContext();
+    const {drawerOpen, setDrawerOpen}: any = useDrawer();
     const handleDrawerToggle = () => {setDrawerOpen(!drawerOpen)}
 
     const container = window !== undefined ? () => window().document.body : undefined;
