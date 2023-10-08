@@ -11,12 +11,15 @@ export default function SignUpForm() {
     const { emailSignUp }: any = useAuth();
 
     const navigate = useNavigate();
-    // TODO: Redirect only if succesful.
+    // TODO: Redirect only if successful.
     const handleFormSubmit = (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
-        emailSignUp(email, password);
-        navigate("/");
+        if (emailSignUp(email, password)) {
+            console.log("Invalid credentials")
+        } else {
+            navigate("/");
+        }
     }
 
     return (

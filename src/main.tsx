@@ -10,11 +10,17 @@ import MyRecipesPage from "./routes/MyRecipesPage/MyRecipesPage.tsx";
 import RouteNotFound from "./routes/404Route/RouteNotFound.tsx";
 import SignUp from "./routes/SignUp/SignUp.tsx";
 import {AuthProvider} from "./contexts/AuthContext.tsx";
+import SignIn from "./routes/SignIn/SignIn.tsx";
+import SnackBarProvider from "./contexts/SnackBarContext.tsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <AuthProvider><Root /></AuthProvider>,
+        element: <SnackBarProvider>
+                    <AuthProvider>
+                        <Root />
+                    </AuthProvider>
+                </SnackBarProvider>,
         children: [
             {
                 path: "/",
