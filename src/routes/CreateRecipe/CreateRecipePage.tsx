@@ -44,20 +44,23 @@ export default function CreateRecipePage() {
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
+                            paddingY: 2,
                             gap: "1rem",
+                            border: "dashed 2px",
+                            borderColor: "secondary.main",
                         }}>
                         <Button
                             variant='contained'
                             color='secondary'
                             component='label'
                             startIcon={<FileUpload />}>
+                            Select Image
                             <input
                                 hidden
                                 accept='image/*'
                                 type='file'
                                 onChange={handleFileUpload}
                             />
-                            Upload Image
                         </Button>
                         {imageUrl && <img src={imageUrl} alt='Uploaded Image' height='300' />}
                     </Box>
