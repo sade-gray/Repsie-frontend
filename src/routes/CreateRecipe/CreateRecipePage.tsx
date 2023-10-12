@@ -1,11 +1,21 @@
-import {Box, Button, Rating, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    IconContainerProps,
+    Rating,
+    TextField,
+    Typography,
+    styled,
+} from "@mui/material";
 import Editor from "./components/Editor";
 import "./styles.scss";
-import {ChangeEvent, useState} from "react";
-import {FileUpload} from "@mui/icons-material";
+import {ChangeEvent, useEffect, useState} from "react";
+import {AccessTime, Create, FileUpload, LocalDining} from "@mui/icons-material";
 
 export default function CreateRecipePage() {
-    const [ratingValue, setRatingValue] = useState<number | null>(2);
+    const [skillRatingValue, setSkillRatingValue] = useState<number | null>(2);
+    const [timeRatingValue, setTimeRatingValue] = useState<number | null>(2);
+    const [colour, setColour] = useState<"success" | "error" | "warning" | "disabled">("disabled");
     const [imageUrl, setImageUrl] = useState<string>("");
 
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -19,13 +29,73 @@ export default function CreateRecipePage() {
 
         reader.readAsDataURL(file[0]);
     };
+
+    function changeColour(value?: number) {
+        setColour(() => {
+            console.log(value);
+            let colour = !value || value === -1 ? skillRatingValue : value;
+            switch (colour) {
+                case 1:
+                    return "success";
+                case 2:
+                    return "success";
+                case 3:
+                    return "warning";
+                case 4:
+                    return "error";
+                case 5:
+                    return "error";
+                default:
+                    return "disabled";
+            }
+        });
+    }
+
+    useEffect(() => {
+        changeColour();
+    }, [skillRatingValue]);
+
+    const customIcons: {
+        [index: string]: {
+            icon: React.ReactElement;
+        };
+    } = {
+        1: {
+            icon: <LocalDining color={colour} fontSize='large' />,
+        },
+        2: {
+            icon: <LocalDining color={colour} fontSize='large' />,
+        },
+        3: {
+            icon: <LocalDining color={colour} fontSize='large' />,
+        },
+        4: {
+            icon: <LocalDining color={colour} fontSize='large' />,
+        },
+        5: {
+            icon: <LocalDining color={colour} fontSize='large' />,
+        },
+    };
+
+    function IconContainer(props: IconContainerProps) {
+        const {value, ...other} = props;
+        return <span {...other}>{customIcons[value].icon}</span>;
+    }
+
+    const StyledRating = styled(Rating)(({theme}) => ({
+        "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
+            color: theme.palette.action.disabled,
+        },
+    }));
+
     return (
         <div className='create--recipe--container'>
             <form>
-                <div className='input--container'>
+                <div className='create--recipe--input--container'>
                     <TextField
                         variant='outlined'
                         label='Recipe title'
+                        name='title'
                         color='secondary'
                         sx={{
                             "& .MuiOutlinedInput-root": {
@@ -37,7 +107,7 @@ export default function CreateRecipePage() {
                             "& .MuiOutlinedInput-root:hover": {
                                 "& > fieldset": {borderColor: "secondary.main"},
                             },
-                            marginBottom: 2,
+                            marginBottom: "2rem",
                         }}></TextField>
                     <Box
                         sx={{
@@ -65,21 +135,53 @@ export default function CreateRecipePage() {
                         {imageUrl && <img src={imageUrl} alt='Uploaded Image' height='300' />}
                     </Box>
                 </div>
-                <div className='editor--container'>
-                    <Editor inital='Method' />
-                    <Editor inital='Ingredients' />
+                <div className='create--recipe--editor--container'>
+                    <Editor inital='' />
                 </div>
                 <Box>
-                    <Typography color='text'>Difficulty</Typography>
-                    <Rating
-                        value={ratingValue}
-                        name='difficulty-rating'
-                        size='large'
-                        onChange={(e, newValue) => {
-                            e.preventDefault();
-                            setRatingValue(newValue);
-                        }}
-                    />
+                    <div className='create--recipe--rating--container'>
+                        <div>
+                            <Typography color='text'>Time rating</Typography>
+                            <StyledRating
+                                value={timeRatingValue}
+                                name='time-rating'
+                                size='large'
+                                icon={<AccessTime fontSize='large' color='secondary' />}
+                                emptyIcon={<AccessTime fontSize='large' />}
+                                onChange={(e, newValue) => {
+                                    e.preventDefault();
+                                    setTimeRatingValue(newValue);
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <Typography color='text'>Skill rating</Typography>
+                            <StyledRating
+                                value={skillRatingValue}
+                                name='skill-rating'
+                                IconContainerComponent={IconContainer}
+                                size='large'
+                                onChangeActive={(e, value) => {
+                                    e.preventDefault();
+                                    changeColour(value);
+                                }}
+                                onChange={(e, newValue) => {
+                                    e.preventDefault();
+                                    setSkillRatingValue(newValue);
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className='create--recipe--button--container'>
+                        <Button
+                            color='secondary'
+                            variant='contained'
+                            size='medium'
+                            type='submit'
+                            startIcon={<Create />}>
+                            Create
+                        </Button>
+                    </div>
                 </Box>
             </form>
         </div>
