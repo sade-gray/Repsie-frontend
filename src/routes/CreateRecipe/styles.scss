@@ -50,18 +50,27 @@
     justify-content: center;
 }
 
-.editor--container {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 2rem;
-    margin-bottom: 2rem;
+.create--recipe--editor--container {
+    width: max-content;
+    margin: auto;
 }
 
-.input--container {
+.create--recipe--input--container {
     display: flex;
     justify-content: center;
     flex-direction: column;
     margin-bottom: 2rem;
+}
+
+.create--recipe--rating--container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.create--recipe--button--container {
+    display: flex;
+    justify-content: end;
 }
