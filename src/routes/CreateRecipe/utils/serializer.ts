@@ -1,7 +1,7 @@
 import escapeHtml from "escape-html";
 import {Node, Text} from "slate";
 
-export const serialize = (node: Node): string => {
+const serialize = (node: Node): string => {
     if (Text.isText(node)) {
         let string = escapeHtml(node.text);
         if (node.bold) {
@@ -36,3 +36,5 @@ export const serialize = (node: Node): string => {
             return children;
     }
 };
+
+export const serializeToHtml = (value: Array<Node>) => serialize({children: value});
