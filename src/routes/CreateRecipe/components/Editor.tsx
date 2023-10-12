@@ -1,12 +1,11 @@
-import React, {useCallback, useState} from "react";
+import React, {Fragment, useCallback, useState} from "react";
 import {BaseEditor, createEditor, Descendant, Editor, Transforms} from "slate";
 import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
 import {withHistory} from "slate-history";
 import * as Icons from "@mui/icons-material";
-import {Box, Button, Divider, Icon, IconButton} from "@mui/material";
+import {Box, Divider, Icon, IconButton} from "@mui/material";
 import isHotkey from "is-hotkey";
 import "../styles.scss";
-import {Save} from "@mui/icons-material";
 
 declare module "slate" {
     export interface CustomTypes {
@@ -90,14 +89,13 @@ export default function SlateEditor({inital}: InitialProps) {
                     <Divider />
                     <Box
                         sx={{
-                            width: "400px",
-                            height: "200px",
+                            width: "40vw",
+                            height: "40vh",
                             overflow: "scroll",
                             overflowX: "hidden",
                         }}>
                         <Editable
                             style={{
-                                height: "100%",
                                 outline: 0,
                                 padding: 5,
                             }}
@@ -122,20 +120,6 @@ export default function SlateEditor({inital}: InitialProps) {
                         />
                     </Box>
                 </Slate>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        margin: 5,
-                    }}>
-                    <Button
-                        color='secondary'
-                        variant='contained'
-                        size='medium'
-                        startIcon={<Save />}>
-                        Save
-                    </Button>
-                </div>
             </Box>
         </div>
     );
