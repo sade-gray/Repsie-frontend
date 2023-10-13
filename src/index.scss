@@ -1,9 +1,5 @@
-//$theme1: #3D5EBD;
-$theme1: rgb(85, 69, 146);
+$theme1: #694FD0FF;
 $background: #252A38;
-$theme3: #551f0d;
-$theme4: #FFE400;
-$theme5: #14A76C;
 $transparenttheme1: rgba(85, 69, 146, 55%);
 
 // TODO: Add breakpoint variables
@@ -25,7 +21,6 @@ body {
   position: sticky;
   top:0;
   background: $theme1;
-  border-radius: 0 0 1rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -93,6 +88,7 @@ body {
 .main--container {
   width: 100vw;
   display: flex;
+  justify-content: center;
 }
 
 .home--container > section {
@@ -122,23 +118,25 @@ body {
 
 .saved--recipes--list {
   display: inline-block;
-  width: 100%;
 }
 
 // The whole feed's container
 .recipes--feed--container {
   flex: 2;
   padding: 0 10%;
+  max-width: 630px;
 
   h1 {
     margin: 0 0 0.5rem 0;
     font-size: 2rem;
   }
 }
-
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: $breakpoint-tablet) {
   .recipes--feed--container {
+      flex: auto;
       padding: 0;
+    margin: 5px;
+      width: 100%;
   }
 }
 
@@ -148,10 +146,10 @@ body {
 
 // The individual recipe container
 .feed--recipe--container {
-  border: 1px solid gray;
+  //border: 1px solid gray;
   border-radius: 1rem;
-  padding: 15px 25px;
-  margin: 10px 0;
+  padding: 5px 20px;
+  margin-bottom: 20px;
 }
 
 .recipe--title--container {
@@ -191,6 +189,9 @@ body {
 @media only screen and (max-width: $breakpoint-tablet) {
   .my--recipes--section {
     padding: 0;
+  }
+  .feed--recipe--container {
+    padding: 25px 10px;
   }
 }
 
