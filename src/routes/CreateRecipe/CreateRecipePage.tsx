@@ -1,295 +1,87 @@
-/**
- * Recipe Creation Page
- * This is where the Slate Editor is implemented
- * Current features: Header (ctrl + 1), bold (ctrl + b), italic (ctrl + i) and paragraph (default)
- *
- */
-import React, {useCallback, useState} from "react";
-import {BaseEditor, createEditor, Descendant, Editor, Transforms} from "slate";
-import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
-import {withHistory} from "slate-history";
-import * as Icons from "@mui/icons-material";
-import {Box, Button, Divider, Icon, IconButton} from "@mui/material";
-import isHotkey from "is-hotkey";
+import {Box, Button, Rating, TextField, Typography} from "@mui/material";
+import Editor from "./components/Editor";
 import "./styles.scss";
-import {Save} from "@mui/icons-material";
-import {useAuth} from "../../contexts/AuthContext.tsx";
-import monke from "../../assets/dummyPhotos/monke.png";
-import {saveRecipe} from "../../api/saveRecipe.ts";
-
-declare module "slate" {
-    export interface CustomTypes {
-        Editor: BaseEditor & ReactEditor;
-        Text: CustomText;
-    }
-}
-
-export type CustomText = {
-    text: string;
-    bold?: boolean;
-    italic?: boolean;
-    underline?: boolean;
-    type?: string;
-};
-
-const LIST_TYPES = ["numbered-list", "bulleted-list"];
-
-const FORMAT_HOTKEYS: {[key: string]: string} = {
-    "mod+b": "bold",
-    "mod+i": "italic",
-    "mod+u": "underline",
-};
-
-const BLOCK_HOTKEYS: {[key: string]: string} = {
-    "mod+1": "heading-one",
-    "mod+2": "heading-two",
-};
-
-// Initial text to be rendered inside the editor. This can be useful later when let users edit their pages.
-const initialValue = [
-    {
-        type: "paragraph",
-        children: [{text: "A line of text in a paragraph"}],
-    },
-];
+import {ChangeEvent, useState} from "react";
+import {FileUpload} from "@mui/icons-material";
 
 export default function CreateRecipePage() {
-    const [value, setValue] = useState<Descendant[]>(initialValue);
-    const { user } = useAuth();
-    console.log(user);
-    const handleSaveRecipe = () => {
-        // try {
-        //     const response = await fetch("http://localhost:8000/recipes", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({
-        //             title: "Pasta",
-        //             imageUrl: "./",
-        //             publisher: {
-        //                 name: "Patriks",
-        //                 iconUrl: monke,
-        //             },
-        //             recipe: JSON.stringify(value),
-        //             timeRating: 2,
-        //             skillRating: 1,
-        //         }),
-        //     });
-        //
-        //     const result = await response.json();
-        //     console.log("Success:", result);
-        // } catch (error) {
-        //     console.error("Error:", error);
-        // }
-        saveRecipe(user.uid,"MacDonalds", "image.png", JSON.stringify(initialValue), 4, 5);
-        console.log("Saved....")
-    };
-    const [editor] = useState(() => withReact(withHistory(createEditor())));
-    // This is the logic for rendering every node according to its type
-    const renderElement = useCallback((props: any) => <Element {...props} />, []);
-    const renderLeaf = useCallback((props: any) => {
-        return <Leaf {...props} />;
-    }, []);
+    const [ratingValue, setRatingValue] = useState<number | null>(2);
+    const [imageUrl, setImageUrl] = useState<string>("");
 
+    const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files;
+        if (!file) return;
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setImageUrl(reader.result as string);
+        };
+
+        reader.readAsDataURL(file[0]);
+    };
     return (
-        <div
-            style={{
-                fontWeight: "initial",
-                margin: 10,
-            }}>
-            <Box
-                sx={{
-                    border: "2px solid",
-                    borderColor: "secondary.main",
-                }}>
-                {/*TODO: Componentize editor*/}
-                <Slate
-                    editor={editor}
-                    initialValue={value}
-                    onChange={(value) => {
-                        setValue(value);
-                        console.log(JSON.stringify(value));
-                    }}>
+        <div className='create--recipe--container'>
+            <form>
+                <div className='input--container'>
+                    <TextField
+                        variant='outlined'
+                        label='Recipe title'
+                        color='secondary'
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                "& > fieldset": {
+                                    border: "solid 2px",
+                                    borderColor: "secondary.main",
+                                },
+                            },
+                            "& .MuiOutlinedInput-root:hover": {
+                                "& > fieldset": {borderColor: "secondary.main"},
+                            },
+                            marginBottom: 2,
+                        }}></TextField>
                     <Box
                         sx={{
                             display: "flex",
+                            flexDirection: "column",
                             alignItems: "center",
-                            justifyContent: "start",
-                            flexWrap: "wrap",
-                            backgroundColor: "secondary.main",
+                            paddingY: 2,
+                            gap: "1rem",
+                            border: "dashed 2px",
+                            borderColor: "secondary.main",
                         }}>
-                        <MarkButton format='bold' icon='FormatBold' />
-                        <MarkButton format='italic' icon='FormatItalic' />
-                        <MarkButton format='underline' icon='FormatUnderlined' />
-                        <BlockButton format='heading-one' icon='LooksOne' />
-                        <BlockButton format='heading-two' icon='LooksTwo' />
-                        <BlockButton format='bulleted-list' icon='FormatListBulleted' />
-                        <BlockButton format='numbered-list' icon='FormatListNumbered' />
+                        <Button
+                            variant='contained'
+                            color='secondary'
+                            component='label'
+                            startIcon={<FileUpload />}>
+                            Select Image
+                            <input
+                                hidden
+                                accept='image/*'
+                                type='file'
+                                onChange={handleFileUpload}
+                            />
+                        </Button>
+                        {imageUrl && <img src={imageUrl} alt='Uploaded Image' height='300' />}
                     </Box>
-                    <Divider />
-                    <Box>
-                        <Editable
-                            style={{outline: 0}}
-                            renderElement={renderElement}
-                            renderLeaf={renderLeaf}
-                            onKeyDown={(event) => {
-                                for (const hotkey in FORMAT_HOTKEYS) {
-                                    if (isHotkey(hotkey, event)) {
-                                        event.preventDefault();
-                                        const mark = FORMAT_HOTKEYS[hotkey];
-                                        toggleMark(editor, mark);
-                                    }
-                                }
-                                for (const hotkey in BLOCK_HOTKEYS) {
-                                    if (isHotkey(hotkey, event)) {
-                                        event.preventDefault();
-                                        const mark = BLOCK_HOTKEYS[hotkey];
-                                        toggleBlock(editor, mark);
-                                    }
-                                }
-                            }}
-                        />
-                    </Box>
-                </Slate>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        margin: 5,
-                        padding: 3,
-                    }}>
-                    <Button
-                        color='secondary'
-                        type='submit'
-                        variant='contained'
-                        size='large'
-                        startIcon={<Save />}
-                        onClick={handleSaveRecipe}>
-                        Save
-                    </Button>
                 </div>
-            </Box>
+                <div className='editor--container'>
+                    <Editor inital='Method' />
+                    <Editor inital='Ingredients' />
+                </div>
+                <Box>
+                    <Typography color='text'>Difficulty</Typography>
+                    <Rating
+                        value={ratingValue}
+                        name='difficulty-rating'
+                        size='large'
+                        onChange={(e, newValue) => {
+                            e.preventDefault();
+                            setRatingValue(newValue);
+                        }}
+                    />
+                </Box>
+            </form>
         </div>
     );
 }
-
-const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
-    const isActive = isBlockActive(editor, format);
-    const isList = LIST_TYPES.includes(format);
-
-    Transforms.unwrapNodes(editor, {
-        // @ts-ignore
-        match: (n) => LIST_TYPES.includes(n.type),
-        split: true,
-    });
-
-    Transforms.setNodes(editor, {
-        type: isActive ? "paragraph" : isList ? "list-item" : format,
-    });
-
-    if (!isActive && isList) {
-        const block = {type: format, children: []};
-        Transforms.wrapNodes(editor, block);
-    }
-};
-
-const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
-    const isActive = isMarkActive(editor, format);
-
-    if (isActive) {
-        Editor.removeMark(editor, format);
-    } else {
-        Editor.addMark(editor, format, true);
-    }
-};
-
-const isBlockActive = (editor: BaseEditor & ReactEditor, format: string) => {
-    const [match] = Editor.nodes(editor, {
-        // @ts-ignore
-        match: (n) => n.type === format,
-    });
-
-    return !!match;
-};
-
-const isMarkActive = (editor: BaseEditor & ReactEditor, format: string) => {
-    const marks: any = Editor.marks(editor);
-    return marks ? marks[format] === true : false;
-};
-
-type ButtonProps = {
-    icon: keyof typeof Icons;
-    format: string;
-};
-
-const MarkButton = ({icon, format}: ButtonProps) => {
-    const editor = useSlate();
-    return (
-        <IconButton
-            onMouseDown={(event) => {
-                event.preventDefault();
-                toggleMark(editor, format);
-            }}>
-            <Icon color={isMarkActive(editor, format) ? "primary" : "disabled"}>
-                {React.createElement(Icons[icon])}
-            </Icon>
-        </IconButton>
-    );
-};
-
-const BlockButton = ({icon, format}: ButtonProps) => {
-    const editor = useSlate();
-    return (
-        <IconButton
-            onMouseDown={(event) => {
-                event.preventDefault();
-                toggleBlock(editor, format);
-            }}>
-            <Icon color={isBlockActive(editor, format) ? "primary" : "disabled"}>
-                {React.createElement(Icons[icon])}
-            </Icon>
-        </IconButton>
-    );
-};
-
-const Element = ({attributes, children, element}: any) => {
-    switch (element.type) {
-        case "heading-one":
-            return <h1 {...attributes}>{children}</h1>;
-        case "heading-two":
-            return <h2 {...attributes}>{children}</h2>;
-        case "bulleted-list":
-            return (
-                <ul className='bulleted--list' {...attributes}>
-                    {children}
-                </ul>
-            );
-        case "numbered-list":
-            return (
-                <ol className='numbered--list' {...attributes}>
-                    {children}
-                </ol>
-            );
-        case "list-item":
-            return <li {...attributes}>{children}</li>;
-        default:
-            return <p {...attributes}>{children}</p>;
-    }
-};
-
-const Leaf = ({attributes, children, leaf}: any) => {
-    if (leaf.bold) {
-        children = <strong>{children}</strong>;
-    }
-
-    if (leaf.italic) {
-        children = <em>{children}</em>;
-    }
-
-    if (leaf.underline) {
-        children = <u>{children}</u>;
-    }
-
-    return <span {...attributes}>{children}</span>;
-};

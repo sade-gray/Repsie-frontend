@@ -5,9 +5,7 @@
     li {
         counter-increment: index;
         margin: 0.25rem;
-        display: flex;
         align-items: center;
-        
     }
     
     li::before {
@@ -29,20 +27,41 @@
 
     li {
         margin: 0.25rem;
-        display: flex;
         align-items: center;
     }
     
     li::before {
         content: "";
-        width: 1rem;
-        height: 1rem;
+        width: 0.5rem;
+        height: 0.5rem;
         border: 2px solid black;
         border-radius: 50%;
-        display: inline-block;
+        display: inline-flex;
         line-height: 2rem;
         color: white;
         text-align: center;
         margin-right: 0.5rem;
     }
+}
+
+.create--recipe--container {
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.editor--container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.input--container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 2rem;
 }
