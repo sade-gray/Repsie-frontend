@@ -9,30 +9,46 @@ import {
 } from "@mui/material";
 import Editor from "./components/Editor";
 import "./styles.scss";
-import {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {AccessTime, Create, FileUpload, LocalDining} from "@mui/icons-material";
+import {saveRecipe} from "../../api/saveRecipe.ts";
+import {useAuth} from "../../contexts/AuthContext.tsx";
+import {Descendant} from "slate";
 
 export default function CreateRecipePage() {
-    const [skillRatingValue, setSkillRatingValue] = useState<number | null>(2);
-    const [timeRatingValue, setTimeRatingValue] = useState<number | null>(2);
+    const initialValue = [
+        {
+            type: "paragraph",
+            children: [{text: "Mmm so yummy"}],
+        },
+    ];
+    const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
+    const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
     const [colour, setColour] = useState<"success" | "error" | "warning" | "disabled">("disabled");
-    const [imageUrl, setImageUrl] = useState<string>("");
+    const [imageUrl, setImageUrl] = useState();
+    // const [coverImageFile, setCoverImageUrl] = useState();
+    const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
+    const { user } = useAuth();
+    function handleFormSubmit(e: ChangeEvent<HTMLFormElement>) {
+        e.preventDefault();
+        if (imageUrl) {
+            saveRecipe(user.uid, "macandcheese", imageUrl,  JSON.stringify(recipeData), skillRatingValue, timeRatingValue);
+        } else {
+            console.log("Invalid Image")
+        }
+    }
 
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files;
-        if (!file) return;
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            setImageUrl(reader.result as string);
-        };
-
-        reader.readAsDataURL(file[0]);
+        if (file !== undefined) {
+            // @ts-ignore
+            setImageUrl(file[0]);
+        }
     };
 
     function changeColour(value?: number) {
         setColour(() => {
-            let colour = !value || value === -1 ? skillRatingValue : value;
+            const colour = !value || value === -1 ? skillRatingValue : value;
             switch (colour) {
                 case 1:
                     return "success";
@@ -89,7 +105,7 @@ export default function CreateRecipePage() {
 
     return (
         <div className='create--recipe--container'>
-            <form>
+            <form onSubmit={(e) => handleFormSubmit(e)}>
                 <div className='create--recipe--title--container'>
                     <TextField
                         variant='outlined'
@@ -144,7 +160,9 @@ export default function CreateRecipePage() {
                     </Box>
                 </div>
                 <div className='create--recipe--editor--container'>
-                    <Editor inital='' />
+                    <Editor recipeData={recipeData}
+                            setRecipeData={setRecipeData}
+                            initial={"This is your journey to creating a delicious recipe"} />
                 </div>
                 <Box>
                     <div className='create--recipe--rating--container'>
@@ -158,7 +176,7 @@ export default function CreateRecipePage() {
                                 emptyIcon={<AccessTime fontSize='large' />}
                                 onChange={(e, newValue) => {
                                     e.preventDefault();
-                                    setTimeRatingValue(newValue);
+                                    setTimeRatingValue(newValue || 1);
                                 }}
                             />
                         </div>

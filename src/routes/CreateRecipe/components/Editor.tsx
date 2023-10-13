@@ -26,7 +26,7 @@ export type CustomText = {
 };
 
 type InitialProps = {
-    inital: string;
+    initial: string;
 };
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
@@ -43,15 +43,7 @@ const BLOCK_HOTKEYS: {[key: string]: string} = {
     "mod+2": "heading-two",
 };
 
-export default function SlateEditor({inital}: InitialProps) {
-    const initialValue = [
-        {
-            type: "paragraph",
-            children: [{text: inital}],
-        },
-    ];
-    const [value, setValue] = useState<Descendant[]>(initialValue);
-    console.log(deserializeFromHtml(serializeToHtml(value)));
+export default function SlateEditor({recipeData, setRecipeData}: any) {
     const [editor] = useState(() => withTables(withHistory(withReact(createEditor()))));
     // This is the logic for rendering every node according to its type
     const renderElement = useCallback((props: any) => <Element {...props} />, []);
@@ -71,9 +63,9 @@ export default function SlateEditor({inital}: InitialProps) {
                 }}>
                 <Slate
                     editor={editor}
-                    initialValue={value}
+                    initialValue={recipeData}
                     onChange={(value) => {
-                        setValue(value);
+                        setRecipeData(value);
                         console.log(JSON.stringify(value));
                     }}>
                     <Box
