@@ -6,7 +6,7 @@ import HeaderLogo from "./HeaderLogo.tsx";
 import HeaderProfileIcon from "./HeaderProfileIcon.tsx";
 import SavedRecipesDrawer from "../SavedRecipesDrawer.tsx";
 
-export const Header = () => {
+export function Header() {
     const theme = useTheme();
     const {drawerOpen, setDrawerOpen} = useContext(DrawerContext)
     const isNotTablet = useMediaQuery(theme.breakpoints.up("lg"))

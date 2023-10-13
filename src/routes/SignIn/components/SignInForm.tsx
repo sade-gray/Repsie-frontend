@@ -1,21 +1,21 @@
-import {Button, TextField, Typography} from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext.tsx";
 import { useNavigate } from "react-router-dom";
 
-export default function SignUpForm() {
+export default function SignInForm() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     // TODO: Disable sign up button until form is valid.
     // TODO: Add type.
-    const { emailSignUp }: any = useAuth();
+    const { emailSignIn }: any = useAuth();
 
     const navigate = useNavigate();
-    // TODO: Redirect only if successful.
+    // TODO: Redirect only if succesful.
     const handleFormSubmit = (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
-        if (emailSignUp(email, password)) {
+        if (emailSignIn(email, password)) {
             console.log("Invalid credentials")
         } else {
             navigate("/");
@@ -24,7 +24,7 @@ export default function SignUpForm() {
 
     return (
         <form onSubmit={handleFormSubmit}>
-            <Typography variant={"h4"}>Sign up</Typography>
+            <Typography variant={"h4"}>Sign in</Typography>
             <TextField color={"secondary"}
                        label={"Email"}
                        name={"email"}
@@ -50,7 +50,7 @@ export default function SignUpForm() {
                     variant={"contained"}
                     color={"secondary"}
                     type={"submit"}
-            >Sign up</Button>
+            >Sign in</Button>
         </form>
-    );
+    )
 }

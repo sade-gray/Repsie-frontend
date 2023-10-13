@@ -1,5 +1,6 @@
 [
   {
+    "id": 0,
     "title": "Pineapple Pizza",
     "imageUrl":"https://i.kinja-img.com/gawker-media/image/upload/c_fit,f_auto,g_center,q_60,w_1315/7762e80e80346b5d41abe2c65e2cf482.jpg",
     "publisher": {
@@ -8,6 +9,7 @@
     }
   },
   {
+    "id": 1,
     "title": "Mario's Burger",
     "imageUrl": "/src/assets/dummyPhotos/goodBurger.jpeg",
     "publisher": {
@@ -16,6 +18,7 @@
     }
   },
   {
+    "id": 2,
     "title": "The Shabster Lobster",
     "imageUrl": "/src/assets/dummyPhotos/shabsterLobster.jpg",
     "publisher":{

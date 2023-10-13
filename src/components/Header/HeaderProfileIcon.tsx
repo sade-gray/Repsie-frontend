@@ -7,7 +7,7 @@ import { ListItemIcon } from "@mui/material";
 import {useAuth} from "../../contexts/AuthContext.tsx";
 
 export default function HeaderProfileIcon() {
-    const { user, signOut } = useAuth();
+    const { user, signOut }: any = useAuth();
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
     const handleLogoutClick = () => {
@@ -32,7 +32,6 @@ export default function HeaderProfileIcon() {
             </Box>
                 <Menu sx={{
                         mt: "45px",
-
                       }}
                       anchorEl={anchorElUser}
                       anchorOrigin={{
@@ -58,7 +57,7 @@ export default function HeaderProfileIcon() {
                         }}
                     }
                 >
-                    <Link to={user ? "/": "/signUp"}>
+                    <Link to={user ? "/": "/signup"}>
                         <MenuItem>
                             <Avatar sx={{ width: "35px", height: "35px"}}/>
                             <Typography color="text">
@@ -66,7 +65,7 @@ export default function HeaderProfileIcon() {
                             </Typography>
                         </MenuItem>
                     </Link>
-                    {user && <>
+                    {user && <section>
                         <Divider />
                         <Link to="/myRecipes">
                             <MenuItem>
@@ -79,17 +78,17 @@ export default function HeaderProfileIcon() {
                                 <ListItemIcon>
                                     <Logout sx={{width: "35px", height: "35px", mr:1}} color="secondary" />
                                 </ListItemIcon>
-                                    <Typography color="text">Logout</Typography>
+                                <Typography color="text">Logout</Typography>
                         </MenuItem>
-                    </>
+                    </section>
                     }
-                    {!user && <>
+                    {!user && <section>
                         <MenuItem>
                             <ListItemIcon>
 
                             </ListItemIcon>
                         </MenuItem>
-                    </>
+                    </section>
                     }
                 </Menu>
         </div>
