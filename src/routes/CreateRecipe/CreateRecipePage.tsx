@@ -1,10 +1,9 @@
-/*
+/**
  * Recipe Creation Page
- * This is where the Slate Editor is implented
+ * This is where the Slate Editor is implemented
  * Current features: Header (ctrl + 1), bold (ctrl + b), italic (ctrl + i) and paragraph (default)
  *
  */
-
 import React, {useCallback, useState} from "react";
 import {BaseEditor, createEditor, Descendant, Editor, Transforms} from "slate";
 import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
@@ -14,7 +13,9 @@ import {Box, Button, Divider, Icon, IconButton} from "@mui/material";
 import isHotkey from "is-hotkey";
 import "./styles.scss";
 import {Save} from "@mui/icons-material";
+import {useAuth} from "../../contexts/AuthContext.tsx";
 import monke from "../../assets/dummyPhotos/monke.png";
+import {saveRecipe} from "../../api/saveRecipe.ts";
 
 declare module "slate" {
     export interface CustomTypes {
@@ -54,32 +55,35 @@ const initialValue = [
 
 export default function CreateRecipePage() {
     const [value, setValue] = useState<Descendant[]>(initialValue);
-
-    const handleSaveRecipe = async () => {
-        try {
-            const response = await fetch("http://localhost:8000/recipes", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title: "Pasta",
-                    imageUrl: "./",
-                    publisher: {
-                        name: "Patriks",
-                        iconUrl: monke,
-                    },
-                    recipe: JSON.stringify(value),
-                    timeRating: 2,
-                    skillRating: 1,
-                }),
-            });
-
-            const result = await response.json();
-            console.log("Success:", result);
-        } catch (error) {
-            console.error("Error:", error);
-        }
+    const { user } = useAuth();
+    console.log(user);
+    const handleSaveRecipe = () => {
+        // try {
+        //     const response = await fetch("http://localhost:8000/recipes", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //         },
+        //         body: JSON.stringify({
+        //             title: "Pasta",
+        //             imageUrl: "./",
+        //             publisher: {
+        //                 name: "Patriks",
+        //                 iconUrl: monke,
+        //             },
+        //             recipe: JSON.stringify(value),
+        //             timeRating: 2,
+        //             skillRating: 1,
+        //         }),
+        //     });
+        //
+        //     const result = await response.json();
+        //     console.log("Success:", result);
+        // } catch (error) {
+        //     console.error("Error:", error);
+        // }
+        saveRecipe(user.uid,"MacDonalds", "image.png", JSON.stringify(initialValue), 4, 5);
+        console.log("Saved....")
     };
     const [editor] = useState(() => withReact(withHistory(createEditor())));
     // This is the logic for rendering every node according to its type
