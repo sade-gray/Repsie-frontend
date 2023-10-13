@@ -1,4 +1,4 @@
-import React, {Fragment, useCallback, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {BaseEditor, createEditor, Descendant, Editor, Transforms} from "slate";
 import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
 import {withHistory} from "slate-history";
@@ -6,6 +6,9 @@ import * as Icons from "@mui/icons-material";
 import {Box, Divider, Icon, IconButton} from "@mui/material";
 import isHotkey from "is-hotkey";
 import "../styles.scss";
+import {deserializeFromHtml} from "../utils/deserializer";
+import {serializeToHtml} from "../utils/serializer";
+import {withTables} from "./utils/withTables";
 
 declare module "slate" {
     export interface CustomTypes {
@@ -27,6 +30,7 @@ type InitialProps = {
 };
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
+const TABLE_TYPES = ["table-row", "table-cell"];
 
 const FORMAT_HOTKEYS: {[key: string]: string} = {
     "mod+b": "bold",
@@ -47,7 +51,8 @@ export default function SlateEditor({inital}: InitialProps) {
         },
     ];
     const [value, setValue] = useState<Descendant[]>(initialValue);
-    const [editor] = useState(() => withReact(withHistory(createEditor())));
+    console.log(deserializeFromHtml(serializeToHtml(value)));
+    const [editor] = useState(() => withTables(withHistory(withReact(createEditor()))));
     // This is the logic for rendering every node according to its type
     const renderElement = useCallback((props: any) => <Element {...props} />, []);
     const renderLeaf = useCallback((props: any) => {
@@ -76,7 +81,7 @@ export default function SlateEditor({inital}: InitialProps) {
                             display: "flex",
                             justifyContent: "start",
                             flexWrap: "wrap",
-                            backgroundColor: "secondary.main",
+                            backgroundColor: "#eee",
                         }}>
                         <MarkButton format='bold' icon='FormatBold' />
                         <MarkButton format='italic' icon='FormatItalic' />
@@ -85,19 +90,19 @@ export default function SlateEditor({inital}: InitialProps) {
                         <BlockButton format='heading-two' icon='LooksTwo' />
                         <BlockButton format='bulleted-list' icon='FormatListBulleted' />
                         <BlockButton format='numbered-list' icon='FormatListNumbered' />
+                        <BlockButton format='table' icon='TableChartOutlined' />
                     </Box>
-                    <Divider />
+                    <Divider color='secondary' />
                     <Box
                         sx={{
                             width: "40vw",
-                            height: "40vh",
-                            overflow: "scroll",
-                            overflowX: "hidden",
+                            minInlineSize: "100%",
                         }}>
                         <Editable
                             style={{
                                 outline: 0,
-                                padding: 5,
+                                padding: 2,
+                                minHeight: "40vh",
                             }}
                             renderElement={renderElement}
                             renderLeaf={renderLeaf}
@@ -182,7 +187,7 @@ const MarkButton = ({icon, format}: ButtonProps) => {
                 event.preventDefault();
                 toggleMark(editor, format);
             }}>
-            <Icon color={isMarkActive(editor, format) ? "primary" : "disabled"}>
+            <Icon color={isMarkActive(editor, format) ? "secondary" : "disabled"}>
                 {React.createElement(Icons[icon])}
             </Icon>
         </IconButton>
@@ -197,7 +202,7 @@ const BlockButton = ({icon, format}: ButtonProps) => {
                 event.preventDefault();
                 toggleBlock(editor, format);
             }}>
-            <Icon color={isBlockActive(editor, format) ? "primary" : "disabled"}>
+            <Icon color={isBlockActive(editor, format) ? "secondary" : "disabled"}>
                 {React.createElement(Icons[icon])}
             </Icon>
         </IconButton>
@@ -224,6 +229,16 @@ const Element = ({attributes, children, element}: any) => {
             );
         case "list-item":
             return <li {...attributes}>{children}</li>;
+        case "table":
+            return (
+                <table className='table'>
+                    <tbody {...attributes}>{children}</tbody>
+                </table>
+            );
+        case "table-row":
+            return <tr {...attributes}>{children}</tr>;
+        case "table-cell":
+            return <td {...attributes}>{children}</td>;
         default:
             return <p {...attributes}>{children}</p>;
     }

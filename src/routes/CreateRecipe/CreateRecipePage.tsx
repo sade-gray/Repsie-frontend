@@ -32,7 +32,6 @@ export default function CreateRecipePage() {
 
     function changeColour(value?: number) {
         setColour(() => {
-            console.log(value);
             let colour = !value || value === -1 ? skillRatingValue : value;
             switch (colour) {
                 case 1:
@@ -91,7 +90,7 @@ export default function CreateRecipePage() {
     return (
         <div className='create--recipe--container'>
             <form>
-                <div className='create--recipe--input--container'>
+                <div className='create--recipe--title--container'>
                     <TextField
                         variant='outlined'
                         label='Recipe title'
@@ -109,13 +108,14 @@ export default function CreateRecipePage() {
                             },
                             marginBottom: "2rem",
                         }}></TextField>
+                </div>
+                <div className='create--recipe--image--container'>
                     <Box
                         sx={{
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
                             paddingY: 2,
-                            gap: "1rem",
                             border: "dashed 2px",
                             borderColor: "secondary.main",
                         }}>
@@ -132,7 +132,15 @@ export default function CreateRecipePage() {
                                 onChange={handleFileUpload}
                             />
                         </Button>
-                        {imageUrl && <img src={imageUrl} alt='Uploaded Image' height='300' />}
+                        {imageUrl && (
+                            <img
+                                src={imageUrl}
+                                alt='Uploaded Image'
+                                height='auto'
+                                width='300'
+                                style={{marginTop: "1rem", minInlineSize: "100%"}}
+                            />
+                        )}
                     </Box>
                 </div>
                 <div className='create--recipe--editor--container'>
