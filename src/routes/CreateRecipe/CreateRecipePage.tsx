@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Editor from "./components/Editor";
 import "./styles.scss";
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import {AccessTime, Create, FileUpload, LocalDining} from "@mui/icons-material";
 import {saveRecipe} from "../../api/saveRecipe.ts";
 import {useAuth} from "../../contexts/AuthContext.tsx";
@@ -26,15 +26,23 @@ export default function CreateRecipePage() {
     const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
     const [colour, setColour] = useState<"success" | "error" | "warning" | "disabled">("disabled");
     const [imageUrl, setImageUrl] = useState();
+    const [coverImageUrl, setCoverImageUrl] = useState();
     // const [coverImageFile, setCoverImageUrl] = useState();
     const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
-    const { user } = useAuth();
-    function handleFormSubmit(e: ChangeEvent<HTMLFormElement>) {
+    const {user} = useAuth();
+    function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (imageUrl) {
-            saveRecipe(user.uid, "macandcheese", imageUrl,  JSON.stringify(recipeData), skillRatingValue, timeRatingValue);
+            saveRecipe(
+                user.uid,
+                "macandcheese",
+                imageUrl,
+                JSON.stringify(recipeData),
+                skillRatingValue,
+                timeRatingValue
+            );
         } else {
-            console.log("Invalid Image")
+            console.log("Invalid Image");
         }
     }
 
@@ -44,6 +52,15 @@ export default function CreateRecipePage() {
             // @ts-ignore
             setImageUrl(file[0]);
         }
+
+        if (!file) return;
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setCoverImageUrl(reader.result as string);
+        };
+
+        reader.readAsDataURL(file[0]);
     };
 
     function changeColour(value?: number) {
@@ -150,7 +167,7 @@ export default function CreateRecipePage() {
                         </Button>
                         {imageUrl && (
                             <img
-                                src={imageUrl}
+                                src={coverImageUrl}
                                 alt='Uploaded Image'
                                 height='auto'
                                 width='300'
@@ -160,9 +177,11 @@ export default function CreateRecipePage() {
                     </Box>
                 </div>
                 <div className='create--recipe--editor--container'>
-                    <Editor recipeData={recipeData}
-                            setRecipeData={setRecipeData}
-                            initial={"This is your journey to creating a delicious recipe"} />
+                    <Editor
+                        recipeData={recipeData}
+                        setRecipeData={setRecipeData}
+                        initial={"This is your journey to creating a delicious recipe"}
+                    />
                 </div>
                 <Box>
                     <div className='create--recipe--rating--container'>
