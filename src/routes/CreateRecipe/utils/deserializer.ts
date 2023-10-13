@@ -20,6 +20,9 @@ const ELEMENT_TAGS: {[key: string]: (el: any) => any} = {
     //     url: el.getAttribute("src"),
     //     alt: el.getAttribute("alt"),
     // }),
+    TB: () => ({type: "table"}),
+    TR: () => ({type: "table-row"}),
+    TD: () => ({type: "table-cell"}),
     LI: () => ({type: "list-item"}),
     OL: () => ({type: "numbered-list"}),
     P: () => ({type: "paragraph"}),
@@ -52,6 +55,15 @@ const deserialize = (el: any): any => {
     if (nodeName === "PRE" && el.childNodes[0] && el.childNodes[0].nodeName === "CODE") {
         parent = el.childNodes[0];
     }
+
+    if (nodeName === "TR" && el.childNodes[0] && el.childNodes[0].nodeName === "TB") {
+        parent = el.childNodes[0];
+    }
+
+    if (nodeName === "TD" && el.childNodes[0] && el.childNodes[0].nodeName === "TR") {
+        parent = el.childNodes[0];
+    }
+
     const children = Array.from(parent.childNodes).map(deserialize).flat();
 
     if (el.nodeName === "BODY") {

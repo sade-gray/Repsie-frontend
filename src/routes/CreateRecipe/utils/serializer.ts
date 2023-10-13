@@ -32,6 +32,12 @@ const serialize = (node: Node): string => {
             return `<ol className='numbered--list'>${children}</ol>`;
         case "list-item":
             return `<li>${children}</li>`;
+        case "table":
+            return `<table><tbody>${children}</tbody></table>`;
+        case "table-row":
+            return `<tr>${children}</tr>`;
+        case "table-cell":
+            return `<td>${children}</td>`;
         default:
             return children;
     }
