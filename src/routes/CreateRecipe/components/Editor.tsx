@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {Dispatch, SetStateAction, useCallback, useState} from "react";
 import {BaseEditor, createEditor, Descendant, Editor, Transforms} from "slate";
 import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
 import {withHistory} from "slate-history";
@@ -6,8 +6,6 @@ import * as Icons from "@mui/icons-material";
 import {Box, Divider, Icon, IconButton} from "@mui/material";
 import isHotkey from "is-hotkey";
 import "../styles.scss";
-import {deserializeFromHtml} from "../utils/deserializer";
-import {serializeToHtml} from "../utils/serializer";
 import {withTables} from "./utils/withTables";
 
 declare module "slate" {
@@ -25,12 +23,13 @@ export type CustomText = {
     type?: string;
 };
 
-type InitialProps = {
-    initial: string;
+type EditorProps = {
+    recipeData: Descendant[];
+    setRecipeData: Dispatch<SetStateAction<Descendant[]>>;
 };
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
-const TABLE_TYPES = ["table-row", "table-cell"];
+// const TABLE_TYPES = ["table-row", "table-cell"];
 
 const FORMAT_HOTKEYS: {[key: string]: string} = {
     "mod+b": "bold",
@@ -43,7 +42,7 @@ const BLOCK_HOTKEYS: {[key: string]: string} = {
     "mod+2": "heading-two",
 };
 
-export default function SlateEditor({recipeData, setRecipeData}: any) {
+export default function SlateEditor({recipeData, setRecipeData}: EditorProps) {
     const [editor] = useState(() => withTables(withHistory(withReact(createEditor()))));
     // This is the logic for rendering every node according to its type
     const renderElement = useCallback((props: any) => <Element {...props} />, []);

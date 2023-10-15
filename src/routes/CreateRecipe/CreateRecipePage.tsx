@@ -19,17 +19,18 @@ export default function CreateRecipePage() {
     const initialValue = [
         {
             type: "paragraph",
-            children: [{text: "Mmm so yummy"}],
+            children: [{text: "This is your journey to creating a delicious recipe"}],
         },
     ];
     const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
     const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
     const [colour, setColour] = useState<"success" | "error" | "warning" | "disabled">("disabled");
-    const [imageUrl, setImageUrl] = useState();
-    const [coverImageUrl, setCoverImageUrl] = useState();
+    const [imageUrl, setImageUrl] = useState<string>();
+    const [coverImageUrl, setCoverImageUrl] = useState<string>();
     // const [coverImageFile, setCoverImageUrl] = useState();
     const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
     const {user} = useAuth();
+
     function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (imageUrl) {
@@ -177,11 +178,7 @@ export default function CreateRecipePage() {
                     </Box>
                 </div>
                 <div className='create--recipe--editor--container'>
-                    <Editor
-                        recipeData={recipeData}
-                        setRecipeData={setRecipeData}
-                        initial={"This is your journey to creating a delicious recipe"}
-                    />
+                    <Editor recipeData={recipeData} setRecipeData={setRecipeData} />
                 </div>
                 <Box>
                     <div className='create--recipe--rating--container'>
@@ -212,7 +209,7 @@ export default function CreateRecipePage() {
                                 }}
                                 onChange={(e, newValue) => {
                                     e.preventDefault();
-                                    setSkillRatingValue(newValue);
+                                    setSkillRatingValue(newValue || 1);
                                 }}
                             />
                         </div>
