@@ -26,13 +26,11 @@ export default function HeaderProfileIcon() {
                 <Tooltip title='Open settings'>
                     <IconButton sx={{paddingRight: 2.5}} onClick={handleOpenUserMenu}>
                         {/* Fetch avatar image from database */}
-                        <Avatar alt='user logo' src={avatar}/>
+                        <Avatar alt='user logo' src={user && avatar}/>
                     </IconButton>
                 </Tooltip>
             </Box>
-                <Menu sx={{
-                        mt: "45px",
-                      }}
+                <Menu sx={{mt: "45px"}}
                       anchorEl={anchorElUser}
                       anchorOrigin={{
                           vertical: "top",
@@ -57,11 +55,11 @@ export default function HeaderProfileIcon() {
                         }}
                     }
                 >
-                    <Link to={user ? "/": "/signup"}>
+                    <Link to={user ? "/": "/signin"}>
                         <MenuItem>
                             <Avatar sx={{ width: "35px", height: "35px"}}/>
                             <Typography color="text">
-                                {user ? "Profile" : "Sign up"}
+                                {user ? "Profile" : "Sign in"}
                             </Typography>
                         </MenuItem>
                     </Link>
@@ -82,14 +80,14 @@ export default function HeaderProfileIcon() {
                         </MenuItem>
                     </section>
                     }
-                    {!user && <section>
-                        <MenuItem>
-                            <ListItemIcon>
+                    {/*{!user && <section>*/}
+                    {/*    <MenuItem>*/}
+                    {/*        <ListItemIcon>*/}
 
-                            </ListItemIcon>
-                        </MenuItem>
-                    </section>
-                    }
+                    {/*        </ListItemIcon>*/}
+                    {/*    </MenuItem>*/}
+                    {/*</section>*/}
+                    {/*}*/}
                 </Menu>
         </div>
     )
