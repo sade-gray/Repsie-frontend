@@ -8,7 +8,7 @@ export function saveRecipe(userId: string, title: string, image: any, recipe: st
     addDoc(recipesCollectionRef, {
         userId: userId,
         title: title,
-        image: "macandcheese",
+        image: imageRef.name,
         recipe: recipe,
         skillRating: skillRating,
         timeRating: timeRating
