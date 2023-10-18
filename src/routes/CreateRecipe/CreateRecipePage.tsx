@@ -24,6 +24,7 @@ export default function CreateRecipePage() {
     ];
     const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
     const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
+    const [title, setTitle] = useState<string>("");
     const [colour, setColour] = useState<"success" | "error" | "warning" | "disabled">("disabled");
     const [imageUrl, setImageUrl] = useState<string>();
     const [coverImageUrl, setCoverImageUrl] = useState<string>();
@@ -36,7 +37,7 @@ export default function CreateRecipePage() {
         if (imageUrl) {
             saveRecipe(
                 user.uid,
-                "macandcheese",
+                title,
                 imageUrl,
                 JSON.stringify(recipeData),
                 skillRatingValue,
@@ -130,6 +131,9 @@ export default function CreateRecipePage() {
                         label='Recipe title'
                         name='title'
                         color='secondary'
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                        }}
                         sx={{
                             "& .MuiOutlinedInput-root": {
                                 "& > fieldset": {
@@ -178,7 +182,11 @@ export default function CreateRecipePage() {
                     </Box>
                 </div>
                 <div className='create--recipe--editor--container'>
-                    <Editor recipeData={recipeData} setRecipeData={setRecipeData} />
+                    <Editor
+                        readOnly={false}
+                        recipeData={recipeData}
+                        setRecipeData={setRecipeData}
+                    />
                 </div>
                 <Box>
                     <div className='create--recipe--rating--container'>

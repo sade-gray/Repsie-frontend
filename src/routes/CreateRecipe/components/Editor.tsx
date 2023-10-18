@@ -24,8 +24,9 @@ export type CustomText = {
 };
 
 type EditorProps = {
-    recipeData: Descendant[];
-    setRecipeData: Dispatch<SetStateAction<Descendant[]>>;
+    recipeData?: Descendant[];
+    setRecipeData?: Dispatch<SetStateAction<Descendant[]>>;
+    readOnly: boolean;
 };
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
@@ -42,7 +43,7 @@ const BLOCK_HOTKEYS: {[key: string]: string} = {
     "mod+2": "heading-two",
 };
 
-export default function SlateEditor({recipeData, setRecipeData}: EditorProps) {
+export default function SlateEditor({recipeData, setRecipeData, readOnly}: EditorProps) {
     const [editor] = useState(() => withTables(withHistory(withReact(createEditor()))));
     // This is the logic for rendering every node according to its type
     const renderElement = useCallback((props: any) => <Element {...props} />, []);
@@ -57,7 +58,7 @@ export default function SlateEditor({recipeData, setRecipeData}: EditorProps) {
             }}>
             <Box
                 sx={{
-                    border: "2px solid",
+                    border: !readOnly ? "2px solid" : "none",
                     borderColor: "secondary.main",
                 }}>
                 <Slate
@@ -67,23 +68,28 @@ export default function SlateEditor({recipeData, setRecipeData}: EditorProps) {
                         setRecipeData(value);
                         console.log(JSON.stringify(value));
                     }}>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "start",
-                            flexWrap: "wrap",
-                            backgroundColor: "#eee",
-                        }}>
-                        <MarkButton format='bold' icon='FormatBold' />
-                        <MarkButton format='italic' icon='FormatItalic' />
-                        <MarkButton format='underline' icon='FormatUnderlined' />
-                        <BlockButton format='heading-one' icon='LooksOne' />
-                        <BlockButton format='heading-two' icon='LooksTwo' />
-                        <BlockButton format='bulleted-list' icon='FormatListBulleted' />
-                        <BlockButton format='numbered-list' icon='FormatListNumbered' />
-                        <BlockButton format='table' icon='TableChartOutlined' />
-                    </Box>
-                    <Divider color='secondary' />
+                    {!readOnly && (
+                        <div>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "start",
+                                    flexWrap: "wrap",
+                                    backgroundColor: "#eee",
+                                }}>
+                                <MarkButton format='bold' icon='FormatBold' />
+                                <MarkButton format='italic' icon='FormatItalic' />
+                                <MarkButton format='underline' icon='FormatUnderlined' />
+                                <BlockButton format='heading-one' icon='LooksOne' />
+                                <BlockButton format='heading-two' icon='LooksTwo' />
+                                <BlockButton format='bulleted-list' icon='FormatListBulleted' />
+                                <BlockButton format='numbered-list' icon='FormatListNumbered' />
+                                <BlockButton format='table' icon='TableChartOutlined' />
+                            </Box>
+                            <Divider color='secondary' />
+                        </div>
+                    )}
+
                     <Box
                         sx={{
                             width: "40vw",
@@ -95,6 +101,7 @@ export default function SlateEditor({recipeData, setRecipeData}: EditorProps) {
                                 padding: 2,
                                 minHeight: "40vh",
                             }}
+                            readOnly={readOnly}
                             renderElement={renderElement}
                             renderLeaf={renderLeaf}
                             onKeyDown={(event) => {
