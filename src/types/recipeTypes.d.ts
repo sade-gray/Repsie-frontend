@@ -6,3 +6,11 @@ export interface savedRecipe {
         iconUrl: string
     }
 }
+
+export interface RecipeCard {
+    id: string
+    title: string,
+    skillRating: number,
+    timeRating: number,
+    image: string,
+}
