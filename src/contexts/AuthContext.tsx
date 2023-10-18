@@ -37,8 +37,8 @@ export function AuthProvider({ children }: any) {
                 console.log(error.message);
             })
     }
-    const emailSignIn = (email: string, password: string) => {
-        signInWithEmailAndPassword(auth, email, password)
+    const emailSignIn = async (email: string, password: string) => {
+        await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
                 if ((user)) {

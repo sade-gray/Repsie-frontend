@@ -16,7 +16,7 @@ export default function SignInForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [loginError, setLoginError] = useState();
+    const [loginError, setLoginError] = useState("");
     // TODO: Add type.a
     const { user, emailSignIn }: any = useAuth();
     // TODO: Disable sign up button until form is valid.
@@ -30,12 +30,11 @@ export default function SignInForm() {
         event.preventDefault();
     }
 
-    const handleFormSubmit = (e: any) => {
+    const handleFormSubmit = async (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
-        emailSignIn(email, password);
+        await emailSignIn(email, password);
         if (!user) {
-            console.log("Invalid credentials");
             setLoginError("Invalid Credentials. Please try again.");
         }
     }
