@@ -10,14 +10,14 @@ import {Link} from "react-router-dom";
 import { RecipeCard } from "../../types/recipeTypes";
 
 export default function Home() {
-
-    const [recipeData, setRecipeData] = useState<RecipeCard[]>();
+    const [recipeData, setRecipeData] = useState<RecipeCard[]>([]);
 
     useEffect(() => {
         getDocs(recipesCollectionRef)
             .then(results => {
-                setRecipeData(prevData => {
+                setRecipeData((prevData) => {
                     return [
+                        ...prevData,
                         ...results.docs.map(doc => {
                             let docData = doc.data()
                             return {
@@ -36,8 +36,8 @@ export default function Home() {
 
     const recipeComponents = recipeData?.map(recipe => {
         return (
-            <Link to={`/recipe/${recipe.id}`}>
-                <FeedRecipeCard key={recipe.id} title={recipe.title} imageUrl={GourmetToastie} publisherName={"50 Sades of Gray"} publisherImageUrl={Wex} />
+            <Link to={`/recipe/${recipe.id}`} key={recipe.id}>
+                <FeedRecipeCard title={recipe.title} imageUrl={GourmetToastie} publisherName={"50 Sades of Gray"} publisherImageUrl={Wex} />
             </Link>
         )
     })

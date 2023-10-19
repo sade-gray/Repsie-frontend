@@ -2,7 +2,7 @@ import {IconButton} from "@mui/material";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import {PublisherContainer} from "../routes/Recipe/components/PublisherContainer.tsx";
-import {useState} from "react";
+import React, {useState} from "react";
 
 interface RecipeCardData {
     title: string,
@@ -12,9 +12,9 @@ interface RecipeCardData {
 }
 
 export default function FeedRecipeCard(props: RecipeCardData) {
-
     const [saved, setSaved] = useState(false)
-    const handleSaveToggle = (e) => {
+    const handleSaveToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        // Prevent from being redirected to the recipe pag
         e.preventDefault();
         setSaved(prevSaved => !prevSaved)
     }
