@@ -14,7 +14,8 @@ interface RecipeCardData {
 export default function FeedRecipeCard(props: RecipeCardData) {
 
     const [saved, setSaved] = useState(false)
-    const handleSaveToggle = () => {
+    const handleSaveToggle = (e) => {
+        e.preventDefault();
         setSaved(prevSaved => !prevSaved)
     }
 
@@ -22,7 +23,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
         <article className={"feed--recipe--container"}>
             <div className={"recipe--title--container"}>
                 <h2 className={"recipe--title"}>{props.title}</h2>
-                <IconButton sx={{marginRight:"0.5rem"}} onClick={() => handleSaveToggle()}>
+                <IconButton sx={{marginRight:"0.5rem"}} onClick={(e) => handleSaveToggle(e)}>
                     {saved
                         ? <BookmarkBorderOutlinedIcon color={"secondary"} fontSize={"large"}/>
                         : <BookmarkOutlinedIcon color={"secondary"} fontSize={"large"}/>
