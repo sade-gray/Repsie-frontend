@@ -82,14 +82,15 @@ export default function HeaderProfileIcon() {
                         </MenuItem>
                     </section>
                     }
-                    {!user && <section>
-                        <MenuItem>
-                            <ListItemIcon>
+                    {/*{!user && <section>*/}
+                    {/*    <MenuItem>*/}
+                    {/*        <ListItemIcon>*/}
 
-                            </ListItemIcon>
-                        </MenuItem>
-                    </section>
-                    }
+                    {/*        </ListItemIcon>*/}
+                    {/*        */}
+                    {/*    </MenuItem>*/}
+                    {/*</section>*/}
+                    {/*}*/}
                 </Menu>
         </div>
     )
