@@ -2,15 +2,10 @@ import * as ReactDOM from "react-dom/client";
 import { Root } from "./components/Root.tsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import "./index.scss";
-import RecipePage from "./routes/Recipe/RecipePage.tsx";
 import Home from "./routes/Home/Home.tsx";
-import CreateRecipePage from "./routes/CreateRecipe/CreateRecipePage.tsx";
-import MyRecipesPage from "./routes/MyRecipesPage/MyRecipesPage.tsx";
 import RouteNotFound from "./routes/404Route/RouteNotFound.tsx";
-import SignUp from "./routes/SignUp/SignUp.tsx";
 import {AuthProvider} from "./contexts/AuthContext.tsx";
-import SignIn from "./routes/SignIn/SignIn.tsx";
-import SnackBarProvider from "./contexts/SnackBarContext.tsx";
+import {SnackBarProvider} from "./contexts/SnackBarContext.tsx";
 
 const router = createBrowserRouter([{
         path: "/",
@@ -22,27 +17,43 @@ const router = createBrowserRouter([{
         children: [
             {
                 path: "/",
+                index: true,
                 element: <Home />,
             },
             {
                 path: "/recipe/:recipeId",
-                element: <RecipePage />,
+                async lazy() {
+                    let { RecipePage } = await import("./routes/Recipe/RecipePage.tsx");
+                    return { Component: RecipePage };
+                }
             },
             {
                 path: "/myRecipes",
-                element: <MyRecipesPage />,
+                async lazy() {
+                    let { MyRecipesPage } = await import("./routes/MyRecipesPage/MyRecipesPage.tsx");
+                    return { Component: MyRecipesPage};
+                }
             },
             {
                 path: "/createRecipe",
-                element: <CreateRecipePage />,
+                async lazy() {
+                    let { CreateRecipePage } = await import("./routes/CreateRecipe/CreateRecipePage.tsx");
+                    return { Component: CreateRecipePage };
+                }
             },
             {
                 path: "/signup",
-                element: <SignUp />,
+                async lazy() {
+                    let {SignUp} = await import("./routes/SignUp/SignUp.tsx");
+                    return {Component: SignUp};
+                }
             },
             {
               path: "/signin",
-              element: <SignIn />,
+              async lazy() {
+                  let { SignIn } = await import("./routes/SignIn/SignIn.tsx");
+                  return {Component: SignIn};
+              }
             },
             {
                 path:"/:any",
@@ -55,6 +66,6 @@ const router = createBrowserRouter([{
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     // <React.StrictMode>
-            <RouterProvider router={router} />
+    <RouterProvider router={router} fallbackElement={<div>Loading your content!</div>}/>
     // </React.StrictMode>
 );

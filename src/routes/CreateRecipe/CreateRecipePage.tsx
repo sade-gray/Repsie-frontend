@@ -15,7 +15,7 @@ import {saveRecipe} from "../../api/saveRecipe.ts";
 import {useAuth} from "../../contexts/AuthContext.tsx";
 import {Descendant} from "slate";
 
-export default function CreateRecipePage() {
+export function CreateRecipePage() {
     const initialValue = [
         {
             type: "paragraph",

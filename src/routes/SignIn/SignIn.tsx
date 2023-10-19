@@ -4,8 +4,8 @@ import {useAuth} from "../../contexts/AuthContext.tsx";
 import {Navigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 
-export default function SignIn() {
-    const { user }:any = useAuth();
+export function SignIn() {
+    const { user } = useAuth();
 
     if (user) {
         return <Navigate to={"/"}/>

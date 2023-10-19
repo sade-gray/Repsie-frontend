@@ -10,7 +10,7 @@ import {doc, getDoc} from "firebase/firestore";
 import Editor from "../CreateRecipe/components/Editor.tsx";
 import {AccessTime, LocalDining} from "@mui/icons-material";
 
-export default function RecipePage() {
+export function RecipePage() {
     const recipeId = useParams()["recipeId"];
     const [coverImageUrl, setCoverImageUrl] = useState<string>();
     const imageUrl = "macandcheese.jpg"

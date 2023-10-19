@@ -4,7 +4,7 @@ import {useEffect, useState} from "react"
 import CreateRecipeButton from "./Components/CreateRecipeButton";
 import { Button, Chip } from "@mui/material";
 
-export default function MyRecipesPage() {
+export function MyRecipesPage() {
     const [myRecipesComponents, setMyRecipesComponents]: any = useState();
 
     useEffect(() => {
