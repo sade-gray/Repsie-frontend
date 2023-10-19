@@ -10,7 +10,7 @@ export function useSnackBar() {
     return useContext(SnackBarContext);
 }
 
-export default function SnackBarProvider({ children }: any) {
+export function SnackBarProvider({ children }: any) {
     // TODO: Add severity customization
     const [snack, setSnack] = useState<snack>({
         message: "",
