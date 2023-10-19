@@ -15,12 +15,10 @@ export default function SnackBarProvider({ children }: any) {
     const [snack, setSnack] = useState<snack>({
         message: "",
         severity: "success"
-        }
-    );
+    });
     const [open, setOpen] = useState<boolean>(false);
 
     const addSnack = (message: string, severity: AlertColor) => {
-        console.log("Adding snack")
         setSnack({message: message, severity: severity || "success"});
         setOpen(true);
     }
@@ -35,7 +33,7 @@ export default function SnackBarProvider({ children }: any) {
 
     return (
         <SnackBarContext.Provider value={value}>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{horizontal: "right", vertical:"bottom"}}>
+            <Snackbar open={open} autoHideDuration={5000} onClose={handleClose} anchorOrigin={{horizontal: "right", vertical:"bottom"}}>
                 <Alert severity={snack.severity} onClose={handleClose}>
                     {snack.message}
                 </Alert>
