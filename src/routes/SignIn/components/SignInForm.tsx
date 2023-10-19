@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext.tsx";
 import {Visibility} from "@mui/icons-material";
 import {VisibilityOff} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 
 export default function SignInForm() {
     const [email, setEmail] = useState("");
@@ -27,7 +28,6 @@ export default function SignInForm() {
 
     const navigate = useNavigate();
     // TODO: Redirect only if succesful.
-    const handleFormSubmit = async (e: any) => {
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -39,11 +39,13 @@ export default function SignInForm() {
         await emailSignIn(email, password);
         if (!user) {
             setLoginError("Invalid Credentials. Please try again.");
+        } else {
+            navigate("");
         }
     }
 
     return (
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={(e) => handleFormSubmit(e)}>
             <Typography variant={"h4"}>Sign in</Typography>
             <TextField color={"secondary"}
                        label={"Email"}
