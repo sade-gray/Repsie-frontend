@@ -1,4 +1,3 @@
-import "./styles.scss";
 import {PublisherContainer} from "./components/PublisherContainer.tsx";
 import Wex from "../../assets/wex.png";
 import {getDownloadURL} from "firebase/storage";
