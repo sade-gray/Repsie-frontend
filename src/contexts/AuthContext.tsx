@@ -6,6 +6,7 @@ import {
     signInWithEmailAndPassword,
 } from "firebase/auth";
 import {useSnackBar} from "./SnackBarContext.tsx";
+import {useNavigate} from "react-router-dom";
 
 // @ts-ignore TODO: Add default value so it stops complaining
 const AuthContext = createContext();
@@ -19,6 +20,7 @@ export function AuthProvider({ children }: any) {
     const [user, setUser] = useState<any>();
     const [ loading, setLoading] = useState(true);
     const { addSnack }: any = useSnackBar();
+    const navigate = useNavigate();
 
     const emailSignUp = (email: string, password: string) => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -35,19 +37,21 @@ export function AuthProvider({ children }: any) {
                 console.log(error.message);
             })
     }
-    const emailSignIn = (email: string, password: string) => {
-        signInWithEmailAndPassword(auth, email, password)
+    const emailSignIn = async (email: string, password: string) => {
+        await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
                 if ((user)) {
                     setUser(user);
                     addSnack(`Success! Logged in as ${user.displayName || user.email}`);
+                    navigate("/")
                     return true;
                 }
                 return false;
             })
             .catch((error) => {
                 console.log(error.message);
+                return false;
             })
     }
     const signOut = () => {
