@@ -34,32 +34,33 @@ export default function Home() {
             .catch(error => console.log(error))
     }, [])
 
-    const recipeComponents = recipeData?.map(recipe => {
+    const recipeComponents = recipeData?.map((recipe, idx) => {
         return (
-            <Link to={`/recipe/${recipe.id}`} key={recipe.id}>
-                <FeedRecipeCard title={recipe.title} imageUrl={GourmetToastie} publisherName={"50 Sades of Gray"} publisherImageUrl={Wex} />
-            </Link>
+            <article key={idx}>
+                <Link to={`/recipe/${recipe.id}`}>
+                    <FeedRecipeCard title={recipe.title} imageUrl={GourmetToastie} publisherName={"50 Sades of Gray"} publisherImageUrl={Wex} />
+                </Link>
+                <Divider />
+            </article>
         )
     })
 
     return (
-        <>
-            <div className={"main--container"}>
-                <section className={"saved--recipe--section"}>
-                    <SavedRecipesContainer />
-                </section>
-                <section className={"recipes--feed--container"}>
-                    <div className={"recipes--feed"}>
-                        <h1>For you</h1>
-                        <Divider />
-                        {/* Feed Card go here */}
-                        {recipeComponents}
-                    </div>
-                </section>
-                <section className={"chef--recommendation--container"}>
-                    Chefs to follow
-                </section>
-            </div>
-        </>
+        <div className={"main--container"}>
+            <section className={"saved--recipe--section"}>
+                <SavedRecipesContainer />
+            </section>
+            <section className={"recipes--feed--container"}>
+                <div className={"recipes--feed"}>
+                    <h1>For you</h1>
+                    <Divider />
+                    {/* Feed Card go here */}
+                    {recipeComponents}
+                </div>
+            </section>
+            <section className={"chef--recommendation--container"}>
+                Chefs to follow
+            </section>
+        </div>
     )
 }
