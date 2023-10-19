@@ -1,5 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import { auth } from "../firebase.ts";
+import { User as FirebaseUser } from "firebase/auth";
 import {
     createUserWithEmailAndPassword,
     onAuthStateChanged,
@@ -7,22 +8,22 @@ import {
 } from "firebase/auth";
 import {useSnackBar} from "./SnackBarContext.tsx";
 import {useNavigate} from "react-router-dom";
+import {AuthContextValues} from "../types/authTypes.ts";
 
-// @ts-ignore TODO: Add default value so it stops complaining
-const AuthContext = createContext();
+const AuthContext = createContext({} as AuthContextValues);
 
 export function useAuth() {
-    return useContext(AuthContext);
+    return useContext<AuthContextValues>(AuthContext);
 }
 
 export function AuthProvider({ children }: any) {
     // TODO: Add user type to state.
-    const [user, setUser] = useState<any>();
+    const [user, setUser] = useState<FirebaseUser | null |undefined>();
     const [loading, setLoading] = useState(true);
     const { addSnack }: any = useSnackBar();
     const navigate = useNavigate();
 
-    const emailSignUp = async (email: string, password: string) => {
+    const emailSignUp = async (email: string, password: string): Promise<boolean> => {
         await createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
@@ -35,9 +36,11 @@ export function AuthProvider({ children }: any) {
             })
             .catch((error) => {
                 console.log(error.message);
+                return false;
             })
+        return false;
     }
-    const emailSignIn = async (email: string, password: string) => {
+    const emailSignIn = async (email: string, password: string): Promise<boolean> => {
         await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
@@ -53,6 +56,7 @@ export function AuthProvider({ children }: any) {
                 console.log(error.message);
                 return false;
             })
+        return false
     }
     const signOut = () => {
         return auth.signOut();
@@ -68,7 +72,7 @@ export function AuthProvider({ children }: any) {
     }, [])
 
 
-    const value= {
+    const value: AuthContextValues= {
         user,
         emailSignUp,
         emailSignIn,
