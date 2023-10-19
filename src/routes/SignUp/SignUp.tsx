@@ -3,7 +3,7 @@ import SignUpForm from "./components/SignUpForm.tsx";
 import {useAuth} from "../../contexts/AuthContext.tsx";
 import {Navigate} from "react-router-dom";
 
-export default function SignUp() {
+export function SignUp() {
     const {user}:any = useAuth();
 
     if (user) {
