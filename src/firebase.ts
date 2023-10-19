@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import {getAuth} from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { collection, getFirestore } from "firebase/firestore";
+import { collection, getFirestore, initializeFirestore, memoryLocalCache } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAJrXQY66JuycdEIOk3h_lXunPSNrVW50Y",
@@ -14,6 +14,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export default app;
+
+// Get caching
+initializeFirestore(app, {localCache: memoryLocalCache()})
 export const contentStorage = getStorage(app);
-const db = getFirestore(app);
+const db = getFirestore(app, );
 export const recipesCollectionRef = collection(db, 'recipes');
