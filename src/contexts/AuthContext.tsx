@@ -57,12 +57,10 @@ export function AuthProvider({ children }: any) {
     // TODO: Add Google Auth.
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        return onAuthStateChanged(auth, (user) => {
             setUser(user);
             setLoading(false);
         });
-
-        return unsubscribe;
     }, [])
 
 
