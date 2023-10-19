@@ -12,7 +12,7 @@ export default function SignInForm() {
 
     const navigate = useNavigate();
     // TODO: Redirect only if succesful.
-    const handleFormSubmit = (e: any) => {
+    const handleFormSubmit = async (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
         if (emailSignIn(email, password)) {

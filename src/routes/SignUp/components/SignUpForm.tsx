@@ -12,7 +12,7 @@ export default function SignUpForm() {
 
     const navigate = useNavigate();
     // TODO: Redirect only if successful.
-    const handleFormSubmit = (e: any) => {
+    const handleFormSubmit = async (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
         if (emailSignUp(email, password)) {

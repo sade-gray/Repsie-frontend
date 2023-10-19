@@ -17,11 +17,11 @@ export function useAuth() {
 export function AuthProvider({ children }: any) {
     // TODO: Add user type to state.
     const [user, setUser] = useState<any>();
-    const [ loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const { addSnack }: any = useSnackBar();
 
-    const emailSignUp = (email: string, password: string) => {
-        createUserWithEmailAndPassword(auth, email, password)
+    const emailSignUp = async (email: string, password: string) => {
+        await createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
                 if ((user)) {
