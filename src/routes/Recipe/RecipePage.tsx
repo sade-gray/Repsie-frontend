@@ -100,7 +100,7 @@ export function RecipePage() {
 
                 <section className={"recipe--content--container"}>
                     {recipeContent ?
-                        <Editor readOnly={true} recipeData={JSON.parse(recipeContent.recipe || "")} setRecipeData={() => {}} />
+                        <Editor readOnly={true} recipeData={JSON.parse(recipeContent.recipe || "")} />
                         :
                         <Typography> Loading that shit</Typography>
                     }
