@@ -11,6 +11,7 @@ export default function HeaderProfileIcon() {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
     const handleLogoutClick = () => {
+        handleCloseUserMenu();
         signOut();
     }
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -25,7 +26,7 @@ export default function HeaderProfileIcon() {
             <Box sx={{flexGrow: 0}}>
                 <Tooltip title='Open settings'>
                     <IconButton sx={{paddingRight: 2.5}} onClick={handleOpenUserMenu}>
-                        {/* Fetch avatar image from database */}
+                        {/* TODO: Fetch avatar image from database */}
                         <Avatar alt='user logo' src={user && avatar}/>
                     </IconButton>
                 </Tooltip>
@@ -43,8 +44,8 @@ export default function HeaderProfileIcon() {
                     keepMounted
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
-                    slotProps={{ 
-                        // This is the styling for the menu options  
+                    // This is the styling for the menu options
+                    slotProps={{
                         paper: {
                             sx: {
                                 "& .MuiAvatar-root": {
@@ -56,7 +57,7 @@ export default function HeaderProfileIcon() {
                     }
                 >
                     <Link to={user ? "/": "/signin"}>
-                        <MenuItem>
+                        <MenuItem onClick={handleCloseUserMenu}>
                             <Avatar sx={{ width: "35px", height: "35px"}}/>
                             <Typography color="text">
                                 {user ? "Profile" : "Sign in"}
@@ -66,7 +67,7 @@ export default function HeaderProfileIcon() {
                     {user && <section>
                         <Divider />
                         <Link to="/myRecipes">
-                            <MenuItem>
+                            <MenuItem onClick={handleCloseUserMenu}>
                                     <RestaurantMenuOutlined sx={{width: "35px", height: "35px", mr:1}} color="secondary"/>
                                     <Typography color="text">My Recipes</Typography>
                             </MenuItem>

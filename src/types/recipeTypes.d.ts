@@ -13,4 +13,14 @@ export interface RecipeCard {
     skillRating: number,
     timeRating: number,
     image: string,
+    savedByUser: boolean
+}
+
+interface RecipeCardData {
+    id: string,
+    title: string,
+    imageUrl: string,
+    publisherName: string,
+    publisherImageUrl: string
+    saved: boolean
 }

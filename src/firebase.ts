@@ -18,5 +18,5 @@ export default app;
 // Get caching
 initializeFirestore(app, {localCache: memoryLocalCache()})
 export const contentStorage = getStorage(app);
-const db = getFirestore(app, );
+export const db = getFirestore(app);
 export const recipesCollectionRef = collection(db, 'recipes');

@@ -8,16 +8,13 @@ import { savedRecipe } from "../types/recipeTypes.ts";
  * Currently, in use by the mobile drawer and home page.
  */
 export default function SavedRecipesContainer() {
-    const [savedRecipes, setSavedRecipes] = useState<Array<savedRecipe>>()
+    const [savedRecipes, setSavedRecipes] = useState<Array<savedRecipe>>();
+
+    // Fetch saved recipes of current user
     useEffect(() => {
-        fetch('http://localhost:8000/saved', {
-            mode: 'cors'
-        })
-            .then(response => response.json())
-            .then(data => {
-                setSavedRecipes(data);
-            })
+
     }, []);
+
     const savedRecipeComponents = savedRecipes?.map((recipe: savedRecipe, idx: number) => {
     // Each Saved Recipe is a link to its page.
         return (
