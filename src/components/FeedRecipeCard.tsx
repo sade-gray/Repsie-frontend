@@ -6,13 +6,15 @@ import React, {useEffect, useState} from "react";
 import {RecipeCardData} from "../types/recipeTypes";
 import {useAuth} from "../contexts/AuthContext.tsx";
 import {useSnackBar} from "../contexts/SnackBarContext.tsx";
-import {doc, updateDoc, arrayUnion, arrayRemove, setDoc} from "firebase/firestore";
+import {doc, updateDoc, arrayUnion, arrayRemove, setDoc, getDoc} from "firebase/firestore";
 import {db} from "../firebase.ts";
+import {useUserData} from "../contexts/UserDataContext.tsx";
 
 export default function FeedRecipeCard(props: RecipeCardData) {
     const [saved, setSaved] = useState(props.saved)
     const { user } = useAuth();
     const { addSnack }:any  = useSnackBar();
+    const { setUserSavedRecipes } = useUserData();
 
     // This usEffect is used to initialise the state of the save button from the cloud
     useEffect(() => {
@@ -30,22 +32,40 @@ export default function FeedRecipeCard(props: RecipeCardData) {
         // Get a reference to the current recipe
         let userSavedRecipesDocRef = doc(db, `userSavedRecipes/${user.uid}`);
         // Create the document if it does not exist.
-        if (!userSavedRecipesDocRef) {
-            await setDoc(userSavedRecipesDocRef, {
-                recipeRefs: [`/recipes/${props.id}`]
-            }).then(() => {
-                addSnack("Success! Saved the recipe.", "success");
-            })
-            return;
-        }
+        await getDoc(userSavedRecipesDocRef).then((doc) => {
+            if (!doc.exists()) {
+                console.log("Creating new doc")
+                setDoc(userSavedRecipesDocRef, {
+                    recipeRefs: [props.id]
+                }).then(() => {
+                    addSnack("Success! Saved the recipe.", "success");
+                })
+                return;
+            }
+        })
         if (!saved) {
             await updateDoc(userSavedRecipesDocRef, {
-                recipeRefs: arrayUnion(`/recipes/${props.id}`)
-            }).then(() => addSnack("Success! Saved the recipe.", "success"));
+                recipeRefs: arrayUnion(props.id)
+            }).then(() =>  {
+                setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
+                    return [
+                        ...prevUserSavedRecipes,
+                        props.id
+                    ]
+                })
+                addSnack("Success! Saved the recipe.", "success")
+            });
+
         } else {
             await updateDoc(userSavedRecipesDocRef, {
-                recipeRefs: arrayRemove(`/recipes/${props.id}`)
-            }).then(() => addSnack("Success! Unsaved the recipe.", "success"));
+                recipeRefs: arrayRemove(props.id)
+            }).then(() => {
+                addSnack("Success! Unsaved the recipe.", "success")
+                setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
+                    return prevUserSavedRecipes.filter((id) => id !== props.id);
+                })
+
+            });
         }
         setSaved(prevSaved => !prevSaved)
     }

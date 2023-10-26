@@ -6,12 +6,15 @@ import Home from "./routes/Home/Home.tsx";
 import RouteNotFound from "./routes/404Route/RouteNotFound.tsx";
 import {AuthProvider} from "./contexts/AuthContext.tsx";
 import {SnackBarProvider} from "./contexts/SnackBarContext.tsx";
+import {UserDataProvider} from "./contexts/UserDataContext.tsx";
 
 const router = createBrowserRouter([{
         path: "/",
         element: <SnackBarProvider>
                     <AuthProvider>
-                        <Root />
+                        <UserDataProvider>
+                            <Root />
+                        </UserDataProvider>
                     </AuthProvider>
                 </SnackBarProvider>,
         children: [

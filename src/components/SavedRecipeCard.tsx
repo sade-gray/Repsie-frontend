@@ -1,5 +1,6 @@
 import { PublisherContainer } from "../routes/Recipe/components/PublisherContainer.tsx";
 import { savedRecipe } from "../types/recipeTypes.ts";
+import Wex from "../assets/wex.png"
 
 export default function SavedRecipeCard({title, imageUrl, publisher}: savedRecipe) {
     
@@ -10,8 +11,8 @@ export default function SavedRecipeCard({title, imageUrl, publisher}: savedRecip
                 <PublisherContainer color={"white"}
                                     size={"small"}
                                     outline={"bold"}
-                                    publisherName={publisher.name}
-                                    publisherImageUrl={publisher.iconUrl}
+                                    publisherName={publisher?.name || "Bob"}
+                                    publisherImageUrl={publisher?.iconUrl || Wex}
                 />
             </div>
         </div>

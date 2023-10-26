@@ -1,33 +1,25 @@
 import Wex from "../../assets/wex.png"
-import GourmetToastie from "../../assets/gourmet-toastie.jpg";
+import GourmetToastie from "../../assets/dummyPhotos/gourmet-toastie.jpg";
 import FeedRecipeCard from "../../components/FeedRecipeCard.tsx";
 import SavedRecipesContainer from "../../components/SavedRecipesContainer.tsx";
 import {Divider, Skeleton, Stack} from "@mui/material";
 import {useEffect, useState} from "react";
 import { recipesCollectionRef} from "../../firebase.ts";
-import {getDoc, getDocs} from "firebase/firestore";
 import {Link} from "react-router-dom";
 import { RecipeCard } from "../../types/recipeTypes";
-import {db} from "../../firebase.ts"
-import {doc} from "firebase/firestore";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import {getDocs} from "firebase/firestore";
+import {useUserData} from "../../contexts/UserDataContext.tsx";
 
 export default function Home() {
     const [recipeData, setRecipeData] = useState<RecipeCard[]>([]);
-    const [userSavedRecipes, setUserSavedRecipes] = useState<any>();
-    const { user } = useAuth();
+    const {userSavedRecipes}: any = useUserData();
 
+    // Helper function to check if a recipe exists in the user's saved recipes list
     function checkIfRecipeSaved(id: string): boolean {
-        return userSavedRecipes?.includes(`/recipes/${id}`) || false
+        return userSavedRecipes?.includes(`${id}`) || false
     }
 
     useEffect( () => {
-        // Get user's saved recipes data
-        getDoc(doc(db, `userSavedRecipes/${user?.uid}`))
-            .then(results => {
-                const data = results.data();
-                setUserSavedRecipes(data?.recipeRefs)
-            })
         // Fetch some recipes
         getDocs(recipesCollectionRef)
             .then(results => {

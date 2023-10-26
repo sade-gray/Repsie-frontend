@@ -11,7 +11,6 @@ export function useSnackBar() {
 }
 
 export function SnackBarProvider({ children }: any) {
-    // TODO: Add severity customization
     const [snack, setSnack] = useState<snack>({
         message: "",
         severity: "success"

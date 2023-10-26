@@ -1,4 +1,5 @@
 export interface savedRecipe {
+    id: string
     title: string,
     imageUrl: string,
     publisher: {

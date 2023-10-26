@@ -73,6 +73,7 @@ body {
 }
 
 .saved--recipe--card--title {
+  text-align: left;
   background: $transparenttheme1;
   border-radius: 1rem;
   padding: 0.3rem;
@@ -114,10 +115,6 @@ body {
   .saved--recipe--section, .chef--recommendation--container {
     display: none;
   }
-}
-
-.saved--recipes--list {
-  display: inline-block;
 }
 
 // The whole feed's container
