@@ -13,7 +13,6 @@ import {useUserData} from "../../contexts/UserDataContext.tsx";
 export default function Home() {
     const [recipeData, setRecipeData] = useState<RecipeCard[]>([]);
     const {userSavedRecipes}: any = useUserData();
-
     // Helper function to check if a recipe exists in the user's saved recipes list
     function checkIfRecipeSaved(id: string): boolean {
         return userSavedRecipes?.includes(`${id}`) || false
@@ -34,8 +33,7 @@ export default function Home() {
                                 skillRating: docData.skillRating,
                                 timeRating: docData.timeRating,
                                 image: "",
-                                // Initialize to false as user data is still being fetched
-                                savedByUser: false
+                                savedByUser: checkIfRecipeSaved(doc.id)
                             }
                         })
                     ]
