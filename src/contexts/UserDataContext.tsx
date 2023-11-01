@@ -6,7 +6,7 @@
  *      * The user's settings (dark mode, allergens etc)
  */
 import {createContext, useContext, useEffect, useState} from "react";
-import {doc, getDoc} from "firebase/firestore";
+import {doc, getDoc, setDoc} from "firebase/firestore";
 import {db} from "../firebase.ts";
 import {useAuth} from "./AuthContext.tsx";
 import {useSnackBar} from "./SnackBarContext.tsx";
@@ -25,19 +25,29 @@ export function UserDataProvider({children}: any) {
     const { addSnack }: any = useSnackBar();
     const { user } = useAuth();
     // const [loading, setLoading] = useState(true);
+    // Reference to user's saved recipe document
+    const userSavedRecipesDocRef = doc(db, `userSavedRecipes/${user?.uid}`);
 
     // Get user's saved recipes data
     // We have rules in firebase that do not allow non-owners of a document access
     useEffect(() => {
-        getDoc(doc(db, `userSavedRecipes/${user?.uid}`))
-            .then(results => {
-                const data = results.data();
-                setUserSavedRecipes(data?.recipeRefs)
+        getDoc(userSavedRecipesDocRef)
+            .then(doc => {
+                // The user's saved recipes is an array of strings in a separate document
+                // It might not exist. If it doesn't, create it.
+                if (doc.exists()) {
+                    const data = doc.data();
+                    setUserSavedRecipes(data?.recipeRefs)
+                } else {
+                    setDoc(userSavedRecipesDocRef, {
+                        recipeRefs: []
+                    }).then(r => console.log(r))
+                }
             })
             .catch(() => {
                 addSnack("Error. Accessing unauthorised data.", "error");
             })
-    }, []);
+    }, [user]);
 
     const value: UserData = {
         userSavedRecipes,
