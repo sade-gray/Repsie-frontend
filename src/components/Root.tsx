@@ -3,7 +3,7 @@ import { Header } from "./Header/Header.tsx";
 import { theme } from "../theme.ts";
 import { ThemeProvider } from "@mui/material/styles";
 import { DrawerProvider } from "../contexts/DrawerContext.tsx";
-import Footer from "./Footer.tsx";
+// import Footer from "./Footer.tsx";
 
 export function Root() {
 
@@ -15,7 +15,7 @@ export function Root() {
             </DrawerProvider>
             {/* Outlet is the child component to be rendered.*/}
                 <Outlet />
-            <Footer/>
+            {/*<Footer/>*/}
         </ThemeProvider>
     )
 }

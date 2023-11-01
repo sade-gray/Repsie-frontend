@@ -2,6 +2,7 @@ import { recipesCollectionRef } from "../firebase.ts";
 import { addDoc } from "firebase/firestore";
 import { uploadBytes, ref } from "firebase/storage"
 import { contentStorage } from "../firebase.ts";
+import {serverTimestamp } from "firebase/firestore";
 
 export function saveRecipe(userId: string, title: string, image: any, recipe: string, skillRating: number, timeRating: number) {
     const imageRef = ref(contentStorage, `recipeImages/${image.name}`);
@@ -11,7 +12,8 @@ export function saveRecipe(userId: string, title: string, image: any, recipe: st
         image: imageRef.name,
         recipe: recipe,
         skillRating: skillRating,
-        timeRating: timeRating
+        timeRating: timeRating,
+        datePublished: serverTimestamp()
     }).then((data) => {
             console.log("Success! Doc saved with id", data.id)
             console.log("Uploading image")

@@ -5,11 +5,11 @@ $transparenttheme1: rgba(85, 69, 146, 55%);
 // TODO: Add breakpoint variables
 // Example
 $breakpoint-tablet: 768px;
-
-body {
+html, body {
   font-weight:bolder;
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .repsie--logo {
@@ -33,7 +33,7 @@ body {
     margin-left: 0.5rem;
     padding: 0.5rem;
   }
-  
+
   .header--search {
     max-width: 30%;
     padding: 0.5rem;
@@ -90,6 +90,7 @@ body {
   width: 100vw;
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .home--container > section {
@@ -120,8 +121,10 @@ body {
 // The whole feed's container
 .recipes--feed--container {
   flex: 2;
-  padding: 0 10%;
+  margin: 0 10%;
   max-width: 630px;
+  max-height: 93vh;
+  overflow-y: scroll;
 
   h1 {
     margin: 0 0 0.5rem 0;

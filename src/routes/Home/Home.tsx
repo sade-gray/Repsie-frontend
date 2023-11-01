@@ -3,24 +3,31 @@ import GourmetToastie from "../../assets/dummyPhotos/gourmet-toastie.jpg";
 import FeedRecipeCard from "../../components/FeedRecipeCard.tsx";
 import SavedRecipesContainer from "../../components/SavedRecipesContainer.tsx";
 import {Divider, Skeleton, Stack} from "@mui/material";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { recipesCollectionRef} from "../../firebase.ts";
 import {Link} from "react-router-dom";
 import { RecipeCard } from "../../types/recipeTypes";
-import {getDocs} from "firebase/firestore";
+import {getDocs, limit, orderBy, query, startAt} from "firebase/firestore";
 import {useUserData} from "../../contexts/UserDataContext.tsx";
+
+const recipeFetchLimit = 2;
 
 export default function Home() {
     const [recipeData, setRecipeData] = useState<RecipeCard[]>([]);
     const {userSavedRecipes}: any = useUserData();
+    // We use useRef as this variable should not trigger re-renders.
+    const recipeOffset = useRef(0);
+
     // Helper function to check if a recipe exists in the user's saved recipes list
     function checkIfRecipeSaved(id: string): boolean {
         return userSavedRecipes?.includes(`${id}`) || false
     }
 
-    useEffect( () => {
-        // Fetch some recipes
-        getDocs(recipesCollectionRef)
+    // Function that gets recipes from the cloud
+    function fetchRecipes() {
+        const q = query(recipesCollectionRef, orderBy("datePublished") , startAt(recipeOffset.current), limit(recipeFetchLimit));
+        recipeOffset.current += recipeFetchLimit;
+        getDocs(q)
             .then(results => {
                 setRecipeData((prevData) => {
                     return [
@@ -39,9 +46,27 @@ export default function Home() {
                     ]
                 })
             })
+    }
+
+    // Function used for infinite scroll
+    function handleScroll(e: any) {
+        // Check if user is at bottom of feed
+        const bottom = e.target.scrollTop + e.target.clientHeight == e.target.scrollHeight;
+        // Fetch more recipes if so
+        if (bottom) {
+            fetchRecipes();
+        }
+    }
+
+    // Fetch first few recipes
+    useEffect( () => {
+        fetchRecipes();
     }, [])
+
     // Once the user's saved recipes data has been fetched, check if any of them have been saved.
+    // Check if feed recipes are saved by user whenever the user saves or unsaves a recipe
     useEffect(() => {
+        // Return the same array of recipes but update the savedByUser field
         setRecipeData(prevRecipeData => prevRecipeData.map((recipe: any )=> {
             return {
                 ...recipe,
@@ -73,8 +98,8 @@ export default function Home() {
             <section className={"saved--recipe--section"}>
                 <SavedRecipesContainer />
             </section>
-            <section className={"recipes--feed--container"}>
-                <div className={"recipes--feed"}>
+            <section className={"recipes--feed--container"} onScroll={handleScroll}>
+                <div className={"recipes--feed"} >
                     <h1>For you</h1>
                     <Divider />
                     {/* Feed Card go here */}
@@ -96,6 +121,7 @@ export default function Home() {
                         // Render the actual recipes when the data makes it here
                         : recipeComponents
                     }
+
                 </div>
             </section>
             <section className={"chef--recommendation--container"}>
