@@ -31,6 +31,9 @@ export function UserDataProvider({children}: any) {
     // Get user's saved recipes data
     // We have rules in firebase that do not allow non-owners of a document access
     useEffect(() => {
+        if (!user) {
+            return setUserSavedRecipes([]);
+        }
         getDoc(userSavedRecipesDocRef)
             .then(doc => {
                 // The user's saved recipes is an array of strings in a separate document
