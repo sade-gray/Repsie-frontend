@@ -1,16 +1,8 @@
-import {
-    Box,
-    Button,
-    IconContainerProps,
-    Rating,
-    TextField,
-    Typography,
-    styled,
-} from "@mui/material";
+import {Box, Button, Rating, TextField, Typography, styled} from "@mui/material";
 import Editor from "./components/Editor";
 import "./styles.scss";
-import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
-import {AccessTime, Create, FileUpload, LocalDining} from "@mui/icons-material";
+import {ChangeEvent, FormEvent, useState} from "react";
+import {AccessTime, Create, FileUpload} from "@mui/icons-material";
 import {saveRecipe} from "../../api/saveRecipe.ts";
 import {useAuth} from "../../contexts/AuthContext.tsx";
 import {Descendant} from "slate";
@@ -25,16 +17,14 @@ export function CreateRecipePage() {
     const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
     const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
     const [title, setTitle] = useState<string>("");
-    const [colour, setColour] = useState<"success" | "error" | "warning" | "disabled">("disabled");
     const [imageUrl, setImageUrl] = useState<string>();
     const [coverImageUrl, setCoverImageUrl] = useState<string>();
-    // const [coverImageFile, setCoverImageUrl] = useState();
     const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
     const {user} = useAuth();
 
     function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if (imageUrl) {
+        if (imageUrl && user) {
             saveRecipe(
                 user.uid,
                 title,
@@ -44,77 +34,25 @@ export function CreateRecipePage() {
                 timeRatingValue
             );
         } else {
-            console.log("Invalid Image");
+            console.log("Invalid image or user");
         }
     }
 
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files;
-        if (file !== undefined) {
-            // @ts-ignore
+        if (!file) return;
+
+        if (file[0] !== undefined) {
             setImageUrl(file[0]);
         }
 
-        if (!file) return;
         const reader = new FileReader();
-
         reader.onloadend = () => {
             setCoverImageUrl(reader.result as string);
         };
 
         reader.readAsDataURL(file[0]);
     };
-
-    function changeColour(value?: number) {
-        setColour(() => {
-            const colour = !value || value === -1 ? skillRatingValue : value;
-            switch (colour) {
-                case 1:
-                    return "success";
-                case 2:
-                    return "success";
-                case 3:
-                    return "warning";
-                case 4:
-                    return "error";
-                case 5:
-                    return "error";
-                default:
-                    return "disabled";
-            }
-        });
-    }
-
-    useEffect(() => {
-        changeColour();
-    }, [skillRatingValue]);
-
-    const customIcons: {
-        [index: string]: {
-            icon: React.ReactElement;
-        };
-    } = {
-        1: {
-            icon: <LocalDining color={colour} fontSize='large' />,
-        },
-        2: {
-            icon: <LocalDining color={colour} fontSize='large' />,
-        },
-        3: {
-            icon: <LocalDining color={colour} fontSize='large' />,
-        },
-        4: {
-            icon: <LocalDining color={colour} fontSize='large' />,
-        },
-        5: {
-            icon: <LocalDining color={colour} fontSize='large' />,
-        },
-    };
-
-    function IconContainer(props: IconContainerProps) {
-        const {value, ...other} = props;
-        return <span {...other}>{customIcons[value].icon}</span>;
-    }
 
     const StyledRating = styled(Rating)(({theme}) => ({
         "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
@@ -128,7 +66,7 @@ export function CreateRecipePage() {
                 <div className='create--recipe--title--container'>
                     <TextField
                         variant='outlined'
-                        label='Recipe title'
+                        label='Title'
                         name='title'
                         color='secondary'
                         onChange={(e) => {
@@ -206,20 +144,6 @@ export function CreateRecipePage() {
                         </div>
                         <div>
                             <Typography color='text'>Skill rating</Typography>
-                            <StyledRating
-                                value={skillRatingValue}
-                                name='skill-rating'
-                                IconContainerComponent={IconContainer}
-                                size='large'
-                                onChangeActive={(e, value) => {
-                                    e.preventDefault();
-                                    changeColour(value);
-                                }}
-                                onChange={(e, newValue) => {
-                                    e.preventDefault();
-                                    setSkillRatingValue(newValue || 1);
-                                }}
-                            />
                         </div>
                     </div>
                     <div className='create--recipe--button--container'>
