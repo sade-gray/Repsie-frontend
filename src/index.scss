@@ -207,6 +207,7 @@ html, body {
   border: 1px solid gray;
   background-size: cover;
   background-repeat: round;
+  margin: 1rem;
   border-radius: 1rem;
   padding: 1rem;
   margin: 1rem;
@@ -255,29 +256,52 @@ a {
 }
 
 // This centers the container, giving the container a set width
-.recipe--page {
+.recipe--page--container {
   display: flex;
   justify-content: center;
+  margin: 0.5rem;
+}
+
+.recipe--title--container {
+  display: flex;
+  // Puts the recipe title on the left
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
+.recipe--image--container {
+  // display: flex;
+  // align-items: center;
+  margin-bottom: 1rem;
+}
+
+.recipe--publisher--container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+}
+
+.recipe--rating--container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.recipe--content--container {
+  // For mobile
+  flex-wrap: wrap;
 }
 
 .recipe--container {
-  // TODO: Set width?
-  padding: 10px;
   display: flex;
   flex-direction: column;
 }
 
-.recipe--page--title {
-  font-size: xxx-large;
-  margin: 1rem 0;
-}
-
 .recipe--image {
-  margin-bottom: 15px;
-  max-width: 600px;
   max-height: 300px;
   object-fit: cover;
-
+  min-inline-size: 100%;
 }
 
 .publisher--container {
@@ -290,25 +314,4 @@ a {
   width: 40px;
   margin: 0 10px;
   aspect-ratio: 1;
-}
-
-.rating--container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.recipe--content--container {
-  display: flex;
-  // For mobile
-  flex-wrap: wrap;
-}
-
-.recipe--ingredients--container {
-  min-width: 300px;
-}
-
-.recipe--content--container ol > li {
-  list-style-type: decimal;
 }

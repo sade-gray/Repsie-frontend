@@ -1,17 +1,24 @@
 import React, {Dispatch, SetStateAction, useCallback, useState} from "react";
-import {BaseEditor, createEditor, Descendant, Editor, Transforms} from "slate";
+import {
+    BaseEditor,
+    createEditor,
+    Descendant,
+    Editor,
+    Transforms,
+    Element as SlateElement,
+} from "slate";
 import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
 import {withHistory} from "slate-history";
 import * as Icons from "@mui/icons-material";
 import {Box, Divider, Icon, IconButton} from "@mui/material";
 import isHotkey from "is-hotkey";
 import "../styles.scss";
-import {withTables} from "./utils/withTables";
 
 declare module "slate" {
     export interface CustomTypes {
         Editor: BaseEditor & ReactEditor;
         Text: CustomText;
+        Element: CustomElement;
     }
 }
 
@@ -23,14 +30,18 @@ export type CustomText = {
     type?: string;
 };
 
+export type CustomElement = {
+    type: string;
+};
+
 type EditorProps = {
-    recipeData?: Descendant[];
-    setRecipeData?: Dispatch<SetStateAction<Descendant[]>>;
+    recipeData: Descendant[];
+    setRecipeData: Dispatch<SetStateAction<Descendant[]>>;
     readOnly: boolean;
 };
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
-// const TABLE_TYPES = ["table-row", "table-cell"];
+const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 
 const FORMAT_HOTKEYS: {[key: string]: string} = {
     "mod+b": "bold",
@@ -41,10 +52,11 @@ const FORMAT_HOTKEYS: {[key: string]: string} = {
 const BLOCK_HOTKEYS: {[key: string]: string} = {
     "mod+1": "heading-one",
     "mod+2": "heading-two",
+    "mod+e": "center",
 };
 
 export default function SlateEditor({recipeData, setRecipeData, readOnly}: EditorProps) {
-    const [editor] = useState(() => withTables(withHistory(withReact(createEditor()))));
+    const [editor] = useState(() => withHistory(withReact(createEditor())));
     // This is the logic for rendering every node according to its type
     const renderElement = useCallback((props: any) => <Element {...props} />, []);
     const renderLeaf = useCallback((props: any) => {
@@ -52,10 +64,7 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
     }, []);
 
     return (
-        <div
-            style={{
-                fontWeight: "initial",
-            }}>
+        <div className='editor'>
             <Box
                 sx={{
                     border: !readOnly ? "2px solid" : "none",
@@ -66,17 +75,10 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                     initialValue={recipeData}
                     onChange={(value) => {
                         setRecipeData(value);
-                        console.log(JSON.stringify(value));
                     }}>
                     {!readOnly && (
                         <div>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "start",
-                                    flexWrap: "wrap",
-                                    backgroundColor: "#eee",
-                                }}>
+                            <div className='editor--buttons'>
                                 <MarkButton format='bold' icon='FormatBold' />
                                 <MarkButton format='italic' icon='FormatItalic' />
                                 <MarkButton format='underline' icon='FormatUnderlined' />
@@ -84,8 +86,11 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                                 <BlockButton format='heading-two' icon='LooksTwo' />
                                 <BlockButton format='bulleted-list' icon='FormatListBulleted' />
                                 <BlockButton format='numbered-list' icon='FormatListNumbered' />
-                                <BlockButton format='table' icon='TableChartOutlined' />
-                            </Box>
+                                <BlockButton format='left' icon='FormatAlignLeft' />
+                                <BlockButton format='center' icon='FormatAlignCenter' />
+                                <BlockButton format='right' icon='FormatAlignRight' />
+                                <BlockButton format='justify' icon='FormatAlignJustify' />
+                            </div>
                             <Divider color='secondary' />
                         </div>
                     )}
@@ -129,18 +134,34 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
 }
 
 const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
-    const isActive = isBlockActive(editor, format);
+    const isActive = isBlockActive(
+        editor,
+        format,
+        TEXT_ALIGN_TYPES.includes(format) ? "align" : "type"
+    );
     const isList = LIST_TYPES.includes(format);
 
     Transforms.unwrapNodes(editor, {
-        // @ts-ignore
-        match: (n) => LIST_TYPES.includes(n.type),
+        match: (n) =>
+            !Editor.isEditor(n) &&
+            SlateElement.isElement(n) &&
+            LIST_TYPES.includes(n.type) &&
+            !TEXT_ALIGN_TYPES.includes(format),
         split: true,
     });
 
-    Transforms.setNodes(editor, {
-        type: isActive ? "paragraph" : isList ? "list-item" : format,
-    });
+    let newProperties = {};
+    if (TEXT_ALIGN_TYPES.includes(format)) {
+        newProperties = {
+            align: isActive ? undefined : format,
+        };
+    } else {
+        newProperties = {
+            type: isActive ? "paragraph" : isList ? "list-item" : format,
+        };
+    }
+
+    Transforms.setNodes(editor, newProperties);
 
     if (!isActive && isList) {
         const block = {type: format, children: []};
@@ -158,11 +179,23 @@ const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
     }
 };
 
-const isBlockActive = (editor: BaseEditor & ReactEditor, format: string) => {
-    const [match] = Editor.nodes(editor, {
-        // @ts-ignore
-        match: (n) => n.type === format,
-    });
+const isBlockActive = (
+    editor: BaseEditor & ReactEditor,
+    format: string,
+    blockType: string = "type"
+) => {
+    const {selection} = editor;
+    if (!selection) return false;
+
+    const [match] = Array.from(
+        Editor.nodes<SlateElement>(editor, {
+            at: Editor.unhangRange(editor, selection),
+            match: (n) =>
+                !Editor.isEditor(n) &&
+                SlateElement.isElement(n) &&
+                (n as {[key: string]: any})[blockType] === format,
+        })
+    );
 
     return !!match;
 };
@@ -208,11 +241,20 @@ const BlockButton = ({icon, format}: ButtonProps) => {
 };
 
 const Element = ({attributes, children, element}: any) => {
+    const style = {textAlign: element.align};
     switch (element.type) {
         case "heading-one":
-            return <h1 {...attributes}>{children}</h1>;
+            return (
+                <h1 style={style} {...attributes}>
+                    {children}
+                </h1>
+            );
         case "heading-two":
-            return <h2 {...attributes}>{children}</h2>;
+            return (
+                <h2 style={style} {...attributes}>
+                    {children}
+                </h2>
+            );
         case "bulleted-list":
             return (
                 <ul className='bulleted--list' {...attributes}>
@@ -227,18 +269,12 @@ const Element = ({attributes, children, element}: any) => {
             );
         case "list-item":
             return <li {...attributes}>{children}</li>;
-        case "table":
-            return (
-                <table className='table'>
-                    <tbody {...attributes}>{children}</tbody>
-                </table>
-            );
-        case "table-row":
-            return <tr {...attributes}>{children}</tr>;
-        case "table-cell":
-            return <td {...attributes}>{children}</td>;
         default:
-            return <p {...attributes}>{children}</p>;
+            return (
+                <p style={style} {...attributes}>
+                    {children}
+                </p>
+            );
     }
 };
 

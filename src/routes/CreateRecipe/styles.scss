@@ -10,12 +10,12 @@
     
     li::before {
         content: counter(index);
-        background: #662974;
-        width: 2rem;
-        height: 2rem;
+        background: #694FD0FF;
+        width: 1.75rem;
+        height: 1.75rem;
         border-radius: 50%;
         display: inline-block;
-        line-height: 2rem;
+        line-height: 1.75rem;
         color: white;
         text-align: center;
         margin-right: 0.5rem;
@@ -37,7 +37,6 @@
         border: 2px solid black;
         border-radius: 50%;
         display: inline-flex;
-        line-height: 2rem;
         color: white;
         text-align: center;
         margin-right: 0.5rem;
@@ -48,6 +47,24 @@
     margin: 2rem;
     display: flex;
     justify-content: center;
+}
+
+.editor {
+    font-weight: initial;
+    p {
+        margin: 0;
+    }
+
+    h1, h2 {
+        margin: 5px;
+    }
+}
+
+.editor--buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: #eee;
 }
 
 .create--recipe--editor--container {
