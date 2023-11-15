@@ -178,6 +178,8 @@ html, body {
 
 // myRecipes Page
 .my--recipes--section {
+  max-height: 85vh;
+  overflow-y: scroll;
   flex: 4;
   padding: 0 1rem;
   h2 {
@@ -205,11 +207,16 @@ html, body {
   border: 1px solid gray;
   background-size: cover;
   background-repeat: round;
-  margin: 1rem;
   border-radius: 1rem;
   padding: 1rem;
+  margin: 1rem;
   width: 20rem;
   height: 15rem;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 a {
@@ -222,6 +229,7 @@ a {
 }
 
 #create--recipe--button {
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;

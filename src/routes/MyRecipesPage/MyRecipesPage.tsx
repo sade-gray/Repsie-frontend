@@ -41,9 +41,9 @@ export function MyRecipesPage() {
 
     const createdRecipesComponents = createdRecipes.map((recipe: any) => {
         return (
-            <Link to={`/recipe/${recipe.id}`}  key={recipe.id}>
+            <Link to={`/recipe/${recipe.id}`} key={recipe.id} className="my--recipe--item">
                 <Button>
-                    <div className="my--recipe--item" style={{backgroundImage: `url(${recipe.imageUrl}`}}>
+                    <div style={{backgroundImage: `url(${recipe.imageUrl}`}}>
                         <Chip label={recipe.title} variant="filled" color="secondary"/>
                     </div>
                 </Button>
@@ -63,7 +63,7 @@ export function MyRecipesPage() {
                 <h2>My Recipes</h2>
                 <div className={"my--recipes--container"}>
                     {createdRecipesComponents}
-                    <CreateRecipeButton/>
+                    <CreateRecipeButton />
                 </div>
             </section>
         </div>

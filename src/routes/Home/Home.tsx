@@ -40,7 +40,7 @@ export default function Home() {
                                 skillRating: docData.skillRating,
                                 timeRating: docData.timeRating,
                                 image: "",
-                                savedByUser: checkIfRecipeSaved(doc.id)
+                                saved: checkIfRecipeSaved(doc.id)
                             }
                         })
                     ]
@@ -70,23 +70,18 @@ export default function Home() {
         setRecipeData(prevRecipeData => prevRecipeData.map((recipe: any )=> {
             return {
                 ...recipe,
-                savedByUser: checkIfRecipeSaved(recipe.id)
+                saved: checkIfRecipeSaved(recipe.id)
             }
         }))
     }, [userSavedRecipes]);
 
     // Turn the recipe data into components for rendering
-    const recipeComponents = recipeData?.map((recipe, idx) => {
+    const recipeComponents = recipeData?.map((recipeInfo, idx) => {
         return (
             <article key={idx}>
-                <Link to={`/recipe/${recipe.id}`}>
-                    <FeedRecipeCard title={recipe.title}
-                                    imageUrl={GourmetToastie}
-                                    publisherName={"50 Sades of Gray"}
-                                    publisherImageUrl={Wex}
-                                    id={recipe.id}
-                                    saved={recipe.savedByUser}
-                    />
+                <Link to={`/recipe/${recipeInfo.id}`}>
+                    {/*TODO: Remove the hardcoded publisher and images */}
+                    <FeedRecipeCard imageUrl={GourmetToastie} publisherName={"\"50 Sades of Gray\""} publisherImageUrl={Wex} {...recipeInfo}/>
                 </Link>
                 <Divider />
             </article>

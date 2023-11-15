@@ -14,7 +14,7 @@ export interface RecipeCard {
     skillRating: number,
     timeRating: number,
     image: string,
-    savedByUser: boolean
+    saved: boolean
 }
 
 interface RecipeCardData {
@@ -24,4 +24,6 @@ interface RecipeCardData {
     publisherName: string,
     publisherImageUrl: string
     saved: boolean
+    skillRating: number
+    timeRating: number
 }
