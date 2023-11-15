@@ -73,7 +73,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
 
     return (
         <article className={"feed--recipe--container"}>
-            <div className={"recipe--title--container"}>
+            <div className={"feed--recipe--title--container"}>
                 <h2 className={"recipe--title"}>{props.title}</h2>
                 <IconButton sx={{marginRight:"0.5rem"}} onClick={(e) => handleSaveToggle(e)}>
                     {saved
