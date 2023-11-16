@@ -86,10 +86,10 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                                 <BlockButton format='heading-two' icon='LooksTwo' />
                                 <BlockButton format='bulleted-list' icon='FormatListBulleted' />
                                 <BlockButton format='numbered-list' icon='FormatListNumbered' />
-                                <BlockButton format='left' icon='FormatAlignLeft' />
-                                <BlockButton format='center' icon='FormatAlignCenter' />
-                                <BlockButton format='right' icon='FormatAlignRight' />
-                                <BlockButton format='justify' icon='FormatAlignJustify' />
+                                <BlockButton format='left' blockType='align' icon='FormatAlignLeft' />
+                                <BlockButton format='center' blockType='align' icon='FormatAlignCenter' />
+                                <BlockButton format='right' blockType='align' icon='FormatAlignRight' />
+                                <BlockButton format='justify' blockType='align' icon='FormatAlignJustify' />
                             </div>
                             <Divider color='secondary' />
                         </div>
@@ -150,18 +150,18 @@ const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
         split: true,
     });
 
-    let newProperties = {};
+    let properties = {};
     if (TEXT_ALIGN_TYPES.includes(format)) {
-        newProperties = {
+        properties = {
             align: isActive ? undefined : format,
         };
     } else {
-        newProperties = {
+        properties = {
             type: isActive ? "paragraph" : isList ? "list-item" : format,
         };
     }
 
-    Transforms.setNodes(editor, newProperties);
+    Transforms.setNodes(editor, properties);
 
     if (!isActive && isList) {
         const block = {type: format, children: []};
@@ -208,6 +208,7 @@ const isMarkActive = (editor: BaseEditor & ReactEditor, format: string) => {
 type ButtonProps = {
     icon: keyof typeof Icons;
     format: string;
+    blockType?: string;
 };
 
 const MarkButton = ({icon, format}: ButtonProps) => {
@@ -225,7 +226,7 @@ const MarkButton = ({icon, format}: ButtonProps) => {
     );
 };
 
-const BlockButton = ({icon, format}: ButtonProps) => {
+const BlockButton = ({icon, format, blockType}: ButtonProps) => {
     const editor = useSlate();
     return (
         <IconButton
@@ -233,7 +234,7 @@ const BlockButton = ({icon, format}: ButtonProps) => {
                 event.preventDefault();
                 toggleBlock(editor, format);
             }}>
-            <Icon color={isBlockActive(editor, format) ? "secondary" : "disabled"}>
+            <Icon color={isBlockActive(editor, format, blockType) ? "secondary" : "disabled"}>
                 {React.createElement(Icons[icon])}
             </Icon>
         </IconButton>
@@ -269,6 +270,7 @@ const Element = ({attributes, children, element}: any) => {
             );
         case "list-item":
             return <li {...attributes}>{children}</li>;
+        // TODO: Add support for images
         default:
             return (
                 <p style={style} {...attributes}>
