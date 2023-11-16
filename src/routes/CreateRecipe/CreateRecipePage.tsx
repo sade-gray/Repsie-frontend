@@ -43,6 +43,7 @@ export function CreateRecipePage() {
         if (!file) return;
 
         if (file[0] !== undefined) {
+            // @ts-ignore
             setImageUrl(file[0]);
         }
 
