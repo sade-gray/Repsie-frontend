@@ -2,10 +2,10 @@ import { Outlet } from "react-router-dom";
 import { Header } from "./Header/Header.tsx";
 import { theme } from "../theme.ts";
 import { ThemeProvider } from "@mui/material/styles";
-import { AuthProvider} from "../contexts/AuthContext.tsx";
-import { DrawerProvider } from "../contexts/DrawerContext.tsx";
-import { SnackBarProvider } from "../contexts/SnackBarContext.tsx";
-import { UserDataProvider } from "../contexts/UserDataContext.tsx";
+import { AuthProvider} from "@context/AuthProvider";
+import { DrawerProvider } from "@context/DrawerProvider";
+import { SnackBarProvider } from "@context/SnackBarProvider/SnackBarContext.tsx";
+import { UserDataProvider } from "@context/UserDataProvider/UserDataContext.tsx";
 // import Footer from "./Footer.tsx";
 
 export function Root() {

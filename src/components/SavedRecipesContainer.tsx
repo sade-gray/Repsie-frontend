@@ -4,9 +4,9 @@ import {useEffect, useState} from "react";
 import { savedRecipe } from "../types/recipeTypes.ts";
 import {getDocs, query, where} from "firebase/firestore"
 import { recipesCollectionRef } from "../firebase.ts"
-import {useUserData} from "../contexts/UserDataContext.tsx";
 import {Link} from "react-router-dom";
 import GourmetToastie from "../assets/dummyPhotos/gourmet-toastie.jpg";
+import useUserData from "@context/UserDataProvider";
 
 /**
  * The list component used to display the saved recipes.

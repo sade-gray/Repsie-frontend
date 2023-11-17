@@ -8,7 +8,7 @@ import {
     Typography
 } from "@mui/material";
 import React, { useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import {Visibility} from "@mui/icons-material";
 import {VisibilityOff} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
@@ -19,7 +19,7 @@ export default function SignInForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [loginError, setLoginError] = useState("");
     // TODO: Add type.a
-    const { user, emailSignIn }: any = useAuth();
+    const { user, emailSignIn } = useAuth();
     // TODO: Disable sign up button until form is valid.
 
     const handleEmailChange = (e: any) => {

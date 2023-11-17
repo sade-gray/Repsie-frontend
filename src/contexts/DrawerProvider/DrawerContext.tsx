@@ -1,16 +1,12 @@
-import {createContext, useContext, useState} from "react";
-import { IContextType } from "../types/contextTypes.ts";
+import {createContext, ReactNode, useState} from "react";
+import { IContextType } from "../../types/contextTypes";
 
 export const DrawerContext = createContext<IContextType>({
     drawerOpen: false,
     setDrawerOpen: () => {},
 });
 
-export function useDrawer() {
-    return useContext(DrawerContext);
-}
-
-export function DrawerProvider({ children }: any) {
+export function DrawerProvider({ children }: { children: ReactNode}) {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
 
     return (

@@ -1,6 +1,6 @@
 import {Button, TextField, Typography} from "@mui/material";
 import { useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 export default function SignUpForm() {
@@ -8,7 +8,7 @@ export default function SignUpForm() {
     const [password, setPassword] = useState("")
     // TODO: Disable sign up button until form is valid.
     // TODO: Add type.
-    const { emailSignUp }: any = useAuth();
+    const { user, emailSignUp } = useAuth();
 
     const navigate = useNavigate();
     // TODO: Redirect only if successful.

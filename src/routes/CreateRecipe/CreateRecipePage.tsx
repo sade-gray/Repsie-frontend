@@ -4,7 +4,7 @@ import "./styles.scss";
 import {ChangeEvent, FormEvent, useState} from "react";
 import {Create, FileUpload} from "@mui/icons-material";
 import {saveRecipe} from "../../api/saveRecipe.ts";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import {Descendant} from "slate";
 import TimeRating from "@component/Ratings/TimeRating";
 import SkillRating from "@component/Ratings/SkillRating";

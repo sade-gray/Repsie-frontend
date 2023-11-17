@@ -2,7 +2,7 @@ import SavedRecipesContainer from "../../components/SavedRecipesContainer";
 import {useEffect, useState} from "react"
 import CreateRecipeButton from "./Components/CreateRecipeButton";
 import { Button, Chip } from "@mui/material";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import {Link, Navigate} from "react-router-dom";
 import {db, recipesCollectionRef} from "../../firebase.ts";
 import {collection, doc, getDoc, getDocs} from "firebase/firestore";

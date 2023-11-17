@@ -1,5 +1,4 @@
-import {useContext} from "react";
-import {DrawerContext} from "../../contexts/DrawerContext.tsx";
+import useDrawer from "@context/DrawerProvider";
 import {useTheme, useMediaQuery} from "@mui/material";
 import {HeaderSearchBox} from "./HeaderSearchBox.tsx";
 import HeaderLogo from "./HeaderLogo.tsx";
@@ -8,7 +7,7 @@ import SavedRecipesDrawer from "../SavedRecipesDrawer.tsx";
 
 export function Header() {
     const theme = useTheme();
-    const {drawerOpen, setDrawerOpen} = useContext(DrawerContext)
+    const {drawerOpen, setDrawerOpen} = useDrawer();
     const isNotTablet = useMediaQuery(theme.breakpoints.up("lg"))
 
     const handleDrawerToggle = () => {

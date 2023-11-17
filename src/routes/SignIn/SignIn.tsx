@@ -1,6 +1,6 @@
 import {Button, Typography} from "@mui/material";
 import SignInForm from "./components/SignInForm.tsx";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import {Navigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 

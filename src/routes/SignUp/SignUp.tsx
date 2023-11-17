@@ -1,10 +1,10 @@
 import {Button} from "@mui/material";
 import SignUpForm from "./components/SignUpForm.tsx";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import {Navigate} from "react-router-dom";
 
 export function SignUp() {
-    const {user}:any = useAuth();
+    const {user} = useAuth();
 
     if (user) {
         return <Navigate to={""} />

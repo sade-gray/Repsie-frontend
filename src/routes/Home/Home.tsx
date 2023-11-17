@@ -8,13 +8,13 @@ import { recipesCollectionRef} from "../../firebase.ts";
 import {Link} from "react-router-dom";
 import { RecipeCard } from "../../types/recipeTypes";
 import {getDocs, limit, orderBy, query, startAt} from "firebase/firestore";
-import {useUserData} from "../../contexts/UserDataContext.tsx";
+import useUserData from "@context/UserDataProvider";
 
 const recipeFetchLimit = 2;
 
 export default function Home() {
     const [recipeData, setRecipeData] = useState<RecipeCard[]>([]);
-    const {userSavedRecipes}: any = useUserData();
+    const { userSavedRecipes } = useUserData();
     // We use useRef as this variable should not trigger re-renders.
     const recipeOffset = useRef(0);
 
