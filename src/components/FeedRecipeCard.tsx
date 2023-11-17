@@ -9,7 +9,7 @@ import {useSnackBar} from "../contexts/SnackBarContext.tsx";
 import {doc, updateDoc, arrayUnion, arrayRemove, setDoc, getDoc} from "firebase/firestore";
 import {db} from "../firebase.ts";
 import {useUserData} from "../contexts/UserDataContext.tsx";
-import SkillRating from "./SkillRating";
+import SkillRating from "./Ratings/SkillRating";
 
 export default function FeedRecipeCard(props: RecipeCardData) {
     const [saved, setSaved] = useState(props.saved)

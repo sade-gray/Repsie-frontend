@@ -1,18 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {LocalDining} from "@mui/icons-material";
 import {IconContainerProps, Rating, styled} from "@mui/material";
+import {ratingProps} from "../ratingClasses";
 
-/**
- * Display of skill rating. Editable by default
- * @param value
- * @constructor
- */
-function SkillRating({value, readOnly}: any) {
-    const [skillRatingValue, setSkillRatingValue] = useState<number>(value);
+function SkillRating({value, readOnly, handleChange}: ratingProps) {
     const [colour, setColour] = useState<"success" | "error" | "warning" | "disabled">("disabled");
-    function changeColour(value?: number) {
+    function changeColour(newValue?: number) {
         setColour(() => {
-            const colour = !value || value === -1 ? skillRatingValue : value;
+            // Change the colour of icons to its set value if hovered away
+            const colour = !newValue || newValue === -1 ? (value || 1) : newValue;
             switch (colour) {
                 case 1:
                     return "success";
@@ -29,7 +25,7 @@ function SkillRating({value, readOnly}: any) {
             }
         });
     }
-
+    // Update the colour of the icons whenever the parent passes a new skill value
     useEffect(() => {
         changeColour();
     }, [value]);
@@ -58,18 +54,22 @@ function SkillRating({value, readOnly}: any) {
     }));
 
     return (
-        <StyledRating value={skillRatingValue} name='skill-rating'
+        <StyledRating value={value || 1} name='skill-rating'
                       IconContainerComponent={IconContainer}
                       size='large'
                       onChangeActive={(e, value) => {
-                        e.preventDefault();
-                        changeColour(value);
+                          e.preventDefault()
+                          if (!readOnly) {
+                            changeColour(value);
+                          }
                       }}
-                      onChange={(e, newValue) => {
-                        e.preventDefault();
-                        setSkillRatingValue(newValue || 1);
+                      onChange={(e, value) => {
+                          e.preventDefault();
+                          // Update the parent's value state if the component is not made readonly
+                          // if the handleChange function prop was passed
+                          !readOnly && handleChange?.(value || 1);
                       }}
-                      readOnly={readOnly ?? false}
+                      readOnly={readOnly}
         />
     )
 }
