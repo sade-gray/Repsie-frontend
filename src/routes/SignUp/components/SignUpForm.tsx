@@ -15,7 +15,9 @@ export default function SignUpForm() {
     const handleFormSubmit = async (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
-        if (emailSignUp(email, password)) {
+        // If the email sign up is successful, the user will change.
+        await emailSignUp(email, password)
+        if (!user) {
             console.log("Invalid credentials")
         } else {
             navigate("/");
