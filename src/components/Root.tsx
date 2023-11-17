@@ -9,7 +9,6 @@ import { UserDataProvider } from "@context/UserDataProvider/UserDataContext.tsx"
 // import Footer from "./Footer.tsx";
 
 export function Root() {
-
     return (
         <SnackBarProvider>
             <AuthProvider>
