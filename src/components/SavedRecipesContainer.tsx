@@ -15,7 +15,7 @@ import useUserData from "@context/UserDataProvider";
 export default function SavedRecipesContainer() {
     // Get ids of saved recipe from context
     const { userSavedRecipes } = useUserData();
-    const [savedRecipes, setSavedRecipes] = useState<any>();
+    const [savedRecipes, setSavedRecipes] = useState<savedRecipe[]>([]);
 
     // TODO: This function makes the api call whenever a user saves or unsaves a recipe
     useEffect(() => {

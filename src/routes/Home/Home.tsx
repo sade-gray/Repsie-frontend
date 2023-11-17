@@ -20,7 +20,7 @@ export default function Home() {
 
     // Helper function to check if a recipe exists in the user's saved recipes list
     function checkIfRecipeSaved(id: string): boolean {
-        return userSavedRecipes?.includes(`${id}`) || false
+        return userSavedRecipes?.includes(id);
     }
 
     // Function that gets recipes from the cloud
@@ -33,7 +33,7 @@ export default function Home() {
                     return [
                         ...prevData,
                         ...results.docs.map(doc => {
-                            let docData = doc.data()
+                            const docData = doc.data()
                             return {
                                 id: doc.id,
                                 title: docData.title,
