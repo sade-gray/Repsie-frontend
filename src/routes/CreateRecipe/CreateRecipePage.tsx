@@ -1,11 +1,13 @@
-import {Box, Button, Rating, TextField, Typography, styled} from "@mui/material";
+import {Box, Button, TextField, Typography} from "@mui/material";
 import Editor from "./components/Editor";
 import "./styles.scss";
 import {ChangeEvent, FormEvent, useState} from "react";
-import {AccessTime, Create, FileUpload} from "@mui/icons-material";
+import {Create, FileUpload} from "@mui/icons-material";
 import {saveRecipe} from "../../api/saveRecipe.ts";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import {Descendant} from "slate";
+import TimeRating from "@component/Ratings/TimeRating";
+import SkillRating from "@component/Ratings/SkillRating";
 
 export function CreateRecipePage() {
     const initialValue = [
@@ -54,12 +56,6 @@ export function CreateRecipePage() {
 
         reader.readAsDataURL(file[0]);
     };
-
-    const StyledRating = styled(Rating)(({theme}) => ({
-        "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
-            color: theme.palette.action.disabled,
-        },
-    }));
 
     return (
         <div className='create--recipe--container'>
@@ -131,20 +127,11 @@ export function CreateRecipePage() {
                     <div className='create--recipe--rating--container'>
                         <div>
                             <Typography color='text'>Time rating</Typography>
-                            <StyledRating
-                                value={timeRatingValue}
-                                name='time-rating'
-                                size='large'
-                                icon={<AccessTime fontSize='large' color='secondary' />}
-                                emptyIcon={<AccessTime fontSize='large' />}
-                                onChange={(e, newValue) => {
-                                    e.preventDefault();
-                                    setTimeRatingValue(newValue || 1);
-                                }}
-                            />
+                            <TimeRating value={timeRatingValue} handleChange={(value: number) => setTimeRatingValue(value)}/>
                         </div>
                         <div>
                             <Typography color='text'>Skill rating</Typography>
+                            <SkillRating value={skillRatingValue} handleChange={(value: number) => setSkillRatingValue(value)}/>
                         </div>
                     </div>
                     <div className='create--recipe--button--container'>

@@ -1,26 +1,21 @@
-import {createContext, useContext, useEffect, useState} from "react";
-import { auth } from "../firebase.ts";
+import {createContext, ReactNode, useEffect, useState} from "react";
+import { auth } from "../../firebase.ts";
 import { User as FirebaseUser } from "firebase/auth";
 import {
     createUserWithEmailAndPassword,
     onAuthStateChanged,
     signInWithEmailAndPassword,
 } from "firebase/auth";
-import {useSnackBar} from "./SnackBarContext.tsx";
+import useSnackBar from "@context/SnackBarProvider";
 import {useNavigate} from "react-router-dom";
-import {AuthContextValues} from "../types/authTypes.ts";
+import {AuthContextValues} from "./authTypes";
 
-const AuthContext = createContext({} as AuthContextValues);
+export const AuthContext = createContext({} as AuthContextValues);
 
-export function useAuth() {
-    return useContext<AuthContextValues>(AuthContext);
-}
-
-export function AuthProvider({ children }: any) {
-    // TODO: Add user type to state.
+export function AuthProvider({ children }: {children: ReactNode}) {
     const [user, setUser] = useState<FirebaseUser | null |undefined>();
     const [loading, setLoading] = useState(true);
-    const { addSnack }: any = useSnackBar();
+    const { addSnack } = useSnackBar();
     const navigate = useNavigate();
 
     const emailSignUp = async (email: string, password: string): Promise<boolean> => {

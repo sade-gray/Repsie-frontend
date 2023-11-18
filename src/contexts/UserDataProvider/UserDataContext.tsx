@@ -5,24 +5,19 @@
  *      * The user's liked recipes (data only)
  *      * The user's settings (dark mode, allergens etc)
  */
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, ReactNode, useEffect, useState} from "react";
 import {doc, getDoc, setDoc} from "firebase/firestore";
-import {db} from "../firebase.ts";
-import {useAuth} from "./AuthContext.tsx";
-import {useSnackBar} from "./SnackBarContext.tsx";
-import {UserData} from "../types/contextTypes.ts";
-import {savedRecipe} from "../types/recipeTypes";
+import {db} from "../../firebase.ts";
+import useAuth from "@context/AuthProvider";
+import useSnackBar from "@context/SnackBarProvider";
+import {UserData} from "./userDataTypes";
 
-const UserDataContext = createContext({} as UserData);
+export const UserDataContext = createContext({} as UserData);
 
-export function useUserData() {
-    return useContext(UserDataContext)
-}
-
-export function UserDataProvider({children}: any) {
+export function UserDataProvider({children}: {children: ReactNode}) {
     // This is an array of the ids of the saved recipes, as strings
-    const [userSavedRecipes, setUserSavedRecipes] = useState<savedRecipe[]>([]);
-    const { addSnack }: any = useSnackBar();
+    const [userSavedRecipes, setUserSavedRecipes] = useState<string[]>([]);
+    const { addSnack } = useSnackBar();
     const { user } = useAuth();
     // const [loading, setLoading] = useState(true);
     // Reference to user's saved recipe document

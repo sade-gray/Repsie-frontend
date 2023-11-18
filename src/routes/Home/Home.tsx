@@ -8,19 +8,19 @@ import { recipesCollectionRef} from "../../firebase.ts";
 import {Link} from "react-router-dom";
 import { RecipeCard } from "../../types/recipeTypes";
 import {getDocs, limit, orderBy, query, startAt} from "firebase/firestore";
-import {useUserData} from "../../contexts/UserDataContext.tsx";
+import useUserData from "@context/UserDataProvider";
 
 const recipeFetchLimit = 2;
 
 export default function Home() {
     const [recipeData, setRecipeData] = useState<RecipeCard[]>([]);
-    const {userSavedRecipes}: any = useUserData();
+    const { userSavedRecipes } = useUserData();
     // We use useRef as this variable should not trigger re-renders.
     const recipeOffset = useRef(0);
 
     // Helper function to check if a recipe exists in the user's saved recipes list
     function checkIfRecipeSaved(id: string): boolean {
-        return userSavedRecipes?.includes(`${id}`) || false
+        return userSavedRecipes?.includes(id);
     }
 
     // Function that gets recipes from the cloud
@@ -33,7 +33,7 @@ export default function Home() {
                     return [
                         ...prevData,
                         ...results.docs.map(doc => {
-                            let docData = doc.data()
+                            const docData = doc.data()
                             return {
                                 id: doc.id,
                                 title: docData.title,

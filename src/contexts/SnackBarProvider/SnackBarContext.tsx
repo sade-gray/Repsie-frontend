@@ -1,28 +1,30 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, ReactNode, useState} from "react";
 import {Alert, Snackbar} from "@mui/material";
 import {AlertColor} from "@mui/material/Alert/Alert";
-import { snack } from "../types/snack.ts";
+import { snack } from "./snackTypes";
+import {snackContextValues} from "./snackTypes";
 // TODO: Implement a multiple snack functionality. Snack stack? Use 'notistack' package?
 
-export const SnackBarContext = createContext({});
+export const SnackBarContext = createContext({} as snackContextValues);
 
-export function useSnackBar() {
-    return useContext(SnackBarContext);
-}
-
-export function SnackBarProvider({ children }: any) {
+export function SnackBarProvider({ children }: {children: ReactNode}) {
     const [snack, setSnack] = useState<snack>({
         message: "",
         severity: "success"
     });
     const [open, setOpen] = useState<boolean>(false);
 
-    const addSnack = (message: string, severity: AlertColor) => {
+    /**
+     * Adds a snack to the snack bar on the bottom right of the screen
+     * @param message
+     * @param severity
+     */
+    const addSnack = (message: string, severity?: AlertColor) => {
         setSnack({message: message, severity: severity || "success"});
         setOpen(true);
     }
 
-    const value = {
+    const value: snackContextValues = {
         addSnack
     }
 

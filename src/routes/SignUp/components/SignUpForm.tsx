@@ -1,6 +1,6 @@
 import {Button, TextField, Typography} from "@mui/material";
 import { useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 export default function SignUpForm() {
@@ -8,14 +8,16 @@ export default function SignUpForm() {
     const [password, setPassword] = useState("")
     // TODO: Disable sign up button until form is valid.
     // TODO: Add type.
-    const { emailSignUp }: any = useAuth();
+    const { user, emailSignUp } = useAuth();
 
     const navigate = useNavigate();
     // TODO: Redirect only if successful.
     const handleFormSubmit = async (e: any) => {
         e.preventDefault();
         console.log("Sending "+ email + " and " + password);
-        if (emailSignUp(email, password)) {
+        // If the email sign up is successful, the user will change.
+        await emailSignUp(email, password)
+        if (!user) {
             console.log("Invalid credentials")
         } else {
             navigate("/");

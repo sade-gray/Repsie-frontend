@@ -4,10 +4,10 @@ import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { RestaurantMenuOutlined, Logout } from "@mui/icons-material";
 import { ListItemIcon } from "@mui/material";
-import {useAuth} from "../../contexts/AuthContext.tsx";
+import useAuth from "@context/AuthProvider";
 
 export default function HeaderProfileIcon() {
-    const { user, signOut }: any = useAuth();
+    const { user, signOut } = useAuth();
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
     const handleLogoutClick = () => {

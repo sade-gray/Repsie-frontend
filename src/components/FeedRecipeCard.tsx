@@ -4,17 +4,17 @@ import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import {PublisherContainer} from "../routes/Recipe/components/PublisherContainer.tsx";
 import React, {useEffect, useState} from "react";
 import {RecipeCardData} from "../types/recipeTypes";
-import {useAuth} from "../contexts/AuthContext.tsx";
-import {useSnackBar} from "../contexts/SnackBarContext.tsx";
+import useAuth from "@context/AuthProvider";
+import useSnackBar from "@context/SnackBarProvider";
+import useUserData from "@context/UserDataProvider";
 import {doc, updateDoc, arrayUnion, arrayRemove, setDoc, getDoc} from "firebase/firestore";
 import {db} from "../firebase.ts";
-import {useUserData} from "../contexts/UserDataContext.tsx";
-import SkillRating from "./SkillRating";
+import SkillRating from "./Ratings/SkillRating";
 
 export default function FeedRecipeCard(props: RecipeCardData) {
     const [saved, setSaved] = useState(props.saved)
     const { user } = useAuth();
-    const { addSnack }:any  = useSnackBar();
+    const { addSnack } = useSnackBar();
     const { setUserSavedRecipes } = useUserData();
 
     // This usEffect is used to initialise the state of the save button from the cloud
@@ -31,7 +31,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
             return;
         }
         // Get a reference to the current recipe
-        let userSavedRecipesDocRef = doc(db, `userSavedRecipes/${user.uid}`);
+        const userSavedRecipesDocRef = doc(db, `userSavedRecipes/${user.uid}`);
         // Create the document if it does not exist.
         await getDoc(userSavedRecipesDocRef).then((doc) => {
             if (!doc.exists()) {
