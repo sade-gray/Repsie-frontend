@@ -1,12 +1,5 @@
 import React, {Dispatch, SetStateAction, useCallback, useState} from "react";
-import {
-    BaseEditor,
-    createEditor,
-    Descendant,
-    Editor,
-    Transforms,
-    Element as SlateElement,
-} from "slate";
+import {BaseEditor, createEditor, Descendant, Editor, Transforms, Element as SlateElement} from "slate";
 import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
 import {withHistory} from "slate-history";
 import * as Icons from "@mui/icons-material";
@@ -36,8 +29,8 @@ export type CustomElement = {
 
 type EditorProps = {
     recipeData: Descendant[];
-    setRecipeData: Dispatch<SetStateAction<Descendant[]>>;
-    readOnly: boolean;
+    setRecipeData?: Dispatch<SetStateAction<Descendant[]>>;
+    readOnly?: boolean;
 };
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
@@ -74,7 +67,7 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                     editor={editor}
                     initialValue={recipeData}
                     onChange={(value) => {
-                        setRecipeData(value);
+                        !readOnly && setRecipeData?.(value);
                     }}>
                     {!readOnly && (
                         <div>
@@ -86,10 +79,10 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                                 <BlockButton format='heading-two' icon='LooksTwo' />
                                 <BlockButton format='bulleted-list' icon='FormatListBulleted' />
                                 <BlockButton format='numbered-list' icon='FormatListNumbered' />
-                                <BlockButton format='left' blockType='align' icon='FormatAlignLeft' />
-                                <BlockButton format='center' blockType='align' icon='FormatAlignCenter' />
-                                <BlockButton format='right' blockType='align' icon='FormatAlignRight' />
-                                <BlockButton format='justify' blockType='align' icon='FormatAlignJustify' />
+                                <BlockButton format='left' type='align' icon='FormatAlignLeft' />
+                                <BlockButton format='center' type='align' icon='FormatAlignCenter' />
+                                <BlockButton format='right' type='align' icon='FormatAlignRight' />
+                                <BlockButton format='justify' type='align' icon='FormatAlignJustify' />
                             </div>
                             <Divider color='secondary' />
                         </div>
@@ -134,11 +127,7 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
 }
 
 const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
-    const isActive = isBlockActive(
-        editor,
-        format,
-        TEXT_ALIGN_TYPES.includes(format) ? "align" : "type"
-    );
+    const isActive = isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format) ? "align" : "type");
     const isList = LIST_TYPES.includes(format);
 
     Transforms.unwrapNodes(editor, {
@@ -179,11 +168,7 @@ const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
     }
 };
 
-const isBlockActive = (
-    editor: BaseEditor & ReactEditor,
-    format: string,
-    blockType: string = "type"
-) => {
+const isBlockActive = (editor: BaseEditor & ReactEditor, format: string, blockType: string = "type") => {
     const {selection} = editor;
     if (!selection) return false;
 
@@ -191,9 +176,7 @@ const isBlockActive = (
         Editor.nodes<SlateElement>(editor, {
             at: Editor.unhangRange(editor, selection),
             match: (n) =>
-                !Editor.isEditor(n) &&
-                SlateElement.isElement(n) &&
-                (n as {[key: string]: any})[blockType] === format,
+                !Editor.isEditor(n) && SlateElement.isElement(n) && (n as {[key: string]: any})[blockType] === format,
         })
     );
 
@@ -208,7 +191,7 @@ const isMarkActive = (editor: BaseEditor & ReactEditor, format: string) => {
 type ButtonProps = {
     icon: keyof typeof Icons;
     format: string;
-    blockType?: string;
+    type?: string;
 };
 
 const MarkButton = ({icon, format}: ButtonProps) => {
@@ -226,7 +209,7 @@ const MarkButton = ({icon, format}: ButtonProps) => {
     );
 };
 
-const BlockButton = ({icon, format, blockType}: ButtonProps) => {
+const BlockButton = ({icon, format, type}: ButtonProps) => {
     const editor = useSlate();
     return (
         <IconButton
@@ -234,7 +217,7 @@ const BlockButton = ({icon, format, blockType}: ButtonProps) => {
                 event.preventDefault();
                 toggleBlock(editor, format);
             }}>
-            <Icon color={isBlockActive(editor, format, blockType) ? "secondary" : "disabled"}>
+            <Icon color={isBlockActive(editor, format, type) ? "secondary" : "disabled"}>
                 {React.createElement(Icons[icon])}
             </Icon>
         </IconButton>
