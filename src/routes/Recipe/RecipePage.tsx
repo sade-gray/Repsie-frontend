@@ -1,15 +1,16 @@
 import {PublisherContainer} from "./components/PublisherContainer.tsx";
 import Wex from "../../assets/wex.png";
 import {getDownloadURL} from "firebase/storage";
-import {Box, Rating, Skeleton, Stack, styled, Typography, useMediaQuery} from "@mui/material";
+import {Box, Skeleton, Stack, Typography, useMediaQuery} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {ref} from "firebase/storage";
 import {contentStorage, recipesCollectionRef} from "../../firebase.ts";
 import {doc, getDoc} from "firebase/firestore";
 import Editor from "../CreateRecipe/components/Editor.tsx";
-import {AccessTime} from "@mui/icons-material";
 import {theme} from "../../theme.ts";
+import SkillRating from "@component/Ratings/SkillRating";
+import TimeRating from "@component/Ratings/TimeRating/TimeRating.tsx";
 
 export function RecipePage() {
     const recipeId = useParams()["recipeId"];
@@ -23,10 +24,7 @@ export function RecipePage() {
             .then((res) => {
                 if (res.exists()) {
                     setRecipeContent(res.data());
-                    const imageRef = ref(
-                        contentStorage,
-                        `recipeImages/${res.data().image || defaultImage}`
-                    );
+                    const imageRef = ref(contentStorage, `recipeImages/${res.data().image || defaultImage}`);
                     getDownloadURL(imageRef).then((url) => {
                         setCoverImageUrl(url);
                     });
@@ -36,12 +34,6 @@ export function RecipePage() {
             })
             .catch((error) => console.log(error));
     }, []);
-
-    const StyledRating = styled(Rating)(({theme}) => ({
-        "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
-            color: theme.palette.action.disabled,
-        },
-    }));
 
     return (
         <div>
@@ -55,42 +47,26 @@ export function RecipePage() {
                         </div>
                         <div className='recipe--image--container'>
                             {coverImageUrl && (
-                                <img
-                                    className='recipe--image'
-                                    src={coverImageUrl}
-                                    alt='Recipe cover image'
-                                />
+                                <img className='recipe--image' src={coverImageUrl} alt='Recipe cover image' />
                             )}
                         </div>
                         <div className='recipe--publisher--container'>
-                            <PublisherContainer
-                                publisherImageUrl={Wex}
-                                publisherName='Patriks Baller'
-                            />
+                            <PublisherContainer publisherImageUrl={Wex} publisherName='Patriks Baller' />
                         </div>
 
                         <section className='recipe--rating--container'>
                             <div>
                                 <Typography color='text'>Time rating</Typography>
-                                <StyledRating
-                                    readOnly
-                                    value={recipeContent?.timeRating || 0}
-                                    size='large'
-                                    icon={<AccessTime fontSize='large' color='secondary' />}
-                                    emptyIcon={<AccessTime fontSize='large' />}
-                                />
+                                <TimeRating value={recipeContent?.timeRating} readOnly />
                             </div>
                             <div>
                                 <Typography color='text'>Skill rating</Typography>
+                                <SkillRating value={recipeContent?.skillRating} readOnly />
                             </div>
                         </section>
 
                         <section className='recipe--content--container'>
-                            <Editor
-                                readOnly={true}
-                                recipeData={JSON.parse(recipeContent.recipe || "")}
-                                setRecipeData={() => {}}
-                            />
+                            <Editor readOnly recipeData={JSON.parse(recipeContent.recipe || "")} />
                         </section>
                     </div>
                 </div>
@@ -99,12 +75,7 @@ export function RecipePage() {
                     <Stack spacing={1} className='recipe--page--container' alignItems={"center"}>
                         <Box sx={{width: "100%"}}>
                             <Skeleton variant='text' animation='wave' width={"100%"} height={40} />
-                            <Skeleton
-                                variant='rectangular'
-                                width={"100%"}
-                                height={300}
-                                animation='wave'
-                            />
+                            <Skeleton variant='rectangular' width={"100%"} height={300} animation='wave' />
                         </Box>
 
                         <Box
@@ -129,12 +100,7 @@ export function RecipePage() {
                             </Box>
                         </Box>
 
-                        <Skeleton
-                            variant='rectangular'
-                            animation='wave'
-                            width={"100%"}
-                            height={300}
-                        />
+                        <Skeleton variant='rectangular' animation='wave' width={"100%"} height={300} />
                     </Stack>
                 </div>
             )}
