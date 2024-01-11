@@ -10,6 +10,7 @@ import useUserData from "@context/UserDataProvider";
 import {doc, updateDoc, arrayUnion, arrayRemove, setDoc, getDoc} from "firebase/firestore";
 import {db} from "../firebase.ts";
 import SkillRating from "./Ratings/SkillRating";
+import TimeRating from "./Ratings/TimeRating";
 
 export default function FeedRecipeCard(props: RecipeCardData) {
     const [saved, setSaved] = useState(props.saved)
@@ -90,8 +91,9 @@ export default function FeedRecipeCard(props: RecipeCardData) {
             <div className={"feed--recipe--image--container"}>
                 <img src={props.imageUrl} alt={"food pic"}/>
             </div>
-            <div className={"feed--recipe--action--buttons"}>
+            <div className={"feed--recipe--action--row"}>
                 <SkillRating value={props.skillRating} readOnly/>
+                <TimeRating value={props.timeRating} readOnly />
             </div>
         </article>
     )

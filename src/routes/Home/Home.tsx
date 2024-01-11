@@ -10,7 +10,7 @@ import { RecipeCard } from "../../types/recipeTypes";
 import {getDocs, limit, orderBy, query, startAt} from "firebase/firestore";
 import useUserData from "@context/UserDataProvider";
 
-const recipeFetchLimit = 2;
+const recipeFetchLimit = 4;
 
 export default function Home() {
     const [recipeData, setRecipeData] = useState<RecipeCard[]>([]);
