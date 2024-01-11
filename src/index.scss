@@ -176,6 +176,11 @@ html, body {
   }
 }
 
+.feed--recipe--action--row {
+  display: flex;
+  justify-content: space-between;
+}
+
 // myRecipes Page
 .my--recipes--section {
   max-height: 85vh;
