@@ -9,7 +9,7 @@ import "../styles.scss";
 
 declare module "slate" {
     export interface CustomTypes {
-        Editor: BaseEditor & ReactEditor;
+        Editor: CustomEditor;
         Text: CustomText;
         Element: CustomElement;
     }
@@ -20,12 +20,18 @@ export type CustomText = {
     bold?: boolean | false;
     italic?: boolean | false;
     underline?: boolean | false;
-    type?: string;
+    type: string;
+    children: Descendant[];
 };
 
 export type CustomElement = {
     type: string;
+    children: Descendant[];
 };
+
+interface CustomEditor extends BaseEditor, ReactEditor {
+    type: string;
+}
 
 type EditorProps = {
     recipeData: Descendant[];
@@ -68,6 +74,7 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                     initialValue={recipeData}
                     onChange={(value) => {
                         !readOnly && setRecipeData?.(value);
+                        console.log(JSON.stringify(value));
                     }}>
                     {!readOnly && (
                         <div>
@@ -117,6 +124,73 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                                         toggleBlock(editor, mark);
                                     }
                                 }
+
+                                const {selection} = editor;
+
+                                if (event.key === "Enter") {
+                                    if (selection) {
+                                        const [start] = Editor.nodes(editor, {
+                                            at: selection,
+                                            match: (n) =>
+                                                !Editor.isEditor(n) &&
+                                                SlateElement.isElement(n) &&
+                                                n.type.startsWith("heading"),
+                                        });
+
+                                        if (start) {
+                                            const [node, path] = start;
+                                            const [end] = Editor.nodes(editor, {
+                                                at: Editor.end(editor, selection),
+                                                match: (n) => n === node,
+                                            });
+
+                                            if (end) {
+                                                event.preventDefault();
+                                                const newLine = {
+                                                    type: "paragraph",
+                                                    children: [{text: ""}],
+                                                };
+                                                // @ts-ignore
+                                                Transforms.insertNodes(editor, newLine, {
+                                                    at: Editor.after(editor, path),
+                                                });
+                                                // @ts-ignore
+                                                Transforms.select(editor, Editor.after(editor, path));
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (
+                                    event.key === "Backspace" &&
+                                    selection &&
+                                    Editor.start(editor, selection).offset === 0
+                                ) {
+                                    const [match] = Editor.nodes(editor, {
+                                        match: (n) => Editor.isBlock(editor, n) && n.type === "list-item",
+                                    });
+
+                                    if (match) {
+                                        const [, path] = match;
+                                        const listItemPath = path.slice(0, path.length - 1); // Remove last index to get the list item
+                                        const listNode = Editor.node(editor, listItemPath);
+
+                                        if (
+                                            listNode &&
+                                            SlateElement.isElement(listNode[0]) &&
+                                            listNode[0].children.length === 1
+                                        ) {
+                                            // If there is only one bullet, exit the list
+                                            event.preventDefault();
+                                            Transforms.unwrapNodes(editor, {
+                                                match: (n) => LIST_TYPES.includes(n.type),
+                                                split: true,
+                                            });
+                                            Transforms.setNodes(editor, {type: "paragraph"});
+                                        }
+                                    }
+                                }
                             }}
                         />
                     </Box>
@@ -126,7 +200,7 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
     );
 }
 
-const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
+const toggleBlock = (editor: CustomEditor, format: string) => {
     const isActive = isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format) ? "align" : "type");
     const isList = LIST_TYPES.includes(format);
 
@@ -158,7 +232,7 @@ const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
     }
 };
 
-const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
+const toggleMark = (editor: CustomEditor, format: string) => {
     const isActive = isMarkActive(editor, format);
 
     if (isActive) {
@@ -168,7 +242,7 @@ const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
     }
 };
 
-const isBlockActive = (editor: BaseEditor & ReactEditor, format: string, blockType: string = "type") => {
+const isBlockActive = (editor: CustomEditor, format: string, blockType: string = "type") => {
     const {selection} = editor;
     if (!selection) return false;
 
@@ -183,7 +257,7 @@ const isBlockActive = (editor: BaseEditor & ReactEditor, format: string, blockTy
     return !!match;
 };
 
-const isMarkActive = (editor: BaseEditor & ReactEditor, format: string) => {
+const isMarkActive = (editor: CustomEditor, format: string) => {
     const marks: any = Editor.marks(editor);
     return marks ? marks[format] === true : false;
 };
