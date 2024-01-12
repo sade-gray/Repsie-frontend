@@ -74,7 +74,6 @@ export default function SlateEditor({recipeData, setRecipeData, readOnly}: Edito
                     initialValue={recipeData}
                     onChange={(value) => {
                         !readOnly && setRecipeData?.(value);
-                        console.log(JSON.stringify(value));
                     }}>
                     {!readOnly && (
                         <div>
