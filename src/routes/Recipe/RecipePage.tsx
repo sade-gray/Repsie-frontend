@@ -11,6 +11,7 @@ import Editor from "../CreateRecipe/components/Editor.tsx";
 import {theme} from "../../theme.ts";
 import SkillRating from "@component/Ratings/SkillRating";
 import TimeRating from "@component/Ratings/TimeRating/TimeRating.tsx";
+import CommentSection from '../MyRecipesPage/Components/CommentSection.tsx';
 
 export function RecipePage() {
     const recipeId = useParams()["recipeId"];
@@ -19,6 +20,7 @@ export function RecipePage() {
     const [recipeContent, setRecipeContent] = useState<any>();
     const isNotTablet = useMediaQuery(theme.breakpoints.up("lg"));
 
+    // Fetch the recipe content on load up
     useEffect(() => {
         getDoc(doc(recipesCollectionRef, recipeId))
             .then((res) => {
@@ -36,7 +38,7 @@ export function RecipePage() {
     }, []);
 
     return (
-        <div>
+        <main>
             {recipeContent ? (
                 <div className='recipe--page--container'>
                     <div className='recipe--container'>
@@ -65,12 +67,17 @@ export function RecipePage() {
                             </div>
                         </section>
 
+                        {/* Recipe Content */}
                         <section className='recipe--content--container'>
                             <Editor readOnly recipeData={JSON.parse(recipeContent.recipe || "")} />
                         </section>
+
+                        {/* Comments Section */}
+                        <CommentSection recipeId={"loremipsumdolor"}/>
                     </div>
                 </div>
             ) : (
+                // Skeleton
                 <div>
                     <Stack spacing={1} className='recipe--page--container' alignItems={"center"}>
                         <Box sx={{width: "100%"}}>
@@ -104,6 +111,6 @@ export function RecipePage() {
                     </Stack>
                 </div>
             )}
-        </div>
+        </main>
     );
 }
