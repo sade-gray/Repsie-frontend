@@ -5,45 +5,15 @@ $transparenttheme1: rgba(85, 69, 146, 55%);
 // TODO: Add breakpoint variables
 // Example
 $breakpoint-tablet: 768px;
+
 html, body {
-  font-weight:bolder;
+  font-weight: bolder;
   margin: 0;
-  height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .repsie--logo {
   height: 35px;
-}
-
-.header {
-  width: 100vw;
-  position: sticky;
-  top:0;
-  background: $theme1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 10;
-
-  .header--left {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0.5rem;
-    padding: 0.5rem;
-  }
-
-  .header--search {
-    max-width: 30%;
-    padding: 0.5rem;
-  }
-}
-
-@media only screen and (min-width: 1200px) {
-  .header--left {
-    margin-left: 1.5rem;
-  }
 }
 
 .saved--recipe--drawer--icon--container {
@@ -90,15 +60,12 @@ html, body {
   width: 100vw;
   display: flex;
   justify-content: center;
-  overflow: hidden;
 }
 
 .home--container > section {
-    padding: 5px 15px;
-}
+  padding: 5px 15px;
 
-@media only screen and (max-width: 600px) {
-  .home--container > section {
+  @media only screen and (max-width: 600px) {
     padding: 10px 5px;
   }
 }
@@ -106,10 +73,6 @@ html, body {
 // Recipe feed container is twice as wide as the other 2
 .saved--recipe--section {
   flex: 1;
-}
-
-.saved--recipes--section--title {
-  margin: 0.2rem 1rem;
 }
 
 @media only screen and (max-width: 1200px) {
@@ -123,22 +86,20 @@ html, body {
   flex: 2;
   margin: 0 10%;
   max-width: 630px;
-  max-height: 93vh;
-  overflow-y: scroll;
 
   h1 {
     margin: 0 0 0.5rem 0;
     font-size: 2rem;
   }
-}
-@media only screen and (max-width: $breakpoint-tablet) {
-  .recipes--feed--container {
-      flex: auto;
-      padding: 0;
+
+  @media only screen and (max-width: $breakpoint-tablet) {
+    flex: auto;
+    padding: 0;
     margin: 5px;
-      width: 100%;
+    width: 100%;
   }
 }
+
 
 .chef--recommendation--container {
   flex: 1;
@@ -150,6 +111,10 @@ html, body {
   border-radius: 1rem;
   padding: 5px 20px;
   margin-bottom: 20px;
+
+  @media only screen and (max-width: $breakpoint-tablet) {
+    padding: 25px 10px;
+  }
 }
 
 .feed--recipe--title--container {
@@ -183,22 +148,16 @@ html, body {
 
 // myRecipes Page
 .my--recipes--section {
-  max-height: 85vh;
-  overflow-y: scroll;
   flex: 4;
   padding: 0 1rem;
+
+  @media only screen and (max-width: $breakpoint-tablet) {
+    padding: 0;
+  }
+
   h2 {
     margin: 0 0 0 1rem;
     font-size: 2rem;
-  }
-}
-
-@media only screen and (max-width: $breakpoint-tablet) {
-  .my--recipes--section {
-    padding: 0;
-  }
-  .feed--recipe--container {
-    padding: 25px 10px;
   }
 }
 
@@ -259,11 +218,15 @@ a {
   font-family: 'Inter', sans-serif;
 }
 
-// This centers the container, giving the container a set width
+// This centers the recipe content. gives content 60% width
 .recipe--page--container {
   display: flex;
-  justify-content: center;
-  margin: 0.5rem;
+  align-items: center;
+  margin: 0 25%;
+
+  @media only screen and (max-width: $breakpoint-tablet) {
+    margin: 0 2em;
+  }
 }
 
 .recipe--title--container {
@@ -274,8 +237,7 @@ a {
 }
 
 .recipe--image--container {
-  // display: flex;
-  // align-items: center;
+  max-width: 90vw;
   margin-bottom: 1rem;
 }
 
@@ -288,7 +250,6 @@ a {
 .recipe--rating--container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 2rem;
 }
 
