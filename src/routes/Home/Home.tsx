@@ -2,7 +2,7 @@ import Wex from "../../assets/wex.png"
 import GourmetToastie from "../../assets/dummyPhotos/gourmet-toastie.jpg";
 import FeedRecipeCard from "../../components/FeedRecipeCard.tsx";
 import SavedRecipesContainer from "../../components/SavedRecipesContainer.tsx";
-import {Divider, Skeleton, Stack} from "@mui/material";
+import {Divider, Skeleton, Stack, Typography} from "@mui/material";
 import {useEffect, useRef, useState} from "react";
 import { recipesCollectionRef} from "../../firebase.ts";
 import {Link} from "react-router-dom";
@@ -67,7 +67,7 @@ export default function Home() {
     // Check if feed recipes are saved by user whenever the user saves or unsaves a recipe
     useEffect(() => {
         // Return the same array of recipes but update the savedByUser field
-        setRecipeData(prevRecipeData => prevRecipeData.map((recipe: any )=> {
+        setRecipeData(prevRecipeData => prevRecipeData.map((recipe: any ) => {
             return {
                 ...recipe,
                 saved: checkIfRecipeSaved(recipe.id)
@@ -94,8 +94,8 @@ export default function Home() {
                 <SavedRecipesContainer />
             </section>
             <section className={"recipes--feed--container"} onScroll={handleScroll}>
-                <div className={"recipes--feed"} >
-                    <h1>For you</h1>
+                <div className={"recipes--feed"}>
+                    <Typography variant={"h1"}>For you</Typography>
                     <Divider />
                     {/* Feed Card go here */}
                     {recipeComponents?.length === 0

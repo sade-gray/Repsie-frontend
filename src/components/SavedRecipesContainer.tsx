@@ -1,4 +1,4 @@
-import {Button, Stack} from "@mui/material";
+import {Button, Stack, Typography} from "@mui/material";
 import SavedRecipeCard from "../components/SavedRecipeCard.tsx";
 import {useEffect, useState} from "react";
 import { savedRecipe } from "../types/recipeTypes.ts";
@@ -34,33 +34,27 @@ export default function SavedRecipesContainer() {
     }, [userSavedRecipes]);
 
     const savedRecipeComponents = savedRecipes?.map((recipe: savedRecipe, idx: number) => {
-    // Each Saved Recipe is a link to its page.
-        return (
-            <Link to={`/recipe/${recipe.id}`} key={idx}>
-                <Button fullWidth>
-                    <SavedRecipeCard
-                        imageUrl={GourmetToastie}
-                        title={recipe.title}
-                        publisher={recipe.publisher}
-                        id={recipe.id}
-                    />
-                </Button>
-            </Link>
-        );
+        // Each Saved Recipe is a link to its page.
+    return (
+        <Link to={`/recipe/${recipe.id}`} key={idx}>
+            <Button fullWidth>
+                <SavedRecipeCard
+                    imageUrl={GourmetToastie}
+                    title={recipe.title}
+                    publisher={recipe.publisher}
+                    id={recipe.id}
+                />
+            </Button>
+        </Link>
+    );
     });
 
-    const savedRecipesList = (
-        <Stack className={"saved--recipes--list"}>
-            {userSavedRecipes.length === 0
-            ? "You have no recipes saved!"
-            : savedRecipeComponents || "Loading"}
-        </Stack>
-    )
-
     return (
-        <div>
-            <h3 className={"saved--recipes--section--title"}>Saved Recipes</h3>
-            {savedRecipesList}
-        </div>
+        // TODO: Make the title sticky in the drawer. Make drawer round. Add swiping edge (like on iOS apps)
+        <Stack maxHeight={"60vh"}>
+            {userSavedRecipes.length === 0
+                ? "You have no recipes saved!"
+                : savedRecipeComponents || "Loading"}
+        </Stack>
     )
 }

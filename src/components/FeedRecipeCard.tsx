@@ -1,4 +1,4 @@
-import {IconButton} from "@mui/material";
+import {IconButton, Typography} from "@mui/material";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import {PublisherContainer} from "../routes/Recipe/components/PublisherContainer.tsx";
@@ -66,7 +66,6 @@ export default function FeedRecipeCard(props: RecipeCardData) {
                 setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
                     return prevUserSavedRecipes.filter((id) => id !== props.id);
                 })
-
             });
         }
         setSaved(prevSaved => !prevSaved)
@@ -75,7 +74,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
     return (
         <article className={"feed--recipe--container"}>
             <div className={"feed--recipe--title--container"}>
-                <h2 className={"recipe--title"}>{props.title}</h2>
+                <Typography variant={"h4"} className={"recipe--title"}>{props.title}</Typography>
                 <IconButton sx={{marginRight:"0.5rem"}} onClick={(e) => handleSaveToggle(e)}>
                     {saved
                         ? <BookmarkOutlinedIcon color={"secondary"} fontSize={"large"}/>
