@@ -47,15 +47,15 @@ const comments: Comment[] = [
 export default function CommentSection(props: any) {
 
   return (
-      <section className={"recipe--comment--section--container"}>
-        <Typography variant={"h3"} color={"text"}>Comments</Typography>
-        <Divider variant={"middle"} sx={{my:1}}/>
-        {/* List of comments from each user*/}
-        <Stack spacing={2}>
-          {/* Comment component. Contains the comment and its replies*/}
-          {comments.map(commentData => <CommentComponent {...commentData} key={commentData.id} />)}
-        </Stack>
-      </section>
+    <section className={"recipe--comment--section--container"}>
+      <Typography variant={"h3"} color={"text"}>Comments</Typography>
+      <Divider variant={"middle"} sx={{my:1}}/>
+      {/* List of comments from each user*/}
+      <Stack spacing={2}>
+        {/* Comment component. Contains the comment and its replies*/}
+        {comments.map(commentData => <CommentComponent {...commentData} key={commentData.id} />)}
+      </Stack>
+    </section>
   );
 }
 
