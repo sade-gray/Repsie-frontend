@@ -1,12 +1,12 @@
-import { Button, Stack, Typography } from '@mui/material';
-import SavedRecipeCard from '../components/SavedRecipeCard.tsx';
-import { useEffect, useState } from 'react';
-import { savedRecipe } from '../types/recipeTypes.ts';
-import { getDocs, query, where } from 'firebase/firestore';
-import { recipesCollectionRef } from '../firebase.ts';
-import { Link } from 'react-router-dom';
-import GourmetToastie from '../assets/dummyPhotos/gourmet-toastie.jpg';
-import useUserData from '@context/UserDataProvider';
+import { Button, Stack, Typography } from "@mui/material";
+import SavedRecipeCard from "../components/SavedRecipeCard.tsx";
+import { useEffect, useState } from "react";
+import { savedRecipe } from "../types/recipeTypes.ts";
+import { getDocs, query, where } from "firebase/firestore";
+import { recipesCollectionRef } from "../firebase.ts";
+import { Link } from "react-router-dom";
+import GourmetToastie from "../assets/dummyPhotos/gourmet-toastie.jpg";
+import useUserData from "@context/UserDataProvider";
 
 /**
  * The list component used to display the saved recipes.
@@ -24,7 +24,7 @@ export default function SavedRecipesContainer() {
     // Find all the user's saved recipes data. __name__ refers to the document's id.
     const q = query(
       recipesCollectionRef,
-      where('__name__', 'in', userSavedRecipes)
+      where("__name__", "in", userSavedRecipes)
     );
     getDocs(q).then((results) => {
       setSavedRecipes(() =>
@@ -58,10 +58,10 @@ export default function SavedRecipesContainer() {
 
   return (
     // TODO: Make the title sticky in the drawer. Make drawer round. Add swiping edge (like on iOS apps)
-    <Stack maxHeight={'60vh'}>
+    <Stack maxHeight={"60vh"}>
       {userSavedRecipes.length === 0
-        ? 'You have no recipes saved!'
-        : savedRecipeComponents || 'Loading'}
+        ? "You have no recipes saved!"
+        : savedRecipeComponents || "Loading"}
     </Stack>
   );
 }

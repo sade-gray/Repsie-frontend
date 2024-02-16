@@ -1,11 +1,11 @@
-import SavedRecipesContainer from '../../components/SavedRecipesContainer';
-import { useEffect, useState } from 'react';
-import CreateRecipeButton from './Components/CreateRecipeButton';
-import { Button, Chip } from '@mui/material';
-import useAuth from '@context/AuthProvider';
-import { Link, Navigate } from 'react-router-dom';
-import { db, recipesCollectionRef } from '../../firebase.ts';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import SavedRecipesContainer from "../../components/SavedRecipesContainer";
+import { useEffect, useState } from "react";
+import CreateRecipeButton from "./Components/CreateRecipeButton";
+import { Button, Chip } from "@mui/material";
+import useAuth from "@context/AuthProvider";
+import { Link, Navigate } from "react-router-dom";
+import { db, recipesCollectionRef } from "../../firebase.ts";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
 export function MyRecipesPage() {
   const [createdRecipes, setCreatedRecipes]: any = useState([]);
@@ -17,9 +17,9 @@ export function MyRecipesPage() {
     // Get the user's created Recipes
     const createdRecipesRef = collection(
       db,
-      'users',
+      "users",
       user.uid,
-      'createdRecipes'
+      "createdRecipes"
     );
     getDocs(createdRecipesRef)
       .then(async (createdRecipesSnap) => {
@@ -67,16 +67,16 @@ export function MyRecipesPage() {
   });
   // Redirect to home if user is not logged in
   if (!user) {
-    return <Navigate to={'/'} />;
+    return <Navigate to={"/"} />;
   }
   return (
-    <div className={'main--container'}>
-      <section className={'saved--recipe--section'}>
+    <div className={"main--container"}>
+      <section className={"saved--recipe--section"}>
         <SavedRecipesContainer />
       </section>
-      <section className={'my--recipes--section'}>
+      <section className={"my--recipes--section"}>
         <h2>My Recipes</h2>
-        <div className={'my--recipes--container'}>
+        <div className={"my--recipes--container"}>
           {createdRecipesComponents}
           <CreateRecipeButton />
         </div>

@@ -5,12 +5,12 @@
  *      * The user's liked recipes (data only)
  *      * The user's settings (dark mode, allergens etc)
  */
-import { createContext, ReactNode, useEffect, useState } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase.ts';
-import useAuth from '@context/AuthProvider';
-import useSnackBar from '@context/SnackBarProvider';
-import { UserData } from './userDataTypes';
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase.ts";
+import useAuth from "@context/AuthProvider";
+import useSnackBar from "@context/SnackBarProvider";
+import { UserData } from "./userDataTypes";
 
 export const UserDataContext = createContext({} as UserData);
 
@@ -43,7 +43,7 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => {
-        addSnack('Error. Accessing unauthorised data.', 'error');
+        addSnack("Error. Accessing unauthorised data.", "error");
       });
   }, [user]);
 

@@ -1,24 +1,24 @@
-import { PublisherContainer } from './components/PublisherContainer.tsx';
-import Wex from '../../assets/wex.png';
-import { getDownloadURL } from 'firebase/storage';
-import { Box, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { ref } from 'firebase/storage';
-import { contentStorage, recipesCollectionRef } from '../../firebase.ts';
-import { doc, getDoc } from 'firebase/firestore';
-import Editor from '../CreateRecipe/components/Editor.tsx';
-import { theme } from '../../theme.ts';
-import SkillRating from '@component/Ratings/SkillRating';
-import TimeRating from '@component/Ratings/TimeRating/TimeRating.tsx';
-import CommentSection from '../MyRecipesPage/Components/CommentSection.tsx';
+import { PublisherContainer } from "./components/PublisherContainer.tsx";
+import Wex from "../../assets/wex.png";
+import { getDownloadURL } from "firebase/storage";
+import { Box, Skeleton, Stack, Typography, useMediaQuery } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { ref } from "firebase/storage";
+import { contentStorage, recipesCollectionRef } from "../../firebase.ts";
+import { doc, getDoc } from "firebase/firestore";
+import Editor from "../CreateRecipe/components/Editor.tsx";
+import { theme } from "../../theme.ts";
+import SkillRating from "@component/Ratings/SkillRating";
+import TimeRating from "@component/Ratings/TimeRating/TimeRating.tsx";
+import CommentSection from "../MyRecipesPage/Components/CommentSection.tsx";
 
 export function RecipePage() {
-  const recipeId = useParams()['recipeId'];
+  const recipeId = useParams()["recipeId"];
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
-  const defaultImage = 'macandcheese.jpg';
+  const defaultImage = "macandcheese.jpg";
   const [recipeContent, setRecipeContent] = useState<any>();
-  const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
+  const isNotTablet = useMediaQuery(theme.breakpoints.up("lg"));
 
   // Fetch the recipe content on load up
   useEffect(() => {
@@ -34,7 +34,7 @@ export function RecipePage() {
             setCoverImageUrl(url);
           });
         } else {
-          console.log('Didnt find that shit');
+          console.log("Didnt find that shit");
         }
       })
       .catch((error) => console.log(error));
@@ -46,8 +46,8 @@ export function RecipePage() {
         <div className="recipe--page--container">
           <div className="recipe--container">
             <div className="recipe--title--container">
-              <Typography variant={`${isNotTablet ? 'h3' : 'h4'}`}>
-                {recipeContent?.title || 'Loading...'}
+              <Typography variant={`${isNotTablet ? "h3" : "h4"}`}>
+                {recipeContent?.title || "Loading..."}
               </Typography>
             </div>
             <div className="recipe--image--container">
@@ -81,12 +81,12 @@ export function RecipePage() {
             <section className="recipe--content--container">
               <Editor
                 readOnly
-                recipeData={JSON.parse(recipeContent.recipe || '')}
+                recipeData={JSON.parse(recipeContent.recipe || "")}
               />
             </section>
 
             {/* Comments Section */}
-            <CommentSection recipeId={'loremipsumdolor'} />
+            <CommentSection recipeId={"loremipsumdolor"} />
           </div>
         </div>
       ) : (
@@ -95,18 +95,18 @@ export function RecipePage() {
           <Stack
             spacing={1}
             className="recipe--page--container"
-            alignItems={'center'}
+            alignItems={"center"}
           >
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{ width: "100%" }}>
               <Skeleton
                 variant="text"
                 animation="wave"
-                width={'100%'}
+                width={"100%"}
                 height={40}
               />
               <Skeleton
                 variant="rectangular"
-                width={'100%'}
+                width={"100%"}
                 height={300}
                 animation="wave"
               />
@@ -114,10 +114,10 @@ export function RecipePage() {
 
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                width: '100%',
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                width: "100%",
               }}
             >
               <Skeleton
@@ -131,9 +131,9 @@ export function RecipePage() {
 
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
               }}
             >
               <Box>
@@ -149,7 +149,7 @@ export function RecipePage() {
             <Skeleton
               variant="rectangular"
               animation="wave"
-              width={'100%'}
+              width={"100%"}
               height={300}
             />
           </Stack>

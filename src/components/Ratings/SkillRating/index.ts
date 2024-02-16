@@ -1,1 +1,1 @@
-export { default } from './SkillRating.tsx';
+export { default } from "./SkillRating.tsx";

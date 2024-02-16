@@ -1,5 +1,5 @@
-import { createContext, ReactNode, useState } from 'react';
-import { IContextType } from '../../types/contextTypes';
+import { createContext, ReactNode, useState } from "react";
+import { IContextType } from "../../types/contextTypes";
 
 export const DrawerContext = createContext<IContextType>({
   drawerOpen: false,

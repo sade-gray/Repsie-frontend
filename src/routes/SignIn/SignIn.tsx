@@ -1,26 +1,26 @@
-import { Button, Typography } from '@mui/material';
-import SignInForm from './components/SignInForm.tsx';
-import useAuth from '@context/AuthProvider';
-import { Navigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Button, Typography } from "@mui/material";
+import SignInForm from "./components/SignInForm.tsx";
+import useAuth from "@context/AuthProvider";
+import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function SignIn() {
   const { user } = useAuth();
 
   if (user) {
-    return <Navigate to={'/'} />;
+    return <Navigate to={"/"} />;
   } else {
     return (
-      <main className={'sign--in--container'}>
+      <main className={"sign--in--container"}>
         <SignInForm />
-        <Typography color={'secondary'}>
+        <Typography color={"secondary"}>
           Don't have an account?
-          <Link to={'/signup'}>
-            {' '}
+          <Link to={"/signup"}>
+            {" "}
             <u>Sign up!</u>
           </Link>
         </Typography>
-        <Button variant={'outlined'} color={'secondary'}>
+        <Button variant={"outlined"} color={"secondary"}>
           Sign in with Google
         </Button>
       </main>

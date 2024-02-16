@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import {
   BaseEditor,
   createEditor,
@@ -6,15 +6,15 @@ import {
   Editor,
   Transforms,
   Element as SlateElement,
-} from 'slate';
-import { Slate, Editable, withReact, ReactEditor, useSlate } from 'slate-react';
-import { withHistory } from 'slate-history';
-import * as Icons from '@mui/icons-material';
-import { Box, Divider, Icon, IconButton } from '@mui/material';
-import isHotkey from 'is-hotkey';
-import '../styles.scss';
+} from "slate";
+import { Slate, Editable, withReact, ReactEditor, useSlate } from "slate-react";
+import { withHistory } from "slate-history";
+import * as Icons from "@mui/icons-material";
+import { Box, Divider, Icon, IconButton } from "@mui/material";
+import isHotkey from "is-hotkey";
+import "../styles.scss";
 
-declare module 'slate' {
+declare module "slate" {
   export interface CustomTypes {
     Editor: CustomEditor;
     Text: CustomText;
@@ -46,19 +46,19 @@ type EditorProps = {
   readOnly?: boolean;
 };
 
-const LIST_TYPES = ['numbered-list', 'bulleted-list'];
-const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'];
+const LIST_TYPES = ["numbered-list", "bulleted-list"];
+const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 
 const FORMAT_HOTKEYS: { [key: string]: string } = {
-  'mod+b': 'bold',
-  'mod+i': 'italic',
-  'mod+u': 'underline',
+  "mod+b": "bold",
+  "mod+i": "italic",
+  "mod+u": "underline",
 };
 
 const BLOCK_HOTKEYS: { [key: string]: string } = {
-  'mod+1': 'heading-one',
-  'mod+2': 'heading-two',
-  'mod+e': 'center',
+  "mod+1": "heading-one",
+  "mod+2": "heading-two",
+  "mod+e": "center",
 };
 
 export default function SlateEditor({
@@ -77,8 +77,8 @@ export default function SlateEditor({
     <div className="editor">
       <Box
         sx={{
-          border: !readOnly ? '2px solid' : 'none',
-          borderColor: 'secondary.main',
+          border: !readOnly ? "2px solid" : "none",
+          borderColor: "secondary.main",
         }}
       >
         <Slate
@@ -125,15 +125,15 @@ export default function SlateEditor({
 
           <Box
             sx={{
-              width: '40vw',
-              minInlineSize: '100%',
+              width: "40vw",
+              minInlineSize: "100%",
             }}
           >
             <Editable
               style={{
                 outline: 0,
                 padding: 2,
-                minHeight: '40vh',
+                minHeight: "40vh",
               }}
               readOnly={readOnly}
               renderElement={renderElement}
@@ -156,14 +156,14 @@ export default function SlateEditor({
 
                 const { selection } = editor;
 
-                if (event.key === 'Enter') {
+                if (event.key === "Enter") {
                   if (selection) {
                     const [start] = Editor.nodes(editor, {
                       at: selection,
                       match: (n) =>
                         !Editor.isEditor(n) &&
                         SlateElement.isElement(n) &&
-                        n.type.startsWith('heading'),
+                        n.type.startsWith("heading"),
                     });
 
                     if (start) {
@@ -176,8 +176,8 @@ export default function SlateEditor({
                       if (end) {
                         event.preventDefault();
                         const newLine = {
-                          type: 'paragraph',
-                          children: [{ text: '' }],
+                          type: "paragraph",
+                          children: [{ text: "" }],
                         };
                         // @ts-ignore
                         Transforms.insertNodes(editor, newLine, {
@@ -192,13 +192,13 @@ export default function SlateEditor({
                 }
 
                 if (
-                  event.key === 'Backspace' &&
+                  event.key === "Backspace" &&
                   selection &&
                   Editor.start(editor, selection).offset === 0
                 ) {
                   const [match] = Editor.nodes(editor, {
                     match: (n) =>
-                      Editor.isBlock(editor, n) && n.type === 'list-item',
+                      Editor.isBlock(editor, n) && n.type === "list-item",
                   });
 
                   if (match) {
@@ -217,7 +217,7 @@ export default function SlateEditor({
                         match: (n) => LIST_TYPES.includes(n.type),
                         split: true,
                       });
-                      Transforms.setNodes(editor, { type: 'paragraph' });
+                      Transforms.setNodes(editor, { type: "paragraph" });
                     }
                   }
                 }
@@ -234,7 +234,7 @@ const toggleBlock = (editor: CustomEditor, format: string) => {
   const isActive = isBlockActive(
     editor,
     format,
-    TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
+    TEXT_ALIGN_TYPES.includes(format) ? "align" : "type"
   );
   const isList = LIST_TYPES.includes(format);
 
@@ -254,7 +254,7 @@ const toggleBlock = (editor: CustomEditor, format: string) => {
     };
   } else {
     properties = {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+      type: isActive ? "paragraph" : isList ? "list-item" : format,
     };
   }
 
@@ -279,7 +279,7 @@ const toggleMark = (editor: CustomEditor, format: string) => {
 const isBlockActive = (
   editor: CustomEditor,
   format: string,
-  blockType: string = 'type'
+  blockType: string = "type"
 ) => {
   const { selection } = editor;
   if (!selection) return false;
@@ -317,7 +317,7 @@ const MarkButton = ({ icon, format }: ButtonProps) => {
         toggleMark(editor, format);
       }}
     >
-      <Icon color={isMarkActive(editor, format) ? 'secondary' : 'disabled'}>
+      <Icon color={isMarkActive(editor, format) ? "secondary" : "disabled"}>
         {React.createElement(Icons[icon])}
       </Icon>
     </IconButton>
@@ -334,7 +334,7 @@ const BlockButton = ({ icon, format, type }: ButtonProps) => {
       }}
     >
       <Icon
-        color={isBlockActive(editor, format, type) ? 'secondary' : 'disabled'}
+        color={isBlockActive(editor, format, type) ? "secondary" : "disabled"}
       >
         {React.createElement(Icons[icon])}
       </Icon>
@@ -345,31 +345,31 @@ const BlockButton = ({ icon, format, type }: ButtonProps) => {
 const Element = ({ attributes, children, element }: any) => {
   const style = { textAlign: element.align };
   switch (element.type) {
-    case 'heading-one':
+    case "heading-one":
       return (
         <h1 style={style} {...attributes}>
           {children}
         </h1>
       );
-    case 'heading-two':
+    case "heading-two":
       return (
         <h2 style={style} {...attributes}>
           {children}
         </h2>
       );
-    case 'bulleted-list':
+    case "bulleted-list":
       return (
         <ul className="bulleted--list" {...attributes}>
           {children}
         </ul>
       );
-    case 'numbered-list':
+    case "numbered-list":
       return (
         <ol className="numbered--list" {...attributes}>
           {children}
         </ol>
       );
-    case 'list-item':
+    case "list-item":
       return <li {...attributes}>{children}</li>;
     // TODO: Add support for images
     default:

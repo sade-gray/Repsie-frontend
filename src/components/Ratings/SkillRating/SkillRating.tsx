@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { LocalDining } from '@mui/icons-material';
-import { IconContainerProps, Rating, styled } from '@mui/material';
-import { ratingProps } from '../ratingClasses';
+import React, { useEffect, useState } from "react";
+import { LocalDining } from "@mui/icons-material";
+import { IconContainerProps, Rating, styled } from "@mui/material";
+import { ratingProps } from "../ratingClasses";
 
 function SkillRating({ value, readOnly, handleChange }: ratingProps) {
   const [colour, setColour] = useState<
-    'success' | 'error' | 'warning' | 'disabled'
-  >('disabled');
+    "success" | "error" | "warning" | "disabled"
+  >("disabled");
   function changeColour(newValue?: number) {
     setColour(() => {
       // Change the colour of icons to its set value if hovered away
       const colour = !newValue || newValue === -1 ? value || 1 : newValue;
       switch (colour) {
         case 1:
-          return 'success';
+          return "success";
         case 2:
-          return 'success';
+          return "success";
         case 3:
-          return 'warning';
+          return "warning";
         case 4:
-          return 'error';
+          return "error";
         case 5:
-          return 'error';
+          return "error";
         default:
-          return 'disabled';
+          return "disabled";
       }
     });
   }
@@ -50,7 +50,7 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
   }
 
   const StyledRating = styled(Rating)(({ theme }) => ({
-    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
+    "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
       color: theme.palette.action.disabled,
     },
   }));

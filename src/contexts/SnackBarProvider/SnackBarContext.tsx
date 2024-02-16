@@ -1,16 +1,16 @@
-import { createContext, ReactNode, useState } from 'react';
-import { Alert, Snackbar } from '@mui/material';
-import { AlertColor } from '@mui/material/Alert/Alert';
-import { snack } from './snackTypes';
-import { snackContextValues } from './snackTypes';
+import { createContext, ReactNode, useState } from "react";
+import { Alert, Snackbar } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert/Alert";
+import { snack } from "./snackTypes";
+import { snackContextValues } from "./snackTypes";
 // TODO: Implement a multiple snack functionality. Snack stack? Use 'notistack' package?
 
 export const SnackBarContext = createContext({} as snackContextValues);
 
 export function SnackBarProvider({ children }: { children: ReactNode }) {
   const [snack, setSnack] = useState<snack>({
-    message: '',
-    severity: 'success',
+    message: "",
+    severity: "success",
   });
   const [open, setOpen] = useState<boolean>(false);
 
@@ -20,7 +20,7 @@ export function SnackBarProvider({ children }: { children: ReactNode }) {
    * @param severity
    */
   const addSnack = (message: string, severity?: AlertColor) => {
-    setSnack({ message: message, severity: severity || 'success' });
+    setSnack({ message: message, severity: severity || "success" });
     setOpen(true);
   };
 
@@ -38,7 +38,7 @@ export function SnackBarProvider({ children }: { children: ReactNode }) {
         open={open}
         autoHideDuration={5000}
         onClose={handleClose}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <Alert severity={snack.severity} onClose={handleClose}>
           {snack.message}

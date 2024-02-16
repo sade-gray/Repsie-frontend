@@ -1,14 +1,14 @@
-import Wex from '../../assets/wex.png';
-import GourmetToastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
-import FeedRecipeCard from '../../components/FeedRecipeCard.tsx';
-import SavedRecipesContainer from '../../components/SavedRecipesContainer.tsx';
-import { Divider, Skeleton, Stack, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
-import { recipesCollectionRef } from '../../firebase.ts';
-import { Link } from 'react-router-dom';
-import { RecipeCard } from '../../types/recipeTypes';
-import { getDocs, limit, orderBy, query, startAt } from 'firebase/firestore';
-import useUserData from '@context/UserDataProvider';
+import Wex from "../../assets/wex.png";
+import GourmetToastie from "../../assets/dummyPhotos/gourmet-toastie.jpg";
+import FeedRecipeCard from "../../components/FeedRecipeCard.tsx";
+import SavedRecipesContainer from "../../components/SavedRecipesContainer.tsx";
+import { Divider, Skeleton, Stack, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { recipesCollectionRef } from "../../firebase.ts";
+import { Link } from "react-router-dom";
+import { RecipeCard } from "../../types/recipeTypes";
+import { getDocs, limit, orderBy, query, startAt } from "firebase/firestore";
+import useUserData from "@context/UserDataProvider";
 
 const recipeFetchLimit = 4;
 
@@ -27,7 +27,7 @@ export default function Home() {
   function fetchRecipes() {
     const q = query(
       recipesCollectionRef,
-      orderBy('datePublished'),
+      orderBy("datePublished"),
       startAt(recipeOffset.current),
       limit(recipeFetchLimit)
     );
@@ -43,7 +43,7 @@ export default function Home() {
               title: docData.title,
               skillRating: docData.skillRating,
               timeRating: docData.timeRating,
-              image: '',
+              image: "",
               saved: checkIfRecipeSaved(doc.id),
             };
           }),
@@ -101,34 +101,34 @@ export default function Home() {
   });
 
   return (
-    <div className={'main--container'}>
-      <section className={'saved--recipe--section'}>
+    <div className={"main--container"}>
+      <section className={"saved--recipe--section"}>
         <SavedRecipesContainer />
       </section>
-      <section className={'recipes--feed--container'} onScroll={handleScroll}>
-        <div className={'recipes--feed'}>
-          <Typography variant={'h1'}>For you</Typography>
+      <section className={"recipes--feed--container"} onScroll={handleScroll}>
+        <div className={"recipes--feed"}>
+          <Typography variant={"h1"}>For you</Typography>
           <Divider />
           {/* Feed Card go here */}
           {recipeComponents?.length === 0 ? (
             // Render the skeletons while data is being fetched
             <Stack spacing={3} mt={2}>
               <Stack spacing={2}>
-                <Skeleton variant={'rounded'} height={50} animation={'wave'} />
+                <Skeleton variant={"rounded"} height={50} animation={"wave"} />
                 <Skeleton
-                  variant={'rectangular'}
+                  variant={"rectangular"}
                   height={300}
-                  animation={'wave'}
-                  sx={{ mb: '1' }}
+                  animation={"wave"}
+                  sx={{ mb: "1" }}
                 />
               </Stack>
               <Divider />
               <Stack spacing={2}>
-                <Skeleton variant={'rounded'} height={50} animation={'wave'} />
+                <Skeleton variant={"rounded"} height={50} animation={"wave"} />
                 <Skeleton
-                  variant={'rectangular'}
+                  variant={"rectangular"}
                   height={300}
-                  animation={'wave'}
+                  animation={"wave"}
                 />
               </Stack>
               <Divider />
@@ -139,7 +139,7 @@ export default function Home() {
           )}
         </div>
       </section>
-      <section className={'chef--recommendation--container'}>
+      <section className={"chef--recommendation--container"}>
         Chefs to follow
       </section>
     </div>

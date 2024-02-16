@@ -1,4 +1,4 @@
-import useDrawer from '@context/DrawerProvider';
+import useDrawer from "@context/DrawerProvider";
 import {
   useTheme,
   useMediaQuery,
@@ -6,18 +6,18 @@ import {
   AppBar,
   IconButton,
   Grid,
-} from '@mui/material';
-import { HeaderSearchBox } from './HeaderSearchBox.tsx';
-import HeaderProfileIcon from './HeaderProfileIcon.tsx';
-import SavedRecipesDrawer from '../SavedRecipesDrawer.tsx';
-import React, { ReactElement } from 'react';
-import SavedRecipeDrawerIcon from '@component/SavedRecipeDrawerIcon.tsx';
-import RepsieLogo from '@component/Navbar/RepsieLogo.tsx';
+} from "@mui/material";
+import { HeaderSearchBox } from "./HeaderSearchBox.tsx";
+import HeaderProfileIcon from "./HeaderProfileIcon.tsx";
+import SavedRecipesDrawer from "../SavedRecipesDrawer.tsx";
+import React, { ReactElement } from "react";
+import SavedRecipeDrawerIcon from "@component/SavedRecipeDrawerIcon.tsx";
+import RepsieLogo from "@component/Navbar/RepsieLogo.tsx";
 
 export function DesktopNavbar() {
   const theme = useTheme();
   const { drawerOpen, setDrawerOpen } = useDrawer();
-  const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
+  const isNotTablet = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -29,11 +29,11 @@ export function DesktopNavbar() {
       <SavedRecipesDrawer />
       {/*<header className='header'>*/}
       <ElevationScroll>
-        <AppBar color={'secondary'} position={'sticky'}>
+        <AppBar color={"secondary"} position={"sticky"}>
           <Grid
             container
-            justifyContent={'space-between'}
-            alignItems={'center'}
+            justifyContent={"space-between"}
+            alignItems={"center"}
             p={1}
           >
             {/* Display the toggle drawer button in the header for mobile */}
@@ -41,7 +41,7 @@ export function DesktopNavbar() {
               {!isNotTablet && (
                 <IconButton
                   sx={{ p: 0 }}
-                  size={'small'}
+                  size={"small"}
                   onClick={handleDrawerToggle}
                 >
                   <SavedRecipeDrawerIcon />

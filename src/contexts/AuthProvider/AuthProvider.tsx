@@ -1,14 +1,14 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
-import { auth } from '../../firebase.ts';
-import { User as FirebaseUser } from 'firebase/auth';
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { auth } from "../../firebase.ts";
+import { User as FirebaseUser } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-} from 'firebase/auth';
-import useSnackBar from '@context/SnackBarProvider';
-import { useNavigate } from 'react-router-dom';
-import { AuthContextValues } from './authTypes';
+} from "firebase/auth";
+import useSnackBar from "@context/SnackBarProvider";
+import { useNavigate } from "react-router-dom";
+import { AuthContextValues } from "./authTypes";
 
 export const AuthContext = createContext({} as AuthContextValues);
 
@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (user) {
           setUser(user);
           addSnack(`Success! Logged in as ${user.displayName || user.email}`);
-          navigate('/');
+          navigate("/");
           return true;
         }
         return false;
