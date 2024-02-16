@@ -1,2 +1,2 @@
-export {default} from "./useSnackBar.ts";
-export * from "./SnackBarContext.tsx";
+export { default } from './useSnackBar.ts';
+export * from './SnackBarContext.tsx';

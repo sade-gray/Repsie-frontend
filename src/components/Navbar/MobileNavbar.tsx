@@ -1,46 +1,58 @@
-import {AppBar, Avatar, Box, Fab, Grid, IconButton, styled} from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Fab,
+  Grid,
+  IconButton,
+  styled,
+} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
-import {Link} from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import { Link } from 'react-router-dom';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import SavedRecipesDrawerMobile from '@component/SavedRecipesDrawerMobile.tsx';
 import useDrawer from '@context/DrawerProvider';
 
 export default function MobileNavbar(props: any) {
-  const {drawerOpen, setDrawerOpen} = useDrawer();
+  const { drawerOpen, setDrawerOpen } = useDrawer();
 
   const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen)
-  }
+    setDrawerOpen(!drawerOpen);
+  };
 
   return (
     <>
-      <AppBar position="fixed" color="secondary" sx={{top: 'auto', bottom: 0}}>
-        <Grid container justifyContent={"space-around"} color={"primary"}>
+      <AppBar
+        position="fixed"
+        color="secondary"
+        sx={{ top: 'auto', bottom: 0 }}
+      >
+        <Grid container justifyContent={'space-around'} color={'primary'}>
           {/* Home button */}
-          <IconButton color={"inherit"} aria-label="open drawer" size={"large"}>
-            <Link to={"/"} aria-label={"home"} style={{lineHeight:0}}>
-              <HomeIcon fontSize={"large"}/>
+          <IconButton color={'inherit'} aria-label="open drawer" size={'large'}>
+            <Link to={'/'} aria-label={'home'} style={{ lineHeight: 0 }}>
+              <HomeIcon fontSize={'large'} />
             </Link>
           </IconButton>
           {/* Search Button */}
           <IconButton color="inherit">
-            <SearchIcon fontSize={"large"}/>
+            <SearchIcon fontSize={'large'} />
           </IconButton>
           {/* Create Recipe button */}
           <StyledFab color="secondary" aria-label="add">
-            <Link to={"/createRecipe"} style={{lineHeight:0}}>
-              <AddIcon fontSize={"large"}/>
+            <Link to={'/createRecipe'} style={{ lineHeight: 0 }}>
+              <AddIcon fontSize={'large'} />
             </Link>
           </StyledFab>
           {/* A simple divider */}
-          <Box sx={{flexGrow: 0.3}}/>
+          <Box sx={{ flexGrow: 0.3 }} />
           {/* Saved Recipes Icon */}
-          <IconButton color={"inherit"} onClick={handleDrawerToggle}>
-            <BookmarkIcon fontSize={"large"}/>
+          <IconButton color={'inherit'} onClick={handleDrawerToggle}>
+            <BookmarkIcon fontSize={'large'} />
           </IconButton>
-          <IconButton color={"inherit"}>
+          <IconButton color={'inherit'}>
             <Avatar />
           </IconButton>
         </Grid>
