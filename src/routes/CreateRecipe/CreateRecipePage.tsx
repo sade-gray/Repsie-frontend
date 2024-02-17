@@ -10,6 +10,7 @@ import TimeRating from "@component/Ratings/TimeRating";
 import SkillRating from "@component/Ratings/SkillRating";
 
 export function CreateRecipePage() {
+  // The initial value for the recipe
   const initialValue = [
     {
       type: "paragraph",
@@ -18,15 +19,17 @@ export function CreateRecipePage() {
       ],
     },
   ];
+  // The state for the skill rating, time rating, title, image url, cover image url and recipe data
   const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
   const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
   const [title, setTitle] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>();
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
   const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
+  // Get the user from the context
   const { user } = useAuth();
 
-  function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (imageUrl && user) {
       saveRecipe(
@@ -40,7 +43,7 @@ export function CreateRecipePage() {
     } else {
       console.log("Invalid image or user");
     }
-  }
+  };
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files;

@@ -14,6 +14,7 @@ import { Box, Divider, Icon, IconButton } from "@mui/material";
 import isHotkey from "is-hotkey";
 import "../styles.scss";
 
+// Declare types for Slate
 declare module "slate" {
   export interface CustomTypes {
     Editor: CustomEditor;
@@ -22,6 +23,7 @@ declare module "slate" {
   }
 }
 
+// Declare types for the custom text
 export type CustomText = {
   text: string;
   bold?: boolean | false;
@@ -30,22 +32,23 @@ export type CustomText = {
   type: string;
   children: Descendant[];
 };
-
+// Declare types for the custom elements
 export type CustomElement = {
   type: string;
   children: Descendant[];
 };
-
+// Declare types for the custom editor
 interface CustomEditor extends BaseEditor, ReactEditor {
   type: string;
 }
-
+// Props for the Editor component
 type EditorProps = {
   recipeData: Descendant[];
   setRecipeData?: Dispatch<SetStateAction<Descendant[]>>;
   readOnly?: boolean;
 };
 
+// List and text align types
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 
@@ -61,6 +64,15 @@ const BLOCK_HOTKEYS: { [key: string]: string } = {
   "mod+e": "center",
 };
 
+/**
+ * Component for rendering a Slate editor.
+ *
+ * @param {EditorProps} props - The component props.
+ * @param {any} props.recipeData - The recipe data.
+ * @param {Function} props.setRecipeData - The function to set the recipe data.
+ * @param {boolean} props.readOnly - Indicates if the editor is read-only.
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function SlateEditor({
   recipeData,
   setRecipeData,
