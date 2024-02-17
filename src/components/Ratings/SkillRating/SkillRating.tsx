@@ -7,6 +7,8 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
   const [colour, setColour] = useState<
     "success" | "error" | "warning" | "disabled"
   >("disabled");
+
+  // Changes the colour of the rating component based on the value of skill rating
   function changeColour(newValue?: number) {
     setColour(() => {
       // Change the colour of icons to its set value if hovered away
@@ -32,6 +34,7 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
     changeColour();
   }, [value]);
 
+  // Custom icons for each value of the skill rating
   const customIcons: {
     [index: string]: {
       icon: React.ReactElement;
@@ -43,12 +46,13 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
     4: { icon: <LocalDining color={colour} fontSize="large" /> },
     5: { icon: <LocalDining color={colour} fontSize="large" /> },
   };
-
+  // Icon wrapper for the rating component
   function IconContainer(props: IconContainerProps) {
     const { value, ...other } = props;
     return <span {...other}>{customIcons[value].icon}</span>;
   }
 
+  // Styles for the rating component
   const StyledRating = styled(Rating)(({ theme }) => ({
     "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
       color: theme.palette.action.disabled,
@@ -63,9 +67,9 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
       size="large"
       onChangeActive={(e, value) => {
         e.preventDefault();
-        if (!readOnly) {
-          changeColour(value);
-        }
+        // Update the parent's value state if the component is not made readonly
+        !readOnly && changeColour(value);
+        console.log(value);
       }}
       onChange={(e, value) => {
         e.preventDefault();
