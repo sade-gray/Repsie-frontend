@@ -2,7 +2,7 @@ import { PublisherContainer } from "./components/PublisherContainer.tsx";
 import Wex from "../../assets/wex.png";
 import { getDownloadURL } from "firebase/storage";
 import { Box, Skeleton, Stack, Typography, useMediaQuery } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ref } from "firebase/storage";
 import { contentStorage, recipesCollectionRef } from "../../firebase.ts";
@@ -12,6 +12,7 @@ import { theme } from "../../theme.ts";
 import SkillRating from "@component/Ratings/SkillRating";
 import TimeRating from "@component/Ratings/TimeRating/TimeRating.tsx";
 import CommentSection from "../MyRecipesPage/Components/CommentSection.tsx";
+import useSnackBar from "@context/SnackBarProvider";
 
 export function RecipePage() {
   const recipeId = useParams()["recipeId"];
@@ -19,6 +20,8 @@ export function RecipePage() {
   const defaultImage = "macandcheese.jpg";
   const [recipeContent, setRecipeContent] = useState<any>();
   const isNotTablet = useMediaQuery(theme.breakpoints.up("lg"));
+  const navigate = useNavigate();
+  const { addSnack } = useSnackBar();
 
   // Fetch the recipe content on load up
   useEffect(() => {
@@ -34,7 +37,8 @@ export function RecipePage() {
             setCoverImageUrl(url);
           });
         } else {
-          console.log("Didnt find that shit");
+          addSnack("Recipe not found", "error");
+          navigate("/");
         }
       })
       .catch((error) => console.log(error));
