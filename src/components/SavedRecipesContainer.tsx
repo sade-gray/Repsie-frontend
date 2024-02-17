@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import SavedRecipeCard from "../components/SavedRecipeCard.tsx";
 import { useEffect, useState } from "react";
 import { savedRecipe } from "../types/recipeTypes.ts";

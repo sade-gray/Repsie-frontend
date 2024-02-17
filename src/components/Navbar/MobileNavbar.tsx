@@ -15,7 +15,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import SavedRecipesDrawerMobile from "@component/SavedRecipesDrawerMobile.tsx";
 import useDrawer from "@context/DrawerProvider";
 
-export default function MobileNavbar(props: any) {
+export default function MobileNavbar() {
   const { drawerOpen, setDrawerOpen } = useDrawer();
 
   const handleDrawerToggle = () => {
