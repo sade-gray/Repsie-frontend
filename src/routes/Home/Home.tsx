@@ -1,5 +1,3 @@
-import Wex from "../../assets/wex.png";
-import GourmetToastie from "../../assets/dummyPhotos/gourmet-toastie.jpg";
 import FeedRecipeCard from "../../components/FeedRecipeCard.tsx";
 import SavedRecipesContainer from "../../components/SavedRecipesContainer.tsx";
 import { Divider, Skeleton, Stack, Typography } from "@mui/material";
@@ -39,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     // Return the same array of recipes but update the savedByUser field
     setRecipeData((prevRecipeData) =>
-      prevRecipeData.map((recipe: any) => {
+      prevRecipeData.map((recipe) => {
         return {
           ...recipe,
           saved: checkIfRecipeSaved(recipe.id),
@@ -68,12 +66,7 @@ export default function Home() {
       <article key={idx}>
         <Link to={`/recipe/${recipeInfo.id}`}>
           {/*TODO: Remove the hardcoded publisher and images */}
-          <FeedRecipeCard
-            imageUrl={GourmetToastie}
-            publisherName={'"50 Sades of Gray"'}
-            publisherImageUrl={Wex}
-            {...recipeInfo}
-          />
+          <FeedRecipeCard {...recipeInfo} />
         </Link>
         <Divider />
       </article>
@@ -95,21 +88,12 @@ export default function Home() {
             <Stack spacing={3} mt={2}>
               <Stack spacing={2}>
                 <Skeleton variant={"rounded"} height={50} animation={"wave"} />
-                <Skeleton
-                  variant={"rectangular"}
-                  height={300}
-                  animation={"wave"}
-                  sx={{ mb: "1" }}
-                />
+                <Skeleton variant={"rectangular"} height={300} animation={"wave"} sx={{ mb: "1" }} />
               </Stack>
               <Divider />
               <Stack spacing={2}>
                 <Skeleton variant={"rounded"} height={50} animation={"wave"} />
-                <Skeleton
-                  variant={"rectangular"}
-                  height={300}
-                  animation={"wave"}
-                />
+                <Skeleton variant={"rectangular"} height={300} animation={"wave"} />
               </Stack>
               <Divider />
             </Stack>
