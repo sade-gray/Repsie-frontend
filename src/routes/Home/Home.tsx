@@ -85,7 +85,7 @@ export default function Home() {
       <section className={"saved--recipe--section"}>
         <SavedRecipesContainer />
       </section>
-      <section className={"recipes--feed--container"} onScroll={handleScroll}>
+      <section className={"recipes--feed--container"}>
         <div className={"recipes--feed"}>
           <Typography variant={"h1"}>For you</Typography>
           <Divider />
