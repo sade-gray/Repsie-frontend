@@ -8,21 +8,10 @@ export interface savedRecipe {
   };
 }
 
-export interface RecipeCard {
-  id: string;
-  title: string;
-  skillRating: number;
-  timeRating: number;
-  image: string;
-  saved: boolean;
-}
-
 interface RecipeCardData {
-  id: string;
+  id: string,
   title: string;
-  imageUrl: string;
-  publisherName: string;
-  publisherImageUrl: string;
+  image: string;
   saved: boolean;
   skillRating: number;
   timeRating: number;
