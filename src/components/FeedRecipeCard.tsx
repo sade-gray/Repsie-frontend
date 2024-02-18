@@ -18,6 +18,8 @@ import {
 import { db } from "../firebase.ts";
 import SkillRating from "./Ratings/SkillRating";
 import TimeRating from "./Ratings/TimeRating";
+import Wex from '../assets/wex.png';
+import GourmetToastie from '../assets/dummyPhotos/gourmet-toastie.jpg';
 
 export default function FeedRecipeCard(props: RecipeCardData) {
   const [saved, setSaved] = useState(props.saved);
