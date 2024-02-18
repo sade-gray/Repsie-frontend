@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { RecipeCardData } from "../../types/recipeTypes";
 import useUserData from "@context/UserDataProvider";
-import fetchRecipes from "../../api/fetchRecipes.ts";
+import fetchRecipes from "@api/fetchRecipes.ts";
 
 export default function Home() {
   const [recipeData, setRecipeData] = useState<RecipeCardData[]>([]);
