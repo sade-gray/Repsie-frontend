@@ -101,11 +101,13 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       <PublisherContainer
         size={"small"}
         color={"gray"}
-        publisherImageUrl={props.publisherImageUrl}
-        publisherName={props.publisherName}
+        // TODO: Update this when we have user profiles
+        publisherImageUrl={props?.publisherImageUrl || Wex}
+        publisherName={props.publisherName || "Patriks"}
       />
       <div className={"feed--recipe--image--container"}>
-        <img src={props.imageUrl} alt={"food pic"} />
+        {/*TODO: Replace GourmetToastie with the recipe's image url*/}
+        <img src={GourmetToastie} alt={"food pic"} />
       </div>
       <div className={"feed--recipe--action--row"}>
         <SkillRating value={props.skillRating} readOnly />
