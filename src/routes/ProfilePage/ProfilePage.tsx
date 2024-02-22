@@ -14,7 +14,7 @@ export default function ProfilePage() {
 
     return (
           <>
-            <AppBar position="static">
+            <AppBar id="navi" position="static">
                 <Toolbar>
                     <Typography variant="h6" component={Link} to="/">
                         Repsie
