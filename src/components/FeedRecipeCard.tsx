@@ -7,15 +7,7 @@ import { RecipeCardData } from "../types/recipeTypes";
 import useAuth from "@context/AuthProvider";
 import useSnackBar from "@context/SnackBarProvider";
 import useUserData from "@context/UserDataProvider";
-import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  setDoc,
-  getDoc,
-} from "firebase/firestore";
-import { db } from "../firebase.ts";
+import {saveRecipe, unsaveRecipe} from '@api/bookmarkRecipe.ts';
 import SkillRating from "./Ratings/SkillRating";
 import TimeRating from "./Ratings/TimeRating";
 import Wex from '../assets/wex.png';
@@ -32,9 +24,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
     setSaved(props.saved);
   }, [props.saved]);
 
-  const handleSaveToggle = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const handleSaveToggle = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // Prevent from being redirected to the recipe pag
     e.preventDefault();
     // User must be logged in to save a recipe.
@@ -43,40 +33,50 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       return;
     }
     // Get a reference to the current recipe
-    const userSavedRecipesDocRef = doc(db, `userSavedRecipes/${user.uid}`);
+    // const userSavedRecipesDocRef = doc(db, `userSavedRecipes/${user.uid}`);
     // Create the document if it does not exist.
-    await getDoc(userSavedRecipesDocRef).then((doc) => {
-      if (!doc.exists()) {
-        console.log("Creating new doc");
-        setDoc(userSavedRecipesDocRef, {
-          recipeRefs: [props.id],
-        }).then(() => {
-          addSnack("Success! Saved the recipe.", "success");
-        });
-        return;
-      }
-    });
+    // await getDoc(userSavedRecipesDocRef).then((doc) => {
+    //   if (!doc.exists()) {
+    //     console.log("Creating new doc");
+    //     setDoc(userSavedRecipesDocRef, {
+    //       recipeRefs: [props.id],
+    //     }).then(() => {
+    //       addSnack("Success! Saved the recipe.", "success");
+    //     });
+    //     return;
+    //   }
+    // });
     if (!saved) {
-      await updateDoc(userSavedRecipesDocRef, {
-        recipeRefs: arrayUnion(props.id),
-      }).then(() => {
+      //   await updateDoc(userSavedRecipesDocRef, {
+      //     recipeRefs: arrayUnion(props.id),
+      //   }).then(() => {
+
+      //   });
+      // } else {
+      //   await updateDoc(userSavedRecipesDocRef, {
+      //     recipeRefs: arrayRemove(props.id),
+      //   }).then(() => {
+      //
+      //   });
+      // }
+      const success = await saveRecipe(props.id, user.uid);
+      if (success) {
         setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
           return [...prevUserSavedRecipes, props.id];
         });
         addSnack("Success! Saved the recipe.", "success");
-      });
+      }
+      setSaved(prevSaved => !prevSaved);
     } else {
-      await updateDoc(userSavedRecipesDocRef, {
-        recipeRefs: arrayRemove(props.id),
-      }).then(() => {
-        addSnack("Success! Unsaved the recipe.", "success");
+      const success = await unsaveRecipe(props.id, user.uid);
+      if (success) {
         setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
           return prevUserSavedRecipes.filter((id) => id !== props.id);
         });
-      });
+        addSnack("Success! Unsaved the recipe.", "success");
+      }
     }
-    setSaved((prevSaved) => !prevSaved);
-  };
+  }
 
   return (
     <article className={"feed--recipe--container"}>
