@@ -1,21 +1,43 @@
 import { Email, Password } from '@mui/icons-material';
 import './ProfilePage.css';
 import { useState } from 'react';
+import { AppBar, Toolbar, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 //import {useAuth} from '@context/AuthProvider';
 
 
 
 export default function ProfilePage() {
-    const [Birthdate,setBirthdate]= useState("");
+    const [Birthdate,setbirthdate]= useState("");
     
 
     return (
-        <><div>
+          <>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" component={Link} to="/">
+                        Repsie
+                    </Typography>
+                    <Typography variant="h6" component={Link} to="/ProfilePage">
+                        Profile
+                    </Typography>
+                    <Typography variant="h6" component={Link} to="/saverecipes">
+                        Recipes
+                    </Typography>
+                    <Typography variant='h6' component={Link} to='/followers'>
+                        Followers
+                    </Typography>
+                     <Typography variant='h6' component={Link} to='/Account'>
+                        Account
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+
             <input type='file' id='file' name='ProfilePic' accept='image/*' required></input>
             <label htmlFor='file'>Choose a profile picture</label>
             <table>
-                <th>Personal Information
+                <th id="pi">Personal Information
                 </th>
                 <tbody>
                 <tr>
@@ -35,24 +57,29 @@ export default function ProfilePage() {
                     <td>Password</td>
                     </tr>
                     <tr>
-                        <button>Save Changes</button>
+                        <button id="button">Save Changes</button>
                     </tr>
                     </tbody>
             </table>
-        </div>
+        {/*
          <div>
             <h2 id="srecipes"> Saved Recipes </h2>
-            
+            import { useEffect, useState } from 'react';
+            import { saveRecipes } from 'api'; // Assuming you have an API function to fetch saved recipes
 
 
             </div>
-            <div>
+
+            {/*<div>
                 <h3 id="rhistory">Recipe History</h3>
-                </div>            
+                import { useEffect, useState } from 'react';
+                import { getRecentRecipes } from 'api'; // Assuming you have an API function to fetch recent recipes
+
+            </div>
+    */ }
+    
             
-            
-            
-            
+
             </>
 
 
