@@ -23,6 +23,7 @@
     "paths": {
       "@component/*": ["components/*"],
       "@context/*": ["contexts/*"],
+      "@api/*": ["api/*"],
     }
   },
   "include": [

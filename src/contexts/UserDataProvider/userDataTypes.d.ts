@@ -1,4 +1,4 @@
 export interface UserData {
-    userSavedRecipes: string[],
-    setUserSavedRecipes: (state?: any) => void,
+  userSavedRecipes: string[];
+  setUserSavedRecipes: (state?: any) => void;
 }
