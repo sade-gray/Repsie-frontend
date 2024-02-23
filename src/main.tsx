@@ -48,6 +48,13 @@ const router = createBrowserRouter([
         },
       },
       {
+        path: "/profile",
+        async lazy() {
+          const { ProfilePage } = await import("./routes/ProfilePage/ProfilePage.tsx");
+          return { Component: ProfilePage };
+        }
+      },
+      {
         path: "/signin",
         async lazy() {
           const { SignIn } = await import("./routes/SignIn/SignIn.tsx");
