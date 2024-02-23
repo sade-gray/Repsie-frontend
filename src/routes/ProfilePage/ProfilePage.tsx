@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 
 
 
-export default function ProfilePage() {
+export function ProfilePage() {
     const [Birthdate,setbirthdate]= useState("");
-    
+
 
     return (
           <>
@@ -51,7 +51,7 @@ export default function ProfilePage() {
                 <tr>
                     <td>Email</td>
                     <td></td> //adding required
-                
+
                 </tr>
                 <tr>
                     <td>Password</td>
@@ -77,8 +77,8 @@ export default function ProfilePage() {
 
             </div>
     */ }
-    
-            
+
+
 
             </>
 
