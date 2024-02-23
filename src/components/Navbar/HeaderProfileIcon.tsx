@@ -66,7 +66,7 @@ export default function HeaderProfileIcon() {
           },
         }}
       >
-        <Link to={user ? "/" : "/signin"}>
+        <Link to={user ? "/profile" : "/signin"}>
           <MenuItem onClick={handleCloseUserMenu}>
             <Avatar sx={{ width: "35px", height: "35px" }} />
             <Typography color="text">{user ? "Profile" : "Sign in"}</Typography>
