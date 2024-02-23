@@ -1,5 +1,5 @@
 export async function getSavedRecipes(userId: string) {
-  return fetch(`http://localhost:8000/saved?user=${userId}`)
+  return fetch(`https://us-central1-repsie.cloudfunctions.net/api/saved?user=${userId}`)
     .then(res => res.json())
     .then(savedRecipes => {
       return savedRecipes
@@ -14,7 +14,7 @@ export async function getSavedRecipes(userId: string) {
  * @return whether the recipe could be saved or not
  */
 export async function saveRecipe(recipeId: string, userId: string) {
-  return fetch(`http://localhost:8000/saved?user=${userId}`, {
+  return fetch(`https://us-central1-repsie.cloudfunctions.net/api/saved?user=${userId}`, {
     method: "POST",
     headers: {
       'Accept': 'application/json',
@@ -40,7 +40,7 @@ export async function saveRecipe(recipeId: string, userId: string) {
  * @return whether the recipe was unsaved or not.
  */
 export async function unsaveRecipe(recipeId: string, userId: string) {
-  return fetch(`http://localhost:8000/saved?user=${userId}`, {
+  return fetch(`https://us-central1-repsie.cloudfunctions.net/api/saved?user=${userId}`, {
     method: "DELETE",
     headers: {
       'Accept': 'application/json',
