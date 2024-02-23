@@ -8,6 +8,7 @@ export default defineConfig({
     alias: {
       "@component": "/src/components",
       "@context": "/src/contexts",
+      "@api": "/src/api",
     }
   }
 })
