@@ -1,11 +1,11 @@
-import FeedRecipeCard from "../../components/FeedRecipeCard.tsx";
-import SavedRecipesContainer from "../../components/SavedRecipesContainer.tsx";
-import { Divider, Skeleton, Stack, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { RecipeCardData } from "../../types/recipeTypes";
-import useUserData from "@context/UserDataProvider";
-import fetchRecipes from "@api/fetchRecipes.ts";
+import FeedRecipeCard from '../../components/FeedRecipeCard.tsx';
+import SavedRecipesContainer from '../../components/SavedRecipesContainer.tsx';
+import { Divider, Skeleton, Stack, Typography } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { RecipeCardData } from '../../types/recipeTypes';
+import useUserData from '@context/UserDataProvider';
+import fetchRecipes from '@api/fetchRecipes.ts';
 
 export default function Home() {
   const [recipeData, setRecipeData] = useState<RecipeCardData[]>([]);
@@ -24,20 +24,20 @@ export default function Home() {
   function getMoreRecipes() {
     fetchRecipes(recipeOffset.current).then(newRecipes => {
       setRecipeData(prevRecipes => [...prevRecipes, ...newRecipes]);
-    })
+    });
   }
 
   // Fetch first few recipes
   useEffect(() => {
-    getMoreRecipes()
+    getMoreRecipes();
   }, []);
 
   // Once the user's saved recipes data has been fetched, check if any of them have been saved.
   // Check if feed recipes are saved by user whenever the user saves or unsaves a recipe
   useEffect(() => {
     // Return the same array of recipes but update the savedByUser field
-    setRecipeData((prevRecipeData) =>
-      prevRecipeData.map((recipe) => {
+    setRecipeData(prevRecipeData =>
+      prevRecipeData.map(recipe => {
         return {
           ...recipe,
           saved: checkIfRecipeSaved(recipe.id),
@@ -54,8 +54,8 @@ export default function Home() {
       if (scrolledToBottom) {
         getMoreRecipes();
       }
-    }
-    window.addEventListener('scroll', handleScroll)
+    };
+    window.addEventListener('scroll', handleScroll);
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -74,26 +74,31 @@ export default function Home() {
   });
 
   return (
-    <div className={"main--container"}>
-      <section className={"saved--recipe--section"}>
+    <div className={'main--container'}>
+      <section className={'saved--recipe--section'}>
         <SavedRecipesContainer />
       </section>
-      <section className={"recipes--feed--container"}>
-        <div className={"recipes--feed"}>
-          <Typography variant={"h1"}>For you</Typography>
+      <section className={'recipes--feed--container'}>
+        <div className={'recipes--feed'}>
+          <Typography variant={'h1'}>For you</Typography>
           <Divider />
           {/* Feed Card go here */}
           {recipeComponents?.length === 0 ? (
             // Render the skeletons while data is being fetched
             <Stack spacing={3} mt={2}>
               <Stack spacing={2}>
-                <Skeleton variant={"rounded"} height={50} animation={"wave"} />
-                <Skeleton variant={"rectangular"} height={300} animation={"wave"} sx={{ mb: "1" }} />
+                <Skeleton variant={'rounded'} height={50} animation={'wave'} />
+                <Skeleton
+                  variant={'rectangular'}
+                  height={300}
+                  animation={'wave'}
+                  sx={{ mb: '1' }}
+                />
               </Stack>
               <Divider />
               <Stack spacing={2}>
-                <Skeleton variant={"rounded"} height={50} animation={"wave"} />
-                <Skeleton variant={"rectangular"} height={300} animation={"wave"} />
+                <Skeleton variant={'rounded'} height={50} animation={'wave'} />
+                <Skeleton variant={'rectangular'} height={300} animation={'wave'} />
               </Stack>
               <Divider />
             </Stack>
@@ -103,9 +108,7 @@ export default function Home() {
           )}
         </div>
       </section>
-      <section className={"chef--recommendation--container"}>
-        Chefs to follow
-      </section>
+      <section className={'chef--recommendation--container'}>Chefs to follow</section>
     </div>
   );
 }
