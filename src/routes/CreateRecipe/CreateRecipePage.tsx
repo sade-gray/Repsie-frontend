@@ -48,7 +48,7 @@ export function CreateRecipePage() {
     if (!file) return;
 
     if (file[0] !== undefined) {
-      // @ts-expect-error - TS doesn't know that file[0] is not undefined
+      // @ts-ignore
       setImageUrl(file[0]);
     }
 

@@ -7,7 +7,6 @@ import { serverTimestamp } from 'firebase/firestore';
 export function saveRecipe(
   userId: string,
   title: string,
-  // @ts-expect-error - TS doesn't know that image is a file
   image: any,
   recipe: string,
   skillRating: number,
