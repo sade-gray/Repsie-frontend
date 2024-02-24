@@ -12,5 +12,5 @@ export default async function fetchRecipes(offset: number) {
     .catch(err => {
       console.error(err);
       return [];
-    })
+    });
 }

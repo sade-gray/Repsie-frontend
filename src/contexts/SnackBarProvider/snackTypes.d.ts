@@ -1,4 +1,4 @@
-import { AlertColor } from "@mui/material/Alert/Alert";
+import { AlertColor } from '@mui/material/Alert/Alert';
 
 export interface snackContextValues {
   /**

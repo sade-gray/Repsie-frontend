@@ -2,8 +2,8 @@ export async function getSavedRecipes(userId: string) {
   return fetch(`https://us-central1-repsie.cloudfunctions.net/api/saved?user=${userId}`)
     .then(res => res.json())
     .then(savedRecipes => {
-      return savedRecipes
-    })
+      return savedRecipes;
+    });
 }
 
 /**
@@ -15,22 +15,23 @@ export async function getSavedRecipes(userId: string) {
  */
 export async function saveRecipe(recipeId: string, userId: string) {
   return fetch(`https://us-central1-repsie.cloudfunctions.net/api/saved?user=${userId}`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      id: recipeId
-    })
-  }).then(res => res.json())
+      id: recipeId,
+    }),
+  })
+    .then(res => res.json())
     .then(data => {
       if (data.error) {
         console.error(data.error);
         return false;
       }
       return true;
-    })
+    });
 }
 
 /**
@@ -41,15 +42,16 @@ export async function saveRecipe(recipeId: string, userId: string) {
  */
 export async function unsaveRecipe(recipeId: string, userId: string) {
   return fetch(`https://us-central1-repsie.cloudfunctions.net/api/saved?user=${userId}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      id: recipeId
-    })
-  }).then(res => res.json())
+      id: recipeId,
+    }),
+  })
+    .then(res => res.json())
     .then(data => {
       console.log(data);
       if (data.error) {
@@ -57,5 +59,5 @@ export async function unsaveRecipe(recipeId: string, userId: string) {
         return false;
       }
       return true;
-    })
+    });
 }

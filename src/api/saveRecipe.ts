@@ -1,12 +1,13 @@
-import { recipesCollectionRef } from "../firebase.ts";
-import { addDoc } from "firebase/firestore";
-import { uploadBytes, ref } from "firebase/storage";
-import { contentStorage } from "../firebase.ts";
-import { serverTimestamp } from "firebase/firestore";
+import { recipesCollectionRef } from '../firebase.ts';
+import { addDoc } from 'firebase/firestore';
+import { uploadBytes, ref } from 'firebase/storage';
+import { contentStorage } from '../firebase.ts';
+import { serverTimestamp } from 'firebase/firestore';
 
 export function saveRecipe(
   userId: string,
   title: string,
+  // @ts-expect-error - TS doesn't know that image is a file
   image: any,
   recipe: string,
   skillRating: number,
@@ -22,14 +23,14 @@ export function saveRecipe(
     timeRating: timeRating,
     datePublished: serverTimestamp(),
   })
-    .then((data) => {
-      console.log("Success! Doc saved with id", data.id);
-      console.log("Uploading image");
-      uploadBytes(imageRef, image, { contentType: "image/jpeg" }).then(() => {
-        console.log("Uploaded a data_url string!");
+    .then(data => {
+      console.log('Success! Doc saved with id', data.id);
+      console.log('Uploading image');
+      uploadBytes(imageRef, image, { contentType: 'image/jpeg' }).then(() => {
+        console.log('Uploaded a data_url string!');
       });
       // uploadBytes(imageRef, image)
       //     .then(() => console.log("Uploaded file"))
     })
-    .catch((e) => console.log("Error", e));
+    .catch(e => console.log('Error', e));
 }

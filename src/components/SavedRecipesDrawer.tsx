@@ -1,6 +1,6 @@
-import { SwipeableDrawer, Box } from "@mui/material";
-import useDrawer from "@context/DrawerProvider";
-import SavedRecipesContainer from "./SavedRecipesContainer.tsx";
+import { SwipeableDrawer, Box } from '@mui/material';
+import useDrawer from '@context/DrawerProvider';
+import SavedRecipesContainer from './SavedRecipesContainer.tsx';
 
 interface Props {
   window?: () => Window;
@@ -20,15 +20,11 @@ export default function SavedRecipesDrawer(props: Props) {
     setDrawerOpen(!drawerOpen);
   };
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
+    <Box sx={{ display: 'flex' }}>
+      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
         {/* Mobile Drawer */}
         <SwipeableDrawer
           container={container}
@@ -40,9 +36,9 @@ export default function SavedRecipesDrawer(props: Props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { lg: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
+            display: { lg: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
             },
           }}
