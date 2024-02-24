@@ -7,6 +7,7 @@
     "dev": "vite --host",
     "build": "tsc && vite build",
     "lint:ci": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --cache",
+    "lint:fix": "eslint src --ext ts,tsx --fix",
     "prettier": "prettier --check \"src/**/*.{ts,tsx,html,scss}\"",
     "preview": "vite preview",
     "prepare": "husky",
