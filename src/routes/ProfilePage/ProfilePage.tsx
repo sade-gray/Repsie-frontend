@@ -1,14 +1,10 @@
 import './ProfilePage.css';
-import { useState } from 'react';
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 //import {useAuth} from '@context/AuthProvider';
 
 export function ProfilePage() {
-  const [birthdate, setBirthdate] = useState('');
-  setBirthdate('01/01/2000');
-
   return (
     <>
       <AppBar id="navi" position="static">
@@ -44,7 +40,7 @@ export function ProfilePage() {
           </tr>
           <tr>
             <td>Birthdate:</td>// adding required
-            <td>{birthdate}</td>
+            <td></td>
           </tr>
           <tr>
             <td>Email</td>
