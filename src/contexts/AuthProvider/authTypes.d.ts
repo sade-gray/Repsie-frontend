@@ -1,4 +1,4 @@
-import { User as FirebaseUser } from "@firebase/auth";
+import { User as FirebaseUser } from '@firebase/auth';
 
 export interface AuthContextValues {
   /** The currently logged-in Updated react router dom to v6.17user */

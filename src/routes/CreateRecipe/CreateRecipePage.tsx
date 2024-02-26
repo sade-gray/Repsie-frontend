@@ -1,28 +1,26 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import Editor from "./components/Editor";
-import "./styles.scss";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { Create, FileUpload } from "@mui/icons-material";
-import { saveRecipe } from "@api/saveRecipe.ts";
-import useAuth from "@context/AuthProvider";
-import { Descendant } from "slate";
-import TimeRating from "@component/Ratings/TimeRating";
-import SkillRating from "@component/Ratings/SkillRating";
+import { Box, Button, TextField, Typography } from '@mui/material';
+import Editor from './components/Editor';
+import './styles.scss';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { Create, FileUpload } from '@mui/icons-material';
+import { saveRecipe } from '@api/saveRecipe.ts';
+import useAuth from '@context/AuthProvider';
+import { Descendant } from 'slate';
+import TimeRating from '@component/Ratings/TimeRating';
+import SkillRating from '@component/Ratings/SkillRating';
 
 export function CreateRecipePage() {
   // The initial value for the recipe
   const initialValue = [
     {
-      type: "paragraph",
-      children: [
-        { text: "This is your journey to creating a delicious recipe" },
-      ],
+      type: 'paragraph',
+      children: [{ text: 'This is your journey to creating a delicious recipe' }],
     },
   ];
   // The state for the skill rating, time rating, title, image url, cover image url and recipe data
   const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
   const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>();
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
   const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
@@ -41,7 +39,7 @@ export function CreateRecipePage() {
         timeRatingValue
       );
     } else {
-      console.log("Invalid image or user");
+      console.log('Invalid image or user');
     }
   };
 
@@ -64,39 +62,39 @@ export function CreateRecipePage() {
 
   return (
     <div className="create--recipe--container">
-      <form onSubmit={(e) => handleFormSubmit(e)}>
+      <form onSubmit={e => handleFormSubmit(e)}>
         <div className="create--recipe--title--container">
           <TextField
             variant="outlined"
             label="Title"
             name="title"
             color="secondary"
-            onChange={(e) => {
+            onChange={e => {
               setTitle(e.target.value);
             }}
             sx={{
-              "& .MuiOutlinedInput-root": {
-                "& > fieldset": {
-                  border: "solid 2px",
-                  borderColor: "secondary.main",
+              '& .MuiOutlinedInput-root': {
+                '& > fieldset': {
+                  border: 'solid 2px',
+                  borderColor: 'secondary.main',
                 },
               },
-              "& .MuiOutlinedInput-root:hover": {
-                "& > fieldset": { borderColor: "secondary.main" },
+              '& .MuiOutlinedInput-root:hover': {
+                '& > fieldset': { borderColor: 'secondary.main' },
               },
-              marginBottom: "2rem",
+              marginBottom: '2rem',
             }}
           ></TextField>
         </div>
         <div className="create--recipe--image--container">
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
               paddingY: 2,
-              border: "dashed 2px",
-              borderColor: "secondary.main",
+              border: 'dashed 2px',
+              borderColor: 'secondary.main',
             }}
           >
             <Button
@@ -106,12 +104,7 @@ export function CreateRecipePage() {
               startIcon={<FileUpload />}
             >
               Select Image
-              <input
-                hidden
-                accept="image/*"
-                type="file"
-                onChange={handleFileUpload}
-              />
+              <input hidden accept="image/*" type="file" onChange={handleFileUpload} />
             </Button>
             {imageUrl && (
               <img
@@ -119,17 +112,13 @@ export function CreateRecipePage() {
                 alt="Uploaded Image"
                 height="auto"
                 width="300"
-                style={{ marginTop: "1rem", minInlineSize: "100%" }}
+                style={{ marginTop: '1rem', minInlineSize: '100%' }}
               />
             )}
           </Box>
         </div>
         <div className="create--recipe--editor--container">
-          <Editor
-            readOnly={false}
-            recipeData={recipeData}
-            setRecipeData={setRecipeData}
-          />
+          <Editor readOnly={false} recipeData={recipeData} setRecipeData={setRecipeData} />
         </div>
         <Box>
           <div className="create--recipe--rating--container">

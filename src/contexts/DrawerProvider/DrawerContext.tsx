@@ -1,5 +1,5 @@
-import { createContext, ReactNode, useState } from "react";
-import { IContextType } from "../../types/contextTypes";
+import { createContext, ReactNode, useState } from 'react';
+import { IContextType } from '../../types/contextTypes';
 
 /** The context values to export as the API*/
 export const DrawerContext = createContext<IContextType>({

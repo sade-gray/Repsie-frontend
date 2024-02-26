@@ -5,10 +5,10 @@
  *      * The user's liked recipes (data only)
  *      * The user's settings (dark mode, allergens etc)
  */
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { getSavedRecipes} from '@api/bookmarkRecipe.ts';
-import useAuth from "@context/AuthProvider";
-import { UserData } from "./userDataTypes";
+import { createContext, ReactNode, useEffect, useState } from 'react';
+import { getSavedRecipes } from '@api/bookmarkRecipe.ts';
+import useAuth from '@context/AuthProvider';
+import { UserData } from './userDataTypes';
 
 export const UserDataContext = createContext({} as UserData);
 
@@ -41,9 +41,5 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
     setUserSavedRecipes,
   };
 
-  return (
-    <UserDataContext.Provider value={value}>
-      {children}
-    </UserDataContext.Provider>
-  );
+  return <UserDataContext.Provider value={value}>{children}</UserDataContext.Provider>;
 }

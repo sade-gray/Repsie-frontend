@@ -1,10 +1,10 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { auth } from '../../firebase.ts';
+import { User as FirebaseUser } from 'firebase/auth';
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  User as FirebaseUser,
 } from 'firebase/auth';
 import useSnackBar from '@context/SnackBarProvider';
 import { useNavigate } from 'react-router-dom';
@@ -38,8 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         return false;
       })
-      .catch((error) => {
-        console.error(error.message);
+      .catch(error => {
+        console.log(error.message);
         return false;
       });
   };
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         return false;
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error.message);
         return false;
       });
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Adds an event listener to the user's authentication status
   // E.g. Makes the user object null when signed out.
   useEffect(() => {
-    return onAuthStateChanged(auth, (user) => {
+    return onAuthStateChanged(auth, user => {
       setUser(user);
       setLoading(false);
     });

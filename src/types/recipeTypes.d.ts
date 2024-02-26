@@ -9,7 +9,7 @@ export interface savedRecipe {
 }
 
 interface RecipeCardData {
-  id: string,
+  id: string;
   title: string;
   image: string;
   saved: boolean;
