@@ -12,15 +12,20 @@ import { UserData } from "./userDataTypes";
 
 export const UserDataContext = createContext({} as UserData);
 
+/**
+ * Provides the app with the user's data. This includes things like:
+ *
+ * - The list of the user's saved recipe ids
+ * - The ability to update the list of the user's saved recipes
+ * @param children the app to wrap
+ * @constructor
+ */
 export function UserDataProvider({ children }: { children: ReactNode }) {
   // This is an array of the ids of the saved recipes, as strings
   const [userSavedRecipes, setUserSavedRecipes] = useState<string[]>([]);
   const { user } = useAuth();
-  // const [loading, setLoading] = useState(true);
-  // Reference to user's saved recipe document
 
-  // Get user's saved recipes data
-  // We have rules in firebase that do not allow non-owners of a document access
+  // Get user's saved recipes data, whenever the user changes (switch account, sign in, sign out etc...)
   useEffect(() => {
     if (!user) {
       return setUserSavedRecipes([]);
@@ -30,6 +35,7 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
     });
   }, [user]);
 
+  // The values to return as part of the component API
   const value: UserData = {
     userSavedRecipes,
     setUserSavedRecipes,
