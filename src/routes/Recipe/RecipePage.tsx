@@ -5,51 +5,50 @@ import { Box, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ref } from 'firebase/storage';
-import { contentStorage, recipesCollectionRef } from '../../firebase.ts';
-import { DocumentData, doc, getDoc } from 'firebase/firestore';
+import { contentStorage } from '../../firebase.ts';
 import Editor from '../CreateRecipe/components/Editor.tsx';
 import { theme } from '../../theme.ts';
 import SkillRating from '@component/Ratings/SkillRating';
 import TimeRating from '@component/Ratings/TimeRating/TimeRating.tsx';
 import CommentSection from '../MyRecipesPage/Components/CommentSection.tsx';
 import useSnackBar from '@context/SnackBarProvider';
+import { fetchRecipe } from '@api/recipe.ts';
 
 export function RecipePage() {
-  const recipeId = useParams()['recipeId'];
+  const recipeId = useParams()['recipeId'] || '';
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
   const defaultImage = 'macandcheese.jpg';
-  const [recipeContent, setRecipeContent] = useState<DocumentData>();
+  const [recipe, setRecipe] = useState<any>();
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const navigate = useNavigate();
   const { addSnack } = useSnackBar();
 
   // Fetch the recipe content on load up
   useEffect(() => {
-    getDoc(doc(recipesCollectionRef, recipeId))
-      .then(res => {
-        if (res.exists()) {
-          setRecipeContent(res.data());
-          const imageRef = ref(contentStorage, `recipeImages/${res.data().image || defaultImage}`);
-          getDownloadURL(imageRef).then(url => {
-            setCoverImageUrl(url);
-          });
-        } else {
-          // If the recipe is not found, redirect to the home page
-          addSnack('Recipe not found', 'error');
-          navigate('/');
-        }
-      })
-      .catch(error => console.log(error));
+    fetchRecipe(recipeId).then(recipe => {
+      if (recipe.error) {
+        addSnack('Recipe not found', 'error');
+        navigate('/');
+      } else {
+        setRecipe(recipe);
+      }
+    });
   }, []);
+
+  // Update the cover image whenever the recipe changes (e.g. page refresh or recipe edit)
+  useEffect(() => {
+    const imageRef = ref(contentStorage, `recipeImages/${recipe?.image || defaultImage}`);
+    getDownloadURL(imageRef).then(url => setCoverImageUrl(url));
+  }, [recipe]);
 
   return (
     <main>
-      {recipeContent ? (
+      {recipe ? (
         <div className="recipe--page--container">
           <div className="recipe--container">
             <div className="recipe--title--container">
               <Typography variant={`${isNotTablet ? 'h3' : 'h4'}`}>
-                {recipeContent?.title || 'Loading...'}
+                {recipe?.title || 'Loading...'}
               </Typography>
             </div>
             <div className="recipe--image--container">
@@ -64,21 +63,21 @@ export function RecipePage() {
             <section className="recipe--rating--container">
               <div>
                 <Typography color="text">Time rating</Typography>
-                <TimeRating value={recipeContent?.timeRating} readOnly />
+                <TimeRating value={recipe?.timeRating} readOnly />
               </div>
               <div>
                 <Typography color="text">Skill rating</Typography>
-                <SkillRating value={recipeContent?.skillRating} readOnly />
+                <SkillRating value={recipe?.skillRating} readOnly />
               </div>
             </section>
 
             {/* Recipe Content */}
             <section className="recipe--content--container">
-              <Editor readOnly recipeData={JSON.parse(recipeContent.recipe || '')} />
+              <Editor readOnly recipeData={JSON.parse(recipe.recipe || '')} />
             </section>
 
             {/* Comments Section */}
-            <CommentSection recipeId={'loremipsumdolor'} />
+            <CommentSection recipeId={recipeId} />
           </div>
         </div>
       ) : (

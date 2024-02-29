@@ -79,7 +79,7 @@ export async function unsaveRecipe(recipeId: string, userId: string) {
  * @param offset
  * @return An array of RecipeCardData (empty if there were errors)
  */
-export default async function fetchRecipes(offset: number) {
+export async function fetchRecipes(offset: number) {
   return fetch(`${apiUrl}/recipes?offset=${offset}`)
     .then(result => result.json())
     .then(recipes => {
@@ -88,5 +88,21 @@ export default async function fetchRecipes(offset: number) {
     .catch(err => {
       console.error(err);
       return [];
+    });
+}
+
+/**
+ * Gets all the details about a recipe, including the recipe content
+ * @param id
+ */
+export async function fetchRecipe(id: string) {
+  return fetch(`${apiUrl}/recipes/recipe?post=${id}`)
+    .then(result => result.json())
+    .then(recipe => {
+      return recipe;
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      return { error: 'Could not get recipe' };
     });
 }
