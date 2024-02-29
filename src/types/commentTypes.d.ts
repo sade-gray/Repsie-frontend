@@ -1,9 +1,9 @@
 export interface Comment {
   id: number;
   username: string;
-  message: string;
-  likeCount: number;
-  replies: CommentReply[];
+  commentBody: string;
+  // likeCount: number;
+  // replies: CommentReply[];
 }
 
 export interface CommentReply {
