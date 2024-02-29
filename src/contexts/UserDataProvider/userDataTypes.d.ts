@@ -1,4 +1,6 @@
+import { SavedRecipe } from '../../types/recipeTypes';
+
 export interface UserData {
-  userSavedRecipes: string[];
+  userSavedRecipes: SavedRecipe[];
   setUserSavedRecipes: (state?: any) => void;
 }

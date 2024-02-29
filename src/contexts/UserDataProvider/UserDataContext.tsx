@@ -9,6 +9,7 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 import { getSavedRecipes } from '@api/recipe.ts';
 import useAuth from '@context/AuthProvider';
 import { UserData } from './userDataTypes';
+import { SavedRecipe } from '../../types/recipeTypes';
 
 export const UserDataContext = createContext({} as UserData);
 
@@ -22,7 +23,7 @@ export const UserDataContext = createContext({} as UserData);
  */
 export function UserDataProvider({ children }: { children: ReactNode }) {
   // This is an array of the ids of the saved recipes, as strings
-  const [userSavedRecipes, setUserSavedRecipes] = useState<string[]>([]);
+  const [userSavedRecipes, setUserSavedRecipes] = useState<SavedRecipe[]>([]);
   const { user } = useAuth();
 
   // Get user's saved recipes data, whenever the user changes (switch account, sign in, sign out etc...)
