@@ -81,47 +81,40 @@ export function RecipePage() {
           </div>
         </div>
       ) : (
-        // Skeleton
-        <div>
-          <Stack spacing={1} className="recipe--page--container" alignItems={'center'}>
-            <Box sx={{ width: '100%' }}>
-              <Skeleton variant="text" animation="wave" width={'100%'} height={40} />
-              <Skeleton variant="rectangular" width={'100%'} height={300} animation="wave" />
-            </Box>
-
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                width: '100%',
-              }}
-            >
-              <Skeleton variant="circular" width={40} height={40} animation="wave" />
-              <Skeleton variant="text" width={100} height={50} />
-            </Box>
-
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-              }}
-            >
-              <Box>
-                <Skeleton variant="text" animation="wave" width={100} />
-                <Skeleton variant="rectangular" animation="wave" width={100} />
-              </Box>
-              <Box>
-                <Skeleton variant="text" animation="wave" width={100} />
-                <Skeleton variant="rectangular" animation="wave" width={100} />
-              </Box>
-            </Box>
-
-            <Skeleton variant="rectangular" animation="wave" width={'100%'} height={300} />
-          </Stack>
-        </div>
+        <PageSkeleton />
       )}
     </main>
+  );
+}
+
+// Used for showing some empty content while the page is loading
+function PageSkeleton() {
+  return (
+    <div>
+      <Stack spacing={1} className="recipe--page--container" alignItems={'center'}>
+        <Box sx={{ width: '100%' }}>
+          <Skeleton variant="text" animation="wave" width={'100%'} height={40} />
+          <Skeleton variant="rectangular" width={'100%'} height={300} animation="wave" />
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
+          <Skeleton variant="circular" width={40} height={40} animation="wave" />
+          <Skeleton variant="text" width={100} height={50} />
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <Box>
+            <Skeleton variant="text" animation="wave" width={100} />
+            <Skeleton variant="rectangular" animation="wave" width={100} />
+          </Box>
+          <Box>
+            <Skeleton variant="text" animation="wave" width={100} />
+            <Skeleton variant="rectangular" animation="wave" width={100} />
+          </Box>
+        </Box>
+
+        <Skeleton variant="rectangular" animation="wave" width={'100%'} height={300} />
+      </Stack>
+    </div>
   );
 }
