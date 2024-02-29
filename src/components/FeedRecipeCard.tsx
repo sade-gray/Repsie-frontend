@@ -7,7 +7,7 @@ import { RecipeCardData } from '../types/recipeTypes';
 import useAuth from '@context/AuthProvider';
 import useSnackBar from '@context/SnackBarProvider';
 import useUserData from '@context/UserDataProvider';
-import { saveRecipe, unsaveRecipe } from '@api/bookmarkRecipe.ts';
+import { saveRecipe, unsaveRecipe } from '@api/recipe.ts';
 import SkillRating from './Ratings/SkillRating';
 import TimeRating from './Ratings/TimeRating';
 import Wex from '../assets/wex.png';

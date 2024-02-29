@@ -6,7 +6,7 @@
  *      * The user's settings (dark mode, allergens etc)
  */
 import { createContext, ReactNode, useEffect, useState } from 'react';
-import { getSavedRecipes } from '@api/bookmarkRecipe.ts';
+import { getSavedRecipes } from '@api/recipe.ts';
 import useAuth from '@context/AuthProvider';
 import { UserData } from './userDataTypes';
 
