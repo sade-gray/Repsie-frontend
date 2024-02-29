@@ -139,3 +139,13 @@ export async function createRecipe(
     .then(response => response)
     .catch(err => console.error(err));
 }
+
+export async function getCreatedRecipes(userId: string) {
+  return fetch(`${apiUrl}/recipes/user?user=${userId}`)
+    .then(response => response.json())
+    .then(createRecipes => createRecipes)
+    .catch(err => {
+      console.log('Error: ', err);
+      return [];
+    });
+}
