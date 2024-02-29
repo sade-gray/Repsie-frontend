@@ -3,11 +3,13 @@ import Editor from './components/Editor';
 import './styles.scss';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Create, FileUpload } from '@mui/icons-material';
-import { saveRecipe } from '@api/saveRecipe.ts';
 import useAuth from '@context/AuthProvider';
 import { Descendant } from 'slate';
 import TimeRating from '@component/Ratings/TimeRating';
 import SkillRating from '@component/Ratings/SkillRating';
+import { createRecipe } from '@api/recipe.ts';
+import useSnackBar from '@context/SnackBarProvider';
+import { useNavigate } from 'react-router-dom';
 
 export function CreateRecipePage() {
   // The initial value for the recipe
@@ -26,20 +28,27 @@ export function CreateRecipePage() {
   const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
   // Get the user from the context
   const { user } = useAuth();
+  const { addSnack } = useSnackBar();
+  const navigate = useNavigate();
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (imageUrl && user) {
-      saveRecipe(
+    if (user) {
+      createRecipe(
         user.uid,
         title,
-        imageUrl,
         JSON.stringify(recipeData),
         skillRatingValue,
         timeRatingValue
-      );
+      ).then(res => {
+        // Redirect to that page if the recipe was created succesfully
+        if (res.id) {
+          addSnack('Success! Added your recipe.', 'success');
+          navigate(`/recipe/${res.id}`);
+        }
+      });
     } else {
-      console.log('Invalid image or user');
+      console.log('Invalid user');
     }
   };
 

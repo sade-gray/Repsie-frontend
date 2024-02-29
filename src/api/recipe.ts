@@ -106,3 +106,36 @@ export async function fetchRecipe(id: string) {
       return { error: 'Could not get recipe' };
     });
 }
+
+/**
+ * Creates a recipe
+ * @param userId
+ * @param title
+ * @param recipe
+ * @param skillRating
+ * @param timeRating
+ */
+export async function createRecipe(
+  userId: string,
+  title: string,
+  recipe: string,
+  skillRating: number,
+  timeRating: number
+) {
+  return fetch(`${apiUrl}/recipes?user=${userId}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: title,
+      recipe: recipe,
+      skillRating: skillRating,
+      timeRating: timeRating,
+    }),
+  })
+    .then(res => res.json())
+    .then(response => response)
+    .catch(err => console.error(err));
+}
