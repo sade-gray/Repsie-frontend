@@ -1,96 +1,96 @@
 .numbered--list {
-    list-style: none;
-    counter-reset: index;
+  list-style: none;
+  counter-reset: index;
 
-    li {
-        counter-increment: index;
-        margin: 0.25rem;
-        align-items: center;
-    }
+  li {
+    counter-increment: index;
+    margin: 0.25rem;
+    align-items: center;
+  }
 
-    li::before {
-        content: counter(index);
-        background: #694FD0FF;
-        width: 1.75rem;
-        height: 1.75rem;
-        border-radius: 50%;
-        display: inline-block;
-        line-height: 1.75rem;
-        color: white;
-        text-align: center;
-        margin-right: 0.5rem;
-    }
+  li::before {
+    content: counter(index);
+    background: #694fd0ff;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 1.75rem;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+  }
 }
 
 .bulleted--list {
-    list-style: none;
+  list-style: none;
 
-    li {
-        margin: 0.25rem;
-        align-items: center;
-    }
+  li {
+    margin: 0.25rem;
+    align-items: center;
+  }
 
-    li::before {
-        content: "";
-        width: 0.5rem;
-        height: 0.5rem;
-        border: 2px solid #694FD0FF;
-        border-radius: 50%;
-        display: inline-flex;
-        color: white;
-        text-align: center;
-        margin-right: 0.5rem;
-    }
+  li::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 2px solid #694fd0ff;
+    border-radius: 50%;
+    display: inline-flex;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+  }
 }
 
 .create--recipe--container {
-    margin: 2rem;
-    display: flex;
-    justify-content: center;
-    max-height: 85vh;
-    overflow-y: scroll;
+  margin: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
 .editor {
-    font-weight: initial;
-    p {
-        margin: 0;
-    }
+  font-weight: initial;
+  p {
+    margin: 0;
+  }
 
-    h1, h2 {
-        margin: 5px;
-    }
+  h1,
+  h2 {
+    margin: 5px;
+  }
 }
 
 .editor--buttons {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    background-color: #eee;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  background-color: #eee;
 }
 
 .create--recipe--editor--container {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .create--recipe--title--container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .create--recipe--image--container {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .create--recipe--rating--container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .create--recipe--button--container {
-    display: flex;
-    justify-content: end;
+  display: flex;
+  justify-content: end;
+  margin-bottom: 2rem;
 }
