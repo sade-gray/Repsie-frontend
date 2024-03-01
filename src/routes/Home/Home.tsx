@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { RecipeCardData } from '../../types/recipeTypes';
 import useUserData from '@context/UserDataProvider';
 
-import fetchRecipes from '@api/recipe.ts';
+import { fetchRecipes } from '@api/recipe.ts';
 
 export default function Home() {
   const [recipeData, setRecipeData] = useState<RecipeCardData[]>([]);
@@ -89,12 +89,7 @@ export default function Home() {
             <Stack spacing={3} mt={2}>
               <Stack spacing={2}>
                 <Skeleton variant={'rounded'} height={50} animation={'wave'} />
-                <Skeleton
-                  variant={'rectangular'}
-                  height={300}
-                  animation={'wave'}
-                  sx={{ mb: '1' }}
-                />
+                <Skeleton variant={'rectangular'} height={300} animation={'wave'} sx={{ mb: '1' }} />
               </Stack>
               <Divider />
               <Stack spacing={2}>
