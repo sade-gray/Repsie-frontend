@@ -1,12 +1,13 @@
-$theme1: #694FD0FF;
-$background: #252A38;
+$theme1: #694fd0ff;
+$background: #252a38;
 $transparenttheme1: rgba(85, 69, 146, 55%);
 
 // TODO: Add breakpoint variables
 // Example
 $breakpoint-tablet: 768px;
 
-html, body {
+html,
+body {
   font-weight: bolder;
   margin: 0;
   overflow-x: hidden;
@@ -52,7 +53,7 @@ html, body {
 .saved--recipe--title {
   font-size: 1rem;
   margin: 0 0.5rem;
-  color:black;
+  color: black;
   font-weight: bold;
 }
 
@@ -76,7 +77,8 @@ html, body {
 }
 
 @media only screen and (max-width: 1200px) {
-  .saved--recipe--section, .chef--recommendation--container {
+  .saved--recipe--section,
+  .chef--recommendation--container {
     display: none;
   }
 }
@@ -99,7 +101,6 @@ html, body {
     width: 100%;
   }
 }
-
 
 .chef--recommendation--container {
   flex: 1;
@@ -200,7 +201,8 @@ a {
   justify-content: center;
 }
 
-.sign--up--container, .sign--in--container {
+.sign--up--container,
+.sign--in--container {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -218,11 +220,11 @@ a {
   font-family: 'Inter', sans-serif;
 }
 
-// This centers the recipe content. gives content 60% width
+// This centers the recipe content
 .recipe--page--container {
   display: flex;
   align-items: center;
-  margin: 0 25%;
+  justify-content: center;
 
   @media only screen and (max-width: $breakpoint-tablet) {
     margin: 0 2em;
@@ -237,7 +239,6 @@ a {
 }
 
 .recipe--image--container {
-  max-width: 90vw;
   margin-bottom: 1rem;
 }
 
@@ -267,6 +268,7 @@ a {
   max-height: 300px;
   object-fit: cover;
   min-inline-size: 100%;
+  max-width: 90vw;
 }
 
 .publisher--container {
