@@ -3,7 +3,7 @@
  *
  * - List View and Single View of recipes, saved recipes, created recipes, list recipes
  */
-import { SavedRecipe } from '../types/recipeTypes';
+import { RecipeCardData } from '../types/recipeTypes';
 
 const apiUrl = 'https://us-central1-repsie.cloudfunctions.net/api';
 
@@ -15,7 +15,7 @@ export async function getSavedRecipes(userId: string) {
   return fetch(`${apiUrl}/saved?user=${userId}`)
     .then(res => res.json())
     .then(savedRecipes => {
-      return savedRecipes as SavedRecipe[];
+      return savedRecipes as RecipeCardData[];
     });
 }
 

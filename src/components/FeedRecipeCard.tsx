@@ -62,7 +62,8 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       const success = await saveRecipe(props.id, user.uid);
       if (success) {
         setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
-          return [...prevUserSavedRecipes, props.id];
+          // we append the props as if it's a recipe card.
+          return [...prevUserSavedRecipes, props];
         });
         addSnack('Success! Saved the recipe.', 'success');
       }
@@ -70,8 +71,8 @@ export default function FeedRecipeCard(props: RecipeCardData) {
     } else {
       const success = await unsaveRecipe(props.id, user.uid);
       if (success) {
-        setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
-          return prevUserSavedRecipes.filter(id => id !== props.id);
+        setUserSavedRecipes((prevUserSavedRecipes: RecipeCardData[]) => {
+          return prevUserSavedRecipes.filter(recipe => recipe.id !== props.id);
         });
         addSnack('Success! Unsaved the recipe.', 'success');
       }

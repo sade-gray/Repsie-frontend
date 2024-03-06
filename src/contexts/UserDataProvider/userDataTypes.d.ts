@@ -1,6 +1,6 @@
-import { SavedRecipe } from '../../types/recipeTypes';
+import { RecipeCardData } from '../../types/recipeTypes';
 
 export interface UserData {
-  userSavedRecipes: SavedRecipe[];
+  userSavedRecipes: RecipeCardData[];
   setUserSavedRecipes: (state?: any) => void;
 }

@@ -15,8 +15,8 @@ export default function Home() {
   const recipeOffset = useRef(0);
 
   // Helper function to check if a recipe exists in the user's saved recipes list
-  function checkIfRecipeSaved(id: string): boolean {
-    return userSavedRecipes?.includes(id);
+  function isRecipeSaved(id: string): boolean {
+    return userSavedRecipes?.find(recipe => recipe.id === id) !== undefined;
   }
 
   /**
@@ -41,7 +41,7 @@ export default function Home() {
       prevRecipeData.map(recipe => {
         return {
           ...recipe,
-          saved: checkIfRecipeSaved(recipe.id),
+          saved: isRecipeSaved(recipe.id),
         };
       })
     );
