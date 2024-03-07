@@ -1,18 +1,20 @@
 import FeedRecipeCard from '../../components/FeedRecipeCard.tsx';
 import SavedRecipesContainer from '../../components/SavedRecipesContainer.tsx';
-import { Divider, Skeleton, Stack, Typography } from '@mui/material';
+import { Divider, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RecipeCardData } from '../../types/recipeTypes';
 import useUserData from '@context/UserDataProvider';
 
 import { fetchRecipes } from '@api/recipe.ts';
+import { theme } from '../../theme.ts';
 
 export default function Home() {
   const [recipeData, setRecipeData] = useState<RecipeCardData[]>([]);
   const { userSavedRecipes } = useUserData();
   // We use useRef as this variable should not trigger re-renders.
   const recipeOffset = useRef(0);
+  const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
 
   // Helper function to check if a recipe exists in the user's saved recipes list
   function isRecipeSaved(id: string): boolean {
@@ -76,7 +78,7 @@ export default function Home() {
 
   return (
     <div className={'main--container'}>
-      <SavedRecipesContainer />
+      {isNotTablet && <SavedRecipesContainer />}
       <section className={'recipes--feed--container'}>
         <div className={'recipes--feed'}>
           <Typography variant={'h4'}>For you</Typography>
