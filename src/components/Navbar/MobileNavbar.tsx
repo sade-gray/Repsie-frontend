@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Fab, Grid, IconButton, styled } from '@mui/material';
+import { AppBar, Box, Fab, Grid, IconButton, styled } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import SavedRecipesDrawerMobile from '@component/SavedRecipesDrawerMobile.tsx';
 import useDrawer from '@context/DrawerProvider';
+import { AccountMenu } from '@component/Navbar/AccountMenu.tsx';
 
 export default function MobileNavbar() {
   const { drawerOpen, setDrawerOpen } = useDrawer();
@@ -40,9 +41,7 @@ export default function MobileNavbar() {
           <IconButton color={'inherit'} onClick={handleDrawerToggle}>
             <BookmarkIcon fontSize={'large'} />
           </IconButton>
-          <IconButton color={'inherit'}>
-            <Avatar />
-          </IconButton>
+          <AccountMenu />
         </Grid>
       </AppBar>
       <SavedRecipesDrawerMobile />
