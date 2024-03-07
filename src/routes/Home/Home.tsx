@@ -76,35 +76,33 @@ export default function Home() {
 
   return (
     <div className={'main--container'}>
-      <section className={'saved--recipe--section'}>
-        <SavedRecipesContainer />
-      </section>
+      <SavedRecipesContainer />
       <section className={'recipes--feed--container'}>
         <div className={'recipes--feed'}>
-          <Typography variant={'h1'}>For you</Typography>
+          <Typography variant={'h4'}>For you</Typography>
           <Divider />
-          {/* Feed Card go here */}
-          {recipeComponents?.length === 0 ? (
-            // Render the skeletons while data is being fetched
-            <Stack spacing={3} mt={2}>
-              <Stack spacing={2}>
-                <Skeleton variant={'rounded'} height={50} animation={'wave'} />
-                <Skeleton variant={'rectangular'} height={300} animation={'wave'} sx={{ mb: '1' }} />
-              </Stack>
-              <Divider />
-              <Stack spacing={2}>
-                <Skeleton variant={'rounded'} height={50} animation={'wave'} />
-                <Skeleton variant={'rectangular'} height={300} animation={'wave'} />
-              </Stack>
-              <Divider />
-            </Stack>
-          ) : (
-            // Render the actual recipes when the data makes it here
-            recipeComponents
-          )}
+          {/* Feed Card go here; Show the skeleton until the recipes are fetched */}
+          {recipeComponents?.length === 0 ? <HomePageSkeleton /> : recipeComponents}
         </div>
       </section>
       <section className={'chef--recommendation--container'}>Chefs to follow</section>
     </div>
+  );
+}
+
+function HomePageSkeleton() {
+  return (
+    <Stack spacing={3} mt={2}>
+      <Stack spacing={2}>
+        <Skeleton variant={'rounded'} height={50} animation={'wave'} />
+        <Skeleton variant={'rectangular'} height={300} animation={'wave'} sx={{ mb: '1' }} />
+      </Stack>
+      <Divider />
+      <Stack spacing={2}>
+        <Skeleton variant={'rounded'} height={50} animation={'wave'} />
+        <Skeleton variant={'rectangular'} height={300} animation={'wave'} />
+      </Stack>
+      <Divider />
+    </Stack>
   );
 }
