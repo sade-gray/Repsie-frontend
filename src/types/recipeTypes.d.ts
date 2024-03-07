@@ -1,4 +1,4 @@
-interface RecipeCardData {
+export interface RecipeCardData {
   id: string;
   title: string;
   image: string;
