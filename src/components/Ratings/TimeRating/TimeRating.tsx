@@ -13,9 +13,9 @@ function TimeRating({ value, readOnly, handleChange }: ratingProps) {
     <StyledRating
       value={value}
       name="time-rating"
-      size="large"
-      icon={<AccessTime fontSize="large" color="secondary" />}
-      emptyIcon={<AccessTime fontSize="large" />}
+      size={size}
+      icon={<AccessTime fontSize={size} color="secondary" />}
+      emptyIcon={<AccessTime fontSize={size} />}
       onChange={(e, newValue) => {
         e.preventDefault();
         !readOnly && handleChange?.(newValue || 1);

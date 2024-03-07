@@ -1,4 +1,5 @@
 export interface ratingProps {
+  size?: 'large' | 'medium' | 'small';
   /** The value the component should display */
   value?: number;
   /** Whether the component should be read only or not*/

@@ -3,7 +3,7 @@ import { LocalDining } from '@mui/icons-material';
 import { IconContainerProps, Rating, styled } from '@mui/material';
 import { ratingProps } from '../ratingClasses';
 
-function SkillRating({ value, readOnly, handleChange }: ratingProps) {
+function SkillRating({ value, readOnly, handleChange, size = 'large' }: ratingProps) {
   const [colour, setColour] = useState<'success' | 'error' | 'warning' | 'disabled'>('disabled');
 
   // Changes the colour of the rating component based on the value of skill rating
@@ -38,11 +38,11 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
       icon: React.ReactElement;
     };
   } = {
-    1: { icon: <LocalDining color={colour} fontSize="large" /> },
-    2: { icon: <LocalDining color={colour} fontSize="large" /> },
-    3: { icon: <LocalDining color={colour} fontSize="large" /> },
-    4: { icon: <LocalDining color={colour} fontSize="large" /> },
-    5: { icon: <LocalDining color={colour} fontSize="large" /> },
+    1: { icon: <LocalDining color={colour} fontSize={size} /> },
+    2: { icon: <LocalDining color={colour} fontSize={size} /> },
+    3: { icon: <LocalDining color={colour} fontSize={size} /> },
+    4: { icon: <LocalDining color={colour} fontSize={size} /> },
+    5: { icon: <LocalDining color={colour} fontSize={size} /> },
   };
   // Icon wrapper for the rating component
   function IconContainer(props: IconContainerProps) {
@@ -67,7 +67,6 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
         e.preventDefault();
         // Update the parent's value state if the component is not made readonly
         !readOnly && changeColour(value);
-        console.log(value);
       }}
       onChange={(e, value) => {
         e.preventDefault();
