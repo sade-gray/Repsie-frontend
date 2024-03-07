@@ -20,7 +20,6 @@ export function DesktopNavbar() {
   return (
     <>
       <SavedRecipesDrawer />
-      {/*<header className='header'>*/}
       <ElevationScroll>
         <AppBar color={'secondary'} position={'sticky'}>
           <Grid container justifyContent={'space-between'} alignItems={'center'} p={1}>
@@ -42,7 +41,6 @@ export function DesktopNavbar() {
           </Grid>
         </AppBar>
       </ElevationScroll>
-      {/*</header>*/}
     </>
   );
 }
