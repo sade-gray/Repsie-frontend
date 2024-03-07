@@ -1,5 +1,6 @@
 import { PublisherContainer } from './components/PublisherContainer.tsx';
 import Wex from '../../assets/wex.png';
+import toastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
 import { getDownloadURL } from 'firebase/storage';
 import { Box, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,7 +18,6 @@ import { fetchRecipe } from '@api/recipe.ts';
 export function RecipePage() {
   const recipeId = useParams()['recipeId'] || '';
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
-  const defaultImage = 'macandcheese.jpg';
   const [recipe, setRecipe] = useState<any>();
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const navigate = useNavigate();
@@ -37,8 +37,14 @@ export function RecipePage() {
 
   // Update the cover image whenever the recipe changes (e.g. page refresh or recipe edit)
   useEffect(() => {
-    const imageRef = ref(contentStorage, `recipeImages/${recipe?.image || defaultImage}`);
-    getDownloadURL(imageRef).then(url => setCoverImageUrl(url));
+    const imageRef = ref(contentStorage, `recipes/${recipeId}/index.png`);
+    getDownloadURL(imageRef)
+      .then(url => setCoverImageUrl(url))
+      .catch(() => {
+        // Use default image if image not found
+        console.error('Error getting image');
+        setCoverImageUrl(toastie);
+      });
   }, [recipe]);
 
   return (
@@ -47,14 +53,10 @@ export function RecipePage() {
         <div className="recipe--page--container">
           <div className="recipe--container">
             <div className="recipe--title--container">
-              <Typography variant={`${isNotTablet ? 'h3' : 'h4'}`}>
-                {recipe?.title || 'Loading...'}
-              </Typography>
+              <Typography variant={`${isNotTablet ? 'h3' : 'h4'}`}>{recipe?.title || 'Loading...'}</Typography>
             </div>
             <div className="recipe--image--container">
-              {coverImageUrl && (
-                <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />
-              )}
+              {coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}
             </div>
             <div className="recipe--publisher--container">
               <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />

@@ -11,11 +11,14 @@ import { saveRecipe, unsaveRecipe } from '@api/recipe.ts';
 import SkillRating from './Ratings/SkillRating';
 import TimeRating from './Ratings/TimeRating';
 import Wex from '../assets/wex.png';
-import GourmetToastie from '../assets/dummyPhotos/gourmet-toastie.jpg';
+import toastie from '../assets/dummyPhotos/gourmet-toastie.jpg';
+import { contentStorage } from '../firebase.ts';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 export default function FeedRecipeCard(props: RecipeCardData) {
   const [saved, setSaved] = useState(props.saved);
   const { user } = useAuth();
+  const [image, setImage] = useState('');
   const { addSnack } = useSnackBar();
   const { setUserSavedRecipes } = useUserData();
 
@@ -24,44 +27,29 @@ export default function FeedRecipeCard(props: RecipeCardData) {
     setSaved(props.saved);
   }, [props.saved]);
 
+  useEffect(() => {
+    const imageRef = ref(contentStorage, `recipes/${props.id}/index.png`);
+    // TODO: I cannot control the error logged by this function, so recipes without an image will flood the console.
+    getDownloadURL(imageRef)
+      .then(url => setImage(url))
+      .catch(() => {
+        setImage(toastie);
+      });
+  }, []);
+
   const handleSaveToggle = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    // Prevent from being redirected to the recipe pag
+    // Prevent from being redirected to the recipe page
     e.preventDefault();
     // User must be logged in to save a recipe.
     if (!user) {
       addSnack('You must be signed in to save a recipe.', 'error');
       return;
     }
-    // Get a reference to the current recipe
-    // const userSavedRecipesDocRef = doc(db, `userSavedRecipes/${user.uid}`);
-    // Create the document if it does not exist.
-    // await getDoc(userSavedRecipesDocRef).then((doc) => {
-    //   if (!doc.exists()) {
-    //     console.log("Creating new doc");
-    //     setDoc(userSavedRecipesDocRef, {
-    //       recipeRefs: [props.id],
-    //     }).then(() => {
-    //       addSnack("Success! Saved the recipe.", "success");
-    //     });
-    //     return;
-    //   }
-    // });
-    if (!saved) {
-      //   await updateDoc(userSavedRecipesDocRef, {
-      //     recipeRefs: arrayUnion(props.id),
-      //   }).then(() => {
 
-      //   });
-      // } else {
-      //   await updateDoc(userSavedRecipesDocRef, {
-      //     recipeRefs: arrayRemove(props.id),
-      //   }).then(() => {
-      //
-      //   });
-      // }
+    if (!saved) {
       const success = await saveRecipe(props.id, user.uid);
       if (success) {
-        setUserSavedRecipes((prevUserSavedRecipes: string[]) => {
+        setUserSavedRecipes((prevUserSavedRecipes: RecipeCardData[]) => {
           // we append the props as if it's a recipe card.
           return [...prevUserSavedRecipes, props];
         });
@@ -102,7 +90,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       />
       <div className={'feed--recipe--image--container'}>
         {/*TODO: Replace GourmetToastie with the recipe's image url*/}
-        <img src={GourmetToastie} alt={'food pic'} />
+        <img src={image} alt={'food pic'} />
       </div>
       <div className={'feed--recipe--action--row'}>
         <SkillRating value={props.skillRating} readOnly />
