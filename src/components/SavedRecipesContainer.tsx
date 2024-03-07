@@ -11,12 +11,12 @@ import { useNavigate } from 'react-router-dom';
  * The list component used to display the saved recipes.
  * Currently, in use by the mobile drawer and home page.
  */
-export default function SavedRecipesContainer() {
+export default function SavedRecipesContainer(props: any) {
   // Get saved recipe items from context provider
   const { userSavedRecipes } = useUserData();
 
   const savedRecipeComponents = userSavedRecipes?.map((recipe, idx) => {
-    return <SavedRecipeCard key={idx} {...recipe} />;
+    return <SavedRecipeCard key={idx} {...recipe} closeDrawer={props.handleItemClick} />;
   });
 
   return (
@@ -27,7 +27,7 @@ export default function SavedRecipesContainer() {
   );
 }
 
-export function SavedRecipeCard({ id, title }: RecipeCardData) {
+export function SavedRecipeCard({ id, title, closeDrawer }: RecipeCardData & any) {
   const navigate = useNavigate();
   const [image, setImage] = useState('');
 
@@ -40,7 +40,12 @@ export function SavedRecipeCard({ id, title }: RecipeCardData) {
 
   return (
     <Card sx={{ borderRadius: 2, backgroundColor: 'secondary.main', maxWidth: 400 }} variant={'outlined'}>
-      <CardActionArea onClick={() => navigate(`/recipe/${id}`)}>
+      <CardActionArea
+        onClick={() => {
+          navigate(`/recipe/${id}`);
+          closeDrawer();
+        }}
+      >
         <CardMedia component={'img'} height={100} image={image} alt={`Recipe image from ${title}`} />
         <CardContent sx={{ padding: 1, color: 'primary.main' }}>
           <Typography variant={'subtitle1'} mr={1}>

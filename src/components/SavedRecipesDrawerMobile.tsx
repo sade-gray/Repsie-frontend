@@ -25,7 +25,7 @@ export default function SavedRecipesDrawerMobile(props: { window: () => Window }
         display: { lg: 'none' },
         '& .MuiDrawer-paper': {
           boxSizing: 'border-box',
-          minHeight: '75vh',
+          height: '70vh',
           borderRadius: '1em 1em 0 0',
           paddingX: 2,
         },
@@ -47,11 +47,12 @@ export default function SavedRecipesDrawerMobile(props: { window: () => Window }
           Saved Recipes
         </Typography>
       </Grid>
-      <SavedRecipesContainer />
+      <SavedRecipesContainer handleItemClick={handleDrawerToggle} />
     </SwipeableDrawer>
   );
 }
 
+// That little gray bar at the edge of the drawer, that you can pull on to close the drawer
 const Puller = styled('div')(({ theme }) => ({
   width: 60,
   height: 6,

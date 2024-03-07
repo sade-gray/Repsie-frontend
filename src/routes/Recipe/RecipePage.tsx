@@ -23,7 +23,7 @@ export function RecipePage() {
   const navigate = useNavigate();
   const { addSnack } = useSnackBar();
 
-  // Fetch the recipe content on load up
+  // Fetch the recipe content on load up and whenever the recipeId changes (for mobile)
   useEffect(() => {
     fetchRecipe(recipeId).then(recipe => {
       if (recipe.error) {
@@ -33,7 +33,7 @@ export function RecipePage() {
         setRecipe(recipe);
       }
     });
-  }, []);
+  }, [recipeId]);
 
   // Update the cover image whenever the recipe changes (e.g. page refresh or recipe edit)
   useEffect(() => {
