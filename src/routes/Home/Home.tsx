@@ -51,7 +51,7 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       const winDoc = document.documentElement;
-      const scrolledToBottom = winDoc.scrollHeight <= winDoc.scrollTop + winDoc.clientHeight;
+      const scrolledToBottom = winDoc.scrollHeight === winDoc.scrollTop + winDoc.clientHeight;
       if (scrolledToBottom) {
         getMoreRecipes();
       }
