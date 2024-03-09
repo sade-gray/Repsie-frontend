@@ -65,8 +65,8 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
   return (
     <Box>
       {/* Comments header */}
-      <Typography variant={'h3'} color={'text'}>
-        Comments ({commentCount})
+      <Typography variant={'h4'} color={'text'}>
+        {commentCount} Comment{commentCount > 1 && 's'}
       </Typography>
       <Divider variant={'fullWidth'} sx={{ my: 1, mb: 3 }} />
       {/* Comment input */}
