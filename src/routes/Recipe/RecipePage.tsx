@@ -79,7 +79,9 @@ export function RecipePage() {
             </section>
 
             {/* Comments Section */}
-            <CommentSection recipeId={recipeId} />
+            <Box mb={10}>
+              <CommentSection recipeId={recipeId} />
+            </Box>
           </div>
         </div>
       ) : (
