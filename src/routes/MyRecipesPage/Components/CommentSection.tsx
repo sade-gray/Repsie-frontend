@@ -48,6 +48,7 @@ const commentsData: Comment[] = [
 ];
 
 export default function CommentSection({ recipeId }: { recipeId: string }) {
+  const [commentDraft, setCommentDraft] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
   const [showControls, setShowControls] = useState(false);
 
@@ -77,6 +78,8 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
             placeholder={'Add a comment...'}
             color={'secondary'}
             onFocus={() => setShowControls(true)}
+            value={commentDraft}
+            onChange={e => setCommentDraft(e.target.value)}
             sx={{ width: '100%' }}
             multiline
           />
@@ -87,7 +90,7 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
             <Button variant={'text'} color={'secondary'} onClick={() => setShowControls(false)}>
               Cancel
             </Button>
-            <Button variant={'text'} color={'secondary'}>
+            <Button variant={'text'} color={'secondary'} disabled={commentDraft.length === 0}>
               Comment
             </Button>
           </Box>
