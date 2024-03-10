@@ -7,14 +7,14 @@ const BannerSlider = () => {
         {
             id: 1,
             image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
-            title: 'Fresh Vegetables & Fruits at your doorstep',
-            description: 'We deliver fresh vegetables & fruits at your doorstep',
+            title: 'Cooking with love provides food for the soul',
+            description: 'We deliver Cooking with love provides food for the soul',
             button: 'htttps://www.google.com'
         },
         {
             id: 2,
             image: 'https://images.unsplash.com/photo-1495480137269-ff29bd0a695c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80',
-            title: 'Fresh Vegetables & Fruits at your doorstep',
+            title: 'cooking with love provides food for the soul',
             description: 'Cherries and berries. Sweet peaches and nectarines. Summer baking season is here, and I couldn’t be more delighted.',
             button: 'htttps://www.google.com'
         }
