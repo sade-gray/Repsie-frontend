@@ -1,7 +1,7 @@
 export interface Comment {
   id: number;
   username: string;
-  message: string;
+  commentBody: string;
   likeCount: number;
   replies: CommentReply[];
 }

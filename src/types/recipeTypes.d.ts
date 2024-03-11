@@ -1,18 +1,9 @@
-export interface savedRecipe {
+export interface RecipeCardData {
   id: string;
   title: string;
-  imageUrl: string;
-  publisher: {
-    name: string;
-    iconUrl: string;
-  };
-}
-
-interface RecipeCardData {
-  id: string,
-  title: string;
   image: string;
-  saved: boolean;
+  saved?: boolean;
   skillRating: number;
   timeRating: number;
+  userId: string;
 }

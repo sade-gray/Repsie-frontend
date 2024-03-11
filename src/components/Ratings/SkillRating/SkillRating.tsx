@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { LocalDining } from "@mui/icons-material";
-import { IconContainerProps, Rating, styled } from "@mui/material";
-import { ratingProps } from "../ratingClasses";
+import React, { useEffect, useState } from 'react';
+import { LocalDining } from '@mui/icons-material';
+import { IconContainerProps, Rating, styled } from '@mui/material';
+import { ratingProps } from '../ratingClasses';
 
-function SkillRating({ value, readOnly, handleChange }: ratingProps) {
-  const [colour, setColour] = useState<
-    "success" | "error" | "warning" | "disabled"
-  >("disabled");
+function SkillRating({ value, readOnly, handleChange, size = 'large' }: ratingProps) {
+  const [colour, setColour] = useState<'success' | 'error' | 'warning' | 'disabled'>('disabled');
 
   // Changes the colour of the rating component based on the value of skill rating
   function changeColour(newValue?: number) {
@@ -15,17 +13,17 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
       const colour = !newValue || newValue === -1 ? value || 1 : newValue;
       switch (colour) {
         case 1:
-          return "success";
+          return 'success';
         case 2:
-          return "success";
+          return 'success';
         case 3:
-          return "warning";
+          return 'warning';
         case 4:
-          return "error";
+          return 'error';
         case 5:
-          return "error";
+          return 'error';
         default:
-          return "disabled";
+          return 'disabled';
       }
     });
   }
@@ -40,11 +38,11 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
       icon: React.ReactElement;
     };
   } = {
-    1: { icon: <LocalDining color={colour} fontSize="large" /> },
-    2: { icon: <LocalDining color={colour} fontSize="large" /> },
-    3: { icon: <LocalDining color={colour} fontSize="large" /> },
-    4: { icon: <LocalDining color={colour} fontSize="large" /> },
-    5: { icon: <LocalDining color={colour} fontSize="large" /> },
+    1: { icon: <LocalDining color={colour} fontSize={size} /> },
+    2: { icon: <LocalDining color={colour} fontSize={size} /> },
+    3: { icon: <LocalDining color={colour} fontSize={size} /> },
+    4: { icon: <LocalDining color={colour} fontSize={size} /> },
+    5: { icon: <LocalDining color={colour} fontSize={size} /> },
   };
   // Icon wrapper for the rating component
   function IconContainer(props: IconContainerProps) {
@@ -54,7 +52,7 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
 
   // Styles for the rating component
   const StyledRating = styled(Rating)(({ theme }) => ({
-    "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
+    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
       color: theme.palette.action.disabled,
     },
   }));
@@ -69,7 +67,6 @@ function SkillRating({ value, readOnly, handleChange }: ratingProps) {
         e.preventDefault();
         // Update the parent's value state if the component is not made readonly
         !readOnly && changeColour(value);
-        console.log(value);
       }}
       onChange={(e, value) => {
         e.preventDefault();

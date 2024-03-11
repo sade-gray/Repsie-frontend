@@ -1,15 +1,16 @@
-$theme1: #694FD0FF;
-$background: #252A38;
+$theme1: #694fd0ff;
+$background: #252a38;
 $transparenttheme1: rgba(85, 69, 146, 55%);
 
 // TODO: Add breakpoint variables
 // Example
 $breakpoint-tablet: 768px;
 
-html, body {
+html,
+body {
   font-weight: bolder;
   margin: 0;
-  overflow-x: hidden;
+  padding: 0;
 }
 
 .repsie--logo {
@@ -29,31 +30,6 @@ html, body {
 .footer {
   width: 100vw;
   background-color: $theme1;
-}
-
-.saved--recipe--card {
-  border: 1px solid gray;
-  padding: 0.5em;
-  border-radius: 20px;
-  height: 8rem;
-  width: 100%;
-  color: white;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.saved--recipe--card--title {
-  text-align: left;
-  background: $transparenttheme1;
-  border-radius: 1rem;
-  padding: 0.3rem;
-}
-
-.saved--recipe--title {
-  font-size: 1rem;
-  margin: 0 0.5rem;
-  color:black;
-  font-weight: bold;
 }
 
 .main--container {
@@ -76,7 +52,7 @@ html, body {
 }
 
 @media only screen and (max-width: 1200px) {
-  .saved--recipe--section, .chef--recommendation--container {
+  .chef--recommendation--container {
     display: none;
   }
 }
@@ -84,13 +60,8 @@ html, body {
 // The whole feed's container
 .recipes--feed--container {
   flex: 2;
-  margin: 0 10%;
+  margin: 0 7%;
   max-width: 630px;
-
-  h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2rem;
-  }
 
   @media only screen and (max-width: $breakpoint-tablet) {
     flex: auto;
@@ -99,7 +70,6 @@ html, body {
     width: 100%;
   }
 }
-
 
 .chef--recommendation--container {
   flex: 1;
@@ -154,33 +124,6 @@ html, body {
   @media only screen and (max-width: $breakpoint-tablet) {
     padding: 0;
   }
-
-  h2 {
-    margin: 0 0 0 1rem;
-    font-size: 2rem;
-  }
-}
-
-.my--recipes--container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-}
-
-.my--recipe--item {
-  border: 1px solid gray;
-  background-size: cover;
-  background-repeat: round;
-  margin: 1rem;
-  border-radius: 1rem;
-  padding: 1rem;
-  width: 20rem;
-  height: 15rem;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 }
 
 a {
@@ -192,15 +135,8 @@ a {
   text-decoration: #039be5;
 }
 
-#create--recipe--button {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.sign--up--container, .sign--in--container {
+.sign--up--container,
+.sign--in--container {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -218,11 +154,11 @@ a {
   font-family: 'Inter', sans-serif;
 }
 
-// This centers the recipe content. gives content 60% width
+// This centers the recipe content
 .recipe--page--container {
   display: flex;
   align-items: center;
-  margin: 0 25%;
+  justify-content: center;
 
   @media only screen and (max-width: $breakpoint-tablet) {
     margin: 0 2em;
@@ -237,7 +173,6 @@ a {
 }
 
 .recipe--image--container {
-  max-width: 90vw;
   margin-bottom: 1rem;
 }
 
@@ -267,6 +202,7 @@ a {
   max-height: 300px;
   object-fit: cover;
   min-inline-size: 100%;
+  max-width: 90vw;
 }
 
 .publisher--container {
@@ -279,9 +215,4 @@ a {
   width: 40px;
   margin: 0 10px;
   aspect-ratio: 1;
-}
-
-.comment--reply--toggle--button {
-  border-radius: 50%;
-  margin-left: 4em;
 }

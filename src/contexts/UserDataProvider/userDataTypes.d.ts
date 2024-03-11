@@ -1,4 +1,6 @@
+import { RecipeCardData } from '../../types/recipeTypes';
+
 export interface UserData {
-  userSavedRecipes: string[];
+  userSavedRecipes: RecipeCardData[];
   setUserSavedRecipes: (state?: any) => void;
 }

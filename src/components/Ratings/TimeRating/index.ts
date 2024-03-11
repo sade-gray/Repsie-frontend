@@ -1,1 +1,1 @@
-export { default } from "./TimeRating.tsx";
+export { default } from './TimeRating.tsx';

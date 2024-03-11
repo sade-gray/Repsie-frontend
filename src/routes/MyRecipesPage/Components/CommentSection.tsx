@@ -1,112 +1,167 @@
-import { Comment, CommentReply } from "../../../types/commentTypes";
-import pic from "../../../assets/dummyPhotos/monke.png";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import {
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
+import { Comment, CommentReply } from '../../../types/commentTypes';
+import pic from '../../../assets/dummyPhotos/monke.png';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Avatar, Box, Button, Divider, IconButton, Input, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { ChatBubbleOutline, KeyboardArrowDown } from '@mui/icons-material';
+// import { getComments } from '@api/comments.ts';
 /**
  * This is the comments section of a specific recipe's page.
  * This component handles the fetching and displaying of any comments related to the recipe
  */
-
-const comments: Comment[] = [
+// Dummy data for comments
+const commentsData: Comment[] = [
   {
-    id: 12345678,
-    username: "Moglio",
-    message: "Lorem Ipsum Dolor Sit Amet",
-    likeCount: 0,
-    replies: [],
-  },
-  {
-    id: 12345679,
-    username: "Moglio",
-    message: "@Moglio Nah he tweakin",
-    likeCount: 5,
+    id: 1,
+    username: 'Moglio',
+    commentBody: 'This is a comment',
+    likeCount: 2,
     replies: [
       {
-        id: 12345680,
-        username: "Sadé",
-        message: "Not too shabby",
-        likeCount: 0,
+        id: 1,
+        username: 'Moglio',
+        message: 'This is a reply',
+        likeCount: 3,
+      },
+    ],
+  },
+  {
+    id: 2,
+    username: 'Bob',
+    commentBody: 'This is a comment',
+    likeCount: 1,
+    replies: [
+      {
+        id: 1,
+        username: 'Moglio',
+        message: 'This is a reply',
+        likeCount: 4,
       },
       {
-        id: 12345680,
-        username: "Sadé",
-        message: "Not too shabby",
-        likeCount: 0,
-      },
-      {
-        id: 12345680,
-        username: "Sadé",
-        message: "Not too shabby",
-        likeCount: 0,
+        id: 2,
+        username: 'Moglio',
+        message: 'This is a reply',
+        likeCount: 5,
       },
     ],
   },
 ];
 
-export default function CommentSection(props: any) {
+export default function CommentSection({ recipeId }: { recipeId: string }) {
+  const [commentDraft, setCommentDraft] = useState('');
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [showControls, setShowControls] = useState(false);
+
+  // Fetch the comments on load up
+  useEffect(() => {
+    // getComments(recipeId).then(newComments => {
+    //   setComments(newComments);
+    // });
+    setComments(commentsData);
+  }, [recipeId]);
+
+  const commentCount = comments?.length;
+
   return (
-    <section className={"recipe--comment--section--container"}>
-      <Typography variant={"h3"} color={"text"}>
-        Comments
+    <Box>
+      {/* Comments header */}
+      <Typography variant={'h4'} color={'text'}>
+        {commentCount} Comment{commentCount > 1 && 's'}
       </Typography>
-      <Divider variant={"middle"} sx={{ my: 1 }} />
-      {/* List of comments from each user*/}
-      <Stack spacing={2}>
+      <Divider variant={'fullWidth'} sx={{ my: 1, mb: 3 }} />
+      {/* Comment input */}
+      <Box display={'flex'} flexDirection={'column'} mb={4} gap={2}>
+        <Box display={'flex'} gap={2}>
+          <Avatar src={pic} alt="Moglio" />
+          <Input
+            type={'text'}
+            placeholder={'Add a comment...'}
+            color={'secondary'}
+            onFocus={() => setShowControls(true)}
+            value={commentDraft}
+            onChange={e => setCommentDraft(e.target.value)}
+            sx={{ width: '100%' }}
+            multiline
+          />
+        </Box>
+        {/* Comment controls (cancel, comment) */}
+        {showControls && (
+          <Box display={'flex'} gap={2} justifyContent={'flex-end'}>
+            <Button variant={'text'} color={'secondary'} onClick={() => setShowControls(false)}>
+              Cancel
+            </Button>
+            <Button variant={'text'} color={'secondary'} disabled={commentDraft.length === 0}>
+              Comment
+            </Button>
+          </Box>
+        )}
+      </Box>
+      {/* List of comments from each user */}
+      <Stack spacing={3}>
         {/* Comment component. Contains the comment and its replies*/}
-        {comments.map((commentData) => (
-          <CommentComponent {...commentData} key={commentData.id} />
-        ))}
+        {comments?.map(commentData => <CommentComponent {...commentData} key={commentData.id} />)}
       </Stack>
-    </section>
+    </Box>
   );
 }
 
 function CommentComponent(props: Comment) {
   const [repliesOpen, setRepliesOpen] = useState(false);
+  const [replying, setIsReplying] = useState(false);
   const replyCount = props.replies.length;
   // TODO: Search message for any @s of other people and turn them into links
   return (
     <>
-      <Box display={"flex"} ml={5} gap={2}>
-        <Avatar src={pic} alt="Moglio" />
-        {/* Comment content container (username, rating */}
+      <Box display={'flex'} ml={5} gap={2}>
+        <Avatar src={pic} alt={'Modglio'} />
+        {/* Comment body */}
         <Box>
-          <Typography color={"text"} variant={"h5"}>
+          <Typography color={'text'} variant={'h5'}>
             {props.username}
           </Typography>
-          <Typography color={"text"} variant={"body1"}>
-            {props.message}
+          <Typography color={'text'} variant={'body1'}>
+            {props.commentBody}
           </Typography>
           {/* Like and Reply Bar */}
-          <Box display={"flex"}>
-            <IconButton aria-label={"like"}>
-              <FavoriteBorderIcon color={"secondary"} />
-              <Typography>{props.likeCount}</Typography>
+          <Box display={'flex'} gap={1} mt={1}>
+            <IconButton sx={{ borderRadius: 4, gap: 0.5 }}>
+              <FavoriteBorderIcon color={'secondary'} />
+              <Typography color={'text'}>{props.likeCount}</Typography>
             </IconButton>
-            <Button color={"secondary"}>Reply</Button>
+            <IconButton sx={{ borderRadius: 4, gap: 0.5 }} onClick={() => setIsReplying(!replying)}>
+              <ChatBubbleOutline color={'secondary'} aria-label={'reply'} />
+              <Typography variant={'body2'} color={'text'}>
+                Reply
+              </Typography>
+            </IconButton>
           </Box>
+          {/* Reply input */}
+          {replying && (
+            <Box display={'flex'} flexDirection={'column'} ml={1} mt={1} gap={2}>
+              <Box display={'flex'} gap={2}>
+                <Avatar src={pic} alt={'Moglio'} />
+                <Input type={'text'} placeholder={'Add a reply...'} color={'secondary'} sx={{ width: '100%' }} multiline />
+              </Box>
+              {/* Reply controls (cancel, reply) */}
+              <Box display={'flex'} gap={2} justifyContent={'flex-end'} sx={{ width: '100%' }}>
+                <Button variant={'text'} color={'secondary'} onClick={() => setIsReplying(false)}>
+                  Cancel
+                </Button>
+                <Button variant={'text'} color={'secondary'}>
+                  Reply
+                </Button>
+              </Box>
+            </Box>
+          )}
+          {/* Replies */}
           {replyCount > 0 && (
             <>
-              <Button
-                size={"small"}
-                variant={"contained"}
-                color={"secondary"}
-                className={"comment--reply--toggle--button"}
-                onClick={() => setRepliesOpen(!repliesOpen)}
-              >
-                <Typography color={"text"}>
-                  {replyCount} {replyCount > 1 ? "replies" : "reply"}
+              <IconButton size={'small'} color={'secondary'} onClick={() => setRepliesOpen(!repliesOpen)} sx={{ mb: 1, mt: 1, borderRadius: 4 }}>
+                <KeyboardArrowDown />
+                <Typography color={'text'}>
+                  {replyCount} {replyCount > 1 ? 'replies' : 'reply'}
                 </Typography>
-              </Button>
+              </IconButton>
               {repliesOpen && (
                 <Stack my={1} gap={2}>
                   {props.replies.map((reply: CommentReply) => (
@@ -124,22 +179,22 @@ function CommentComponent(props: Comment) {
 
 function CommentReplyComponent(props: CommentReply) {
   return (
-    <Box display={"flex"} ml={1} gap={2}>
-      <Avatar src={pic} alt={"Moglio"} />
+    <Box display={'flex'} ml={1} gap={2}>
+      <Avatar src={pic} alt={'Moglio'} />
       <Box>
-        <Typography color={"text"} variant={"h6"}>
+        {/* Comment body */}
+        <Typography color={'text'} variant={'h6'}>
           {props.username}
         </Typography>
-        <Typography color={"text"} variant={"body2"}>
+        <Typography color={'text'} variant={'body1'}>
           {props.message}
         </Typography>
         {/*  Like and Reply Bar*/}
-        <Box display={"flex"}>
-          <IconButton aria-label={"like"}>
-            <FavoriteBorderIcon fontSize={"small"} color={"secondary"} />
-            <Typography>{props.likeCount}</Typography>
+        <Box display={'flex'} gap={1} mt={1}>
+          <IconButton sx={{ borderRadius: 4, gap: 0.5 }}>
+            <FavoriteBorderIcon color={'secondary'} />
+            <Typography color={'text'}>{props.likeCount}</Typography>
           </IconButton>
-          <Button color={"secondary"}>Reply</Button>
         </Box>
       </Box>
     </Box>

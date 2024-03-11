@@ -1,19 +1,20 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 // TODO: Add Dark mode baby
 export const theme = createTheme({
   palette: {
     text: {
-      primary: "#040316",
+      primary: '#040316',
     },
     primary: {
-      main: "#FFFFFF",
+      main: '#FFFFFF',
+      dark: '#acaaaf',
     },
     secondary: {
-      main: "#694FD0FF",
+      main: '#694FD0FF',
     },
     background: {
-      default: "#FFFFFF",
+      default: '#FFFFFF',
     },
   },
 });

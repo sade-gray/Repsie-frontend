@@ -1,19 +1,10 @@
-import {
-  Avatar,
-  Box,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import avatar from "../../assets/wex.png";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { RestaurantMenuOutlined, Logout } from "@mui/icons-material";
-import { ListItemIcon } from "@mui/material";
-import useAuth from "@context/AuthProvider";
+import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import avatar from '../../assets/wex.png';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { RestaurantMenuOutlined, Logout } from '@mui/icons-material';
+import { ListItemIcon } from '@mui/material';
+import useAuth from '@context/AuthProvider';
 
 export default function HeaderProfileIcon() {
   const { user, signOut } = useAuth();
@@ -41,16 +32,16 @@ export default function HeaderProfileIcon() {
         </Tooltip>
       </Box>
       <Menu
-        sx={{ mt: "45px" }}
+        sx={{ mt: '45px' }}
         anchorEl={anchorElUser}
         keepMounted
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
@@ -58,7 +49,7 @@ export default function HeaderProfileIcon() {
         slotProps={{
           paper: {
             sx: {
-              "& .MuiAvatar-root": {
+              '& .MuiAvatar-root': {
                 mr: 1,
                 height: 35,
               },
@@ -66,10 +57,10 @@ export default function HeaderProfileIcon() {
           },
         }}
       >
-        <Link to={user ? "/profile" : "/signin"}>
+        <Link to={user ? '/profile' : '/signin'}>
           <MenuItem onClick={handleCloseUserMenu}>
-            <Avatar sx={{ width: "35px", height: "35px" }} />
-            <Typography color="text">{user ? "Profile" : "Sign in"}</Typography>
+            <Avatar sx={{ width: '35px', height: '35px' }} />
+            <Typography color="text">{user ? 'Profile' : 'Sign in'}</Typography>
           </MenuItem>
         </Link>
         {user && (
@@ -77,20 +68,14 @@ export default function HeaderProfileIcon() {
             <Divider />
             <Link to="/myRecipes">
               <MenuItem onClick={handleCloseUserMenu}>
-                <RestaurantMenuOutlined
-                  sx={{ width: "35px", height: "35px", mr: 1 }}
-                  color="secondary"
-                />
+                <RestaurantMenuOutlined sx={{ width: '35px', height: '35px', mr: 1 }} color="secondary" />
                 <Typography color="text">My Recipes</Typography>
               </MenuItem>
             </Link>
             <Divider />
             <MenuItem onClick={handleLogoutClick}>
               <ListItemIcon>
-                <Logout
-                  sx={{ width: "35px", height: "35px", mr: 1 }}
-                  color="secondary"
-                />
+                <Logout sx={{ width: '35px', height: '35px', mr: 1 }} color="secondary" />
               </ListItemIcon>
               <Typography color="text">Logout</Typography>
             </MenuItem>

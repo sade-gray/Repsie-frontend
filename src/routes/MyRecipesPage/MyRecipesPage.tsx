@@ -1,86 +1,95 @@
-import SavedRecipesContainer from "../../components/SavedRecipesContainer";
-import { useEffect, useState } from "react";
-import CreateRecipeButton from "./Components/CreateRecipeButton";
-import { Button, Chip } from "@mui/material";
-import useAuth from "@context/AuthProvider";
-import { Link, Navigate } from "react-router-dom";
-import { db, recipesCollectionRef } from "../../firebase.ts";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import SavedRecipesContainer from '../../components/SavedRecipesContainer';
+import { useEffect, useState } from 'react';
+import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import useAuth from '@context/AuthProvider';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { getCreatedRecipes } from '@api/recipe.ts';
+import { RecipeCardData } from '../../types/recipeTypes';
+import { contentStorage } from '../../firebase.ts';
+import { getDownloadURL, ref } from 'firebase/storage';
+import toastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
+import SkillRating from '@component/Ratings/SkillRating';
+import TimeRating from '@component/Ratings/TimeRating';
+import { AddRounded } from '@mui/icons-material';
 
 export function MyRecipesPage() {
-  const [createdRecipes, setCreatedRecipes]: any = useState([]);
+  // @ts-ignore
+  const [createdRecipes, setCreatedRecipes] = useState<RecipeCardData[]>([]);
   const { user } = useAuth();
 
+  // Re fetch the recipes created by the user whenever the user changes
   useEffect(() => {
-    // Only fetch the created recipes if user is logged in
     if (!user) return;
-    // Get the user's created Recipes
-    const createdRecipesRef = collection(
-      db,
-      "users",
-      user.uid,
-      "createdRecipes"
-    );
-    getDocs(createdRecipesRef)
-      .then(async (createdRecipesSnap) => {
-        if (createdRecipesSnap.empty) {
-          return;
-        }
-        // For each document in the result
-        createdRecipesSnap.forEach((createdRecipeDocRef) => {
-          // Create a document reference from the doc
-          const recipeRef = doc(
-            recipesCollectionRef,
-            createdRecipeDocRef.data().recipeRef
-          );
-          // Fetch the doc and save the data to memory
-          getDoc(recipeRef)
-            .then((doc) => {
-              setCreatedRecipes((prevCreatedRecipes: any[]) => [
-                ...prevCreatedRecipes,
-                {
-                  id: doc.id,
-                  ...doc.data(),
-                },
-              ]);
-            })
-            .catch((e) => console.log(e));
-        });
-      })
-      .catch((e) => console.log(e));
-  }, []); // Get user's created recipes once mounted
 
-  const createdRecipesComponents = createdRecipes.map((recipe: any) => {
-    return (
-      <Link
-        to={`/recipe/${recipe.id}`}
-        key={recipe.id}
-        className="my--recipe--item"
-      >
-        <Button>
-          <div style={{ backgroundImage: `url(${recipe.imageUrl}` }}>
-            <Chip label={recipe.title} variant="filled" color="secondary" />
-          </div>
-        </Button>
-      </Link>
-    );
-  });
+    getCreatedRecipes(user.uid).then(createdRecipes => setCreatedRecipes(createdRecipes));
+  }, [user]);
+
   // Redirect to home if user is not logged in
   if (!user) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={'/'} />;
   }
   return (
-    <div className={"main--container"}>
-      <section className={"saved--recipe--section"}>
-        <SavedRecipesContainer />
-      </section>
-      <section className={"my--recipes--section"}>
-        <h2>My Recipes</h2>
-        <div className={"my--recipes--container"}>
-          {createdRecipesComponents}
-          <CreateRecipeButton />
-        </div>
+    <div className={'main--container'}>
+      <SavedRecipesContainer />
+      <section className={'my--recipes--section'}>
+        <Typography variant={'h4'}>My Recipes</Typography>
+        <Grid container justifyContent={'flex-start'} spacing={5}>
+          {createdRecipes?.map(recipe => (
+            <Grid item key={recipe.id}>
+              <RecipeCard {...recipe} />
+            </Grid>
+          ))}
+          <Grid item>
+            <CreateRecipeButton />
+          </Grid>
+        </Grid>
       </section>
     </div>
+  );
+}
+
+function RecipeCard(props: RecipeCardData) {
+  const [image, setImage] = useState('');
+  const navigate = useNavigate();
+
+  // Get the recipe image on mount
+  useEffect(() => {
+    const imageRef = ref(contentStorage, `recipes/${props.id}/index.png`);
+    getDownloadURL(imageRef)
+      .then(url => setImage(url))
+      .catch(() => setImage(toastie));
+  }, []);
+
+  return (
+    <Card sx={{ width: 350, borderRadius: 3 }} variant={'outlined'}>
+      <CardActionArea onClick={() => navigate(`/recipe/${props.id}`)}>
+        <CardMedia component={'img'} height={150} image={image} />
+        <CardContent>
+          <Typography gutterBottom variant={'h5'}>
+            {props.title}
+          </Typography>
+          <Grid container justifyContent={'space-between'}>
+            <SkillRating value={props.skillRating} size={'small'} readOnly />
+            <TimeRating value={props.timeRating} size={'small'} readOnly />
+          </Grid>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
+
+function CreateRecipeButton() {
+  const navigate = useNavigate();
+  return (
+    <Card sx={{ width: 350, height: 245, borderRadius: 3 }} variant={'outlined'}>
+      <CardActionArea sx={{ height: '100%' }} onClick={() => navigate('/createrecipe')}>
+        <Grid container alignItems={'center'} justifyContent={'center'} direction={'column'}>
+          <AddRounded sx={{ width: '50%', height: '50%' }} color={'secondary'} />
+          <Typography variant={'h4'} color={'secondary'}>
+            Create
+          </Typography>
+        </Grid>
+      </CardActionArea>
+    </Card>
   );
 }
