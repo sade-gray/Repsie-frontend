@@ -142,7 +142,13 @@ export async function createRecipe(userId: string, title: string, recipe: string
 export async function getCreatedRecipes(userId: string) {
   return fetch(`${apiUrl}/recipes/user?user=${userId}`)
     .then(response => response.json())
-    .then(createRecipes => createRecipes)
+    .then(data => {
+      if (data.error) {
+        console.log('Error getting created recipes:', data.error);
+        return [];
+      }
+      return data;
+    })
     .catch(err => {
       console.log('Error: ', err);
       return [];
