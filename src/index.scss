@@ -75,57 +75,6 @@ body {
   flex: 1;
 }
 
-// The individual recipe container
-.feed--recipe--container {
-  //border: 1px solid gray;
-  border-radius: 1rem;
-  padding: 5px 20px;
-  margin-bottom: 20px;
-
-  @media only screen and (max-width: $breakpoint-tablet) {
-    padding: 25px 10px;
-  }
-}
-
-.feed--recipe--title--container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.recipe--title {
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
-}
-
-.feed--recipe--image--container {
-  border-radius: 1rem;
-  display: flex;
-  justify-content: center;
-  margin: 10px;
-
-  img {
-    max-width: 100%;
-    max-height: 30rem;
-    border-radius: 1rem;
-  }
-}
-
-.feed--recipe--action--row {
-  display: flex;
-  justify-content: space-between;
-}
-
-// myRecipes Page
-.my--recipes--section {
-  flex: 4;
-  padding: 0 1rem;
-
-  @media only screen and (max-width: $breakpoint-tablet) {
-    padding: 0;
-  }
-}
-
 a {
   text-decoration: none;
   color: inherit;
@@ -159,9 +108,12 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 50%;
+  margin: auto;
 
   @media only screen and (max-width: $breakpoint-tablet) {
     margin: 0 2em;
+    max-width: 100%;
   }
 }
 
@@ -203,16 +155,4 @@ a {
   object-fit: cover;
   min-inline-size: 100%;
   max-width: 90vw;
-}
-
-.publisher--container {
-  display: flex;
-  align-items: center;
-}
-
-.publisher--icon {
-  border-radius: 50%;
-  width: 40px;
-  margin: 0 10px;
-  aspect-ratio: 1;
 }

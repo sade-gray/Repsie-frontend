@@ -1,3 +1,5 @@
+import { Avatar, Grid, Typography } from '@mui/material';
+
 interface PublisherProps {
   // ? is used to denote an optional prop
   outline?: 'bold';
@@ -8,15 +10,7 @@ interface PublisherProps {
 }
 
 export function PublisherContainer(props: PublisherProps) {
-  const imageBorderStyle = () => {
-    switch (props.outline) {
-      case 'bold':
-        return '2px solid black';
-      default:
-        return 'initial';
-    }
-  };
-  const imageSize = () => {
+  const size = () => {
     switch (props.size) {
       case 'x-small':
         return '25px';
@@ -44,22 +38,11 @@ export function PublisherContainer(props: PublisherProps) {
   };
 
   return (
-    <div className={'publisher--container'} style={{ fontSize: props.size }}>
-      <img
-        src={props.publisherImageUrl}
-        alt="Wex"
-        className={'publisher--icon'}
-        style={{ border: imageBorderStyle(), width: imageSize() }}
-      />
-      <span
-        className={'publisher--name'}
-        style={{
-          color: props.color,
-          fontSize: fontSize(),
-        }}
-      >
+    <Grid container alignItems={'center'} fontSize={props.size} my={0.5}>
+      <Avatar src={props.publisherImageUrl} alt="Wex" sx={{ width: size(), height: size(), mx: 1 }} />
+      <Typography variant="body2" color={'primary.dark'} fontSize={fontSize()}>
         {props.publisherName}
-      </span>
-    </div>
+      </Typography>
+    </Grid>
   );
 }

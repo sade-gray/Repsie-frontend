@@ -2,7 +2,6 @@ import FeedRecipeCard from '../../components/FeedRecipeCard.tsx';
 import SavedRecipesContainer from '../../components/SavedRecipesContainer.tsx';
 import { Divider, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { RecipeCardData } from '../../types/recipeTypes';
 import useUserData from '@context/UserDataProvider';
 
@@ -64,16 +63,8 @@ export default function Home() {
   }, []);
 
   // Turn the recipe data into components for rendering
-  const recipeComponents = recipeData?.map((recipeInfo, idx) => {
-    return (
-      <article key={idx}>
-        <Link to={`/recipe/${recipeInfo.id}`}>
-          {/*TODO: Remove the hardcoded publisher and images */}
-          <FeedRecipeCard {...recipeInfo} />
-        </Link>
-        <Divider />
-      </article>
-    );
+  const recipeComponents = recipeData?.map((recipe, idx) => {
+    return <FeedRecipeCard {...recipe} key={idx} />;
   });
 
   return (

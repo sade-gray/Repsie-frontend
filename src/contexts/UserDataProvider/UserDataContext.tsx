@@ -10,6 +10,7 @@ import { getSavedRecipes } from '@api/recipe.ts';
 import useAuth from '@context/AuthProvider';
 import { UserData } from './userDataTypes';
 import { RecipeCardData } from '../../types/recipeTypes';
+import { getUserLikes } from '@api/likes';
 
 export const UserDataContext = createContext({} as UserData);
 
@@ -24,6 +25,8 @@ export const UserDataContext = createContext({} as UserData);
 export function UserDataProvider({ children }: { children: ReactNode }) {
   // This is an array of the ids of the saved recipes, as strings
   const [userSavedRecipes, setUserSavedRecipes] = useState<RecipeCardData[]>([]);
+  // TODO: Change type to RecipeCardData[] if the api changes it to that
+  const [likedRecipes, setLikedRecipes] = useState<string[]>([]);
   const { user } = useAuth();
 
   // Get user's saved recipes data, whenever the user changes (switch account, sign in, sign out etc...)
@@ -34,12 +37,17 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
     getSavedRecipes(user.uid).then(savedRecipes => {
       setUserSavedRecipes(savedRecipes);
     });
+    getUserLikes(user.uid).then(likedRecipes => {
+      setLikedRecipes(likedRecipes);
+    });
   }, [user]);
 
   // The values to return as part of the component API
   const value: UserData = {
     userSavedRecipes,
     setUserSavedRecipes,
+    likedRecipes,
+    setLikedRecipes,
   };
 
   return <UserDataContext.Provider value={value}>{children}</UserDataContext.Provider>;
