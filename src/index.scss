@@ -75,16 +75,6 @@ body {
   flex: 1;
 }
 
-// myRecipes Page
-.my--recipes--section {
-  flex: 4;
-  padding: 0 1rem;
-
-  @media only screen and (max-width: $breakpoint-tablet) {
-    padding: 0;
-  }
-}
-
 a {
   text-decoration: none;
   color: inherit;
