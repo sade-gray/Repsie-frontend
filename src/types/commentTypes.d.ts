@@ -1,14 +1,14 @@
 export interface Comment {
   id: number;
-  username: string;
+  userId: string;
   commentBody: string;
-  likeCount: number;
-  replies: CommentReply[];
+  // likeCount: number;
+  // replies: CommentReply[];
 }
 
-export interface CommentReply {
-  id: number;
-  username: string;
-  message: string;
-  likeCount: number;
-}
+// export interface CommentReply {
+//   id: number;
+//   username: string;
+//   message: string;
+//   likeCount: number;
+// }

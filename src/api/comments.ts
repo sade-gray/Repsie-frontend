@@ -28,3 +28,35 @@ export async function getComments(id: string) {
       return [];
     });
 }
+
+/**
+ * Adds a comment to a post
+ * @param id The id of the recipe.
+ * @param commentBody The body of the comment.
+ * @param userId The id of the user making the comment.
+ */
+export async function postComment(id: string, commentBody: string, userId: string) {
+  return fetch(`${apiUrl}/comments?post=${id}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      commentBody: commentBody,
+      userId: userId,
+    }),
+  })
+    .then(response => response.json())
+    .then(result => {
+      if (result.message && result.message.startsWith('Something went wrong')) {
+        console.error('Error adding comment');
+        return false;
+      }
+      return true;
+    })
+    .catch(err => {
+      console.error('Error adding comment: ', err);
+      return false;
+    });
+}
