@@ -12,6 +12,8 @@ import SkillRating from '@component/Ratings/SkillRating';
 import TimeRating from '@component/Ratings/TimeRating';
 import { AddRounded } from '@mui/icons-material';
 import { theme } from '../../theme.ts';
+import Likes from '@component/Likes/Likes.tsx';
+import { getPostLikes } from '@api/likes.ts';
 
 export function MyRecipesPage() {
   // @ts-ignore
@@ -52,6 +54,7 @@ export function MyRecipesPage() {
 
 function RecipeCard(props: RecipeCardData) {
   const [image, setImage] = useState('');
+  const [likes, setLikes] = useState(0);
   const navigate = useNavigate();
 
   // Get the recipe image on mount
@@ -60,12 +63,17 @@ function RecipeCard(props: RecipeCardData) {
     getDownloadURL(imageRef)
       .then(url => setImage(url))
       .catch(() => setImage(toastie));
+
+    getPostLikes(props.id).then(likes => setLikes(likes));
   }, []);
 
   return (
     <Card sx={{ width: 350, borderRadius: 3 }} variant={'outlined'}>
-      <CardActionArea onClick={() => navigate(`/recipe/${props.id}`)}>
+      <CardActionArea sx={{ position: 'relative' }} onClick={() => navigate(`/recipe/${props.id}`)}>
         <CardMedia component={'img'} height={150} image={image} />
+        <Box position={'absolute'} top={125} bgcolor={'white'} borderRadius={2} right={0}>
+          <Likes totalLikes={likes} readOnly />
+        </Box>
         <CardContent>
           <Typography gutterBottom variant={'h5'}>
             {props.title}
