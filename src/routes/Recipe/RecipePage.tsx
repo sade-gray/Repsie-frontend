@@ -45,7 +45,7 @@ export function RecipePage() {
         console.error('Error getting image');
         setCoverImageUrl(toastie);
       });
-  }, [recipe]);
+  }, [recipeId]);
 
   return (
     <main>
