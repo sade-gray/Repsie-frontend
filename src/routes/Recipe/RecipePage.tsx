@@ -2,7 +2,7 @@ import { PublisherContainer } from './components/PublisherContainer.tsx';
 import Wex from '../../assets/wex.png';
 import toastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
 import { getDownloadURL } from 'firebase/storage';
-import { Box, Divider, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Box, Container, Divider, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { ref } from 'firebase/storage';
@@ -80,46 +80,43 @@ export function RecipePage() {
   };
 
   return (
-    <main>
+    <Container maxWidth={'md'}>
       {recipe ? (
-        <div className="recipe--page--container">
-          <div className="recipe--container">
-            <Typography variant={isNotTablet ? 'h4' : 'h5'}>{recipe?.title || 'Loading...'}</Typography>
-            {/* TODO: Maybe add the share button on the top right? */}
-            <div className="recipe--image--container">
-              {coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}
-            </div>
-            <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />
-            <Divider sx={{ my: 1 }} />
-            <Likes totalLikes={likes} liked={likedByUser} onClick={handleLikeClick} />
-            <section className="recipe--rating--container">
-              <div>
-                <Typography color="text">Time rating</Typography>
-                <TimeRating value={recipe?.timeRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
-              </div>
-              <div>
-                <Typography color="text" align="right">
-                  Skill rating
-                </Typography>
-                <SkillRating value={recipe?.skillRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
-              </div>
-            </section>
-
-            {/* Recipe Content */}
-            <section className="recipe--content--container">
-              <Editor readOnly recipeData={JSON.parse(recipe.recipe || '')} />
-            </section>
-
-            {/* Comments Section */}
-            <Box mb={10}>
-              <CommentSection recipeId={recipeId} />
-            </Box>
+        <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} p={2}>
+          <Typography variant={isNotTablet ? 'h4' : 'h5'}>{recipe?.title || 'Loading...'}</Typography>
+          <div className="recipe--image--container">
+            {coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}
           </div>
-        </div>
+          <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />
+          <Divider sx={{ my: 1 }} />
+          <Likes totalLikes={likes} liked={likedByUser} onClick={handleLikeClick} />
+          <section className="recipe--rating--container">
+            <div>
+              <Typography color="text">Time rating</Typography>
+              <TimeRating value={recipe?.timeRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
+            </div>
+            <div>
+              <Typography color="text" align="right">
+                Skill rating
+              </Typography>
+              <SkillRating value={recipe?.skillRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
+            </div>
+          </section>
+
+          {/* Recipe Content */}
+          <section className="recipe--content--container">
+            <Editor readOnly recipeData={JSON.parse(recipe.recipe || '')} />
+          </section>
+
+          {/* Comments Section */}
+          <Box mb={10}>
+            <CommentSection recipeId={recipeId} />
+          </Box>
+        </Box>
       ) : (
         <PageSkeleton />
       )}
-    </main>
+    </Container>
   );
 }
 

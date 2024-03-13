@@ -2,8 +2,6 @@ $theme1: #694fd0ff;
 $background: #252a38;
 $transparenttheme1: rgba(85, 69, 146, 55%);
 
-// TODO: Add breakpoint variables
-// Example
 $breakpoint-tablet: 768px;
 
 html,
@@ -103,20 +101,6 @@ a {
   font-family: 'Inter', sans-serif;
 }
 
-// This centers the recipe content
-.recipe--page--container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 50%;
-  margin: auto;
-
-  @media only screen and (max-width: $breakpoint-tablet) {
-    margin: 0 2em;
-    max-width: 100%;
-  }
-}
-
 .recipe--title--container {
   display: flex;
   // Puts the recipe title on the left
@@ -145,14 +129,9 @@ a {
   flex-wrap: wrap;
 }
 
-.recipe--container {
-  display: flex;
-  flex-direction: column;
-}
-
 .recipe--image {
   max-height: 300px;
   object-fit: cover;
   min-inline-size: 100%;
-  max-width: 90vw;
+  max-width: 85vw;
 }
