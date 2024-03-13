@@ -15,6 +15,10 @@ export async function getSavedRecipes(userId: string) {
   return fetch(`${apiUrl}/saved?user=${userId}`)
     .then(res => res.json())
     .then(savedRecipes => {
+      if (savedRecipes.error) {
+        console.error('Error getting saved Recipes:', savedRecipes.error);
+        return [];
+      }
       return savedRecipes as RecipeCardData[];
     });
 }
