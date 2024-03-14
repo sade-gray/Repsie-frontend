@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import Editor from './components/Editor';
 import './styles.scss';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Check, CheckCircle, Create, FileUpload } from '@mui/icons-material';
 import useAuth from '@context/AuthProvider';
 import { Descendant } from 'slate';
@@ -25,6 +25,7 @@ import SkillRating from '@component/Ratings/SkillRating';
 import { createRecipe } from '@api/recipe.ts';
 import { contentStorage } from '../../firebase.ts';
 import { ref, uploadBytes } from 'firebase/storage';
+import { useNavigate } from 'react-router-dom';
 
 // The initial value for the recipe
 const initialValue = [{ type: 'paragraph', children: [{ text: 'This is your journey to creating a delicious recipe' }] }];
@@ -34,11 +35,12 @@ export function CreateRecipePage() {
   const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
   const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
   const [title, setTitle] = useState<string>('');
-  const [coverImage, setCoverImage] = useState();
+  const [coverImage, setCoverImage] = useState<File | null>();
   const [coverPreview, setCoverPreview] = useState<string | undefined>();
   // Used for tracking the uploading progress
   const [recipeUploadStep, setRecipeUploadStep] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const recipeId = useRef('');
 
   const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
   // Get the user from the context
@@ -51,12 +53,11 @@ export function CreateRecipePage() {
     }
     // Start showing the progress display
     setIsUploading(true);
-    let recipeId = '';
 
     // Step 1: Upload the data
     await createRecipe(user.uid, title, JSON.stringify(recipeData), skillRatingValue, timeRatingValue).then(res => {
       if (res.id) {
-        recipeId = res.id;
+        recipeId.current = res.id;
         setRecipeUploadStep(1);
       }
     });
@@ -77,6 +78,12 @@ export function CreateRecipePage() {
 
     // Success: We can tell the user that the recipe is uploaded
     setRecipeUploadStep(3);
+  };
+
+  // Handle the user uploading an image from their device.
+  const handleImageUpload = (e: any) => {
+    if (!e.target.files) return;
+    setCoverImage(e.target.files[0]);
   };
 
   // Update the image preview on every image upload
@@ -127,7 +134,7 @@ export function CreateRecipePage() {
           >
             <Button variant="contained" color="secondary" component="label" startIcon={<FileUpload />}>
               Select Image
-              <input hidden accept="image/png, image/jpeg" type="file" onChange={e => setCoverImage(e.target.files[0])} />
+              <input hidden accept="image/png, image/jpeg" type="file" onChange={handleImageUpload} />
             </Button>
             {coverPreview && (
               <img src={coverPreview} alt="Uploaded Image" height="auto" width="300" style={{ marginTop: '1rem', minInlineSize: '100%' }} />
@@ -155,17 +162,18 @@ export function CreateRecipePage() {
           </div>
         </Box>
       </form>
-      {isUploading && <RecipeUploadProgressDisplay step={recipeUploadStep} />}
+      {isUploading && <RecipeUploadProgressDisplay step={recipeUploadStep} recipeId={recipeId.current} />}
     </div>
   );
 }
 
 const steps = ['Uploading your recipe content', 'Uploading your cover image', 'Success!'];
 
-function RecipeUploadProgressDisplay(props) {
+function RecipeUploadProgressDisplay(props: any) {
   const [open] = useState(true);
   const [step, setStep] = useState(props.step);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setStep(props.step);
@@ -186,9 +194,14 @@ function RecipeUploadProgressDisplay(props) {
             </Step>
           ))}
         </Stepper>
-        <Grid container justifyContent={'center'} height={400} alignContent={'center'}>
+        <Grid container justifyContent={'center'} height={400} alignContent={'center'} direction={'column'} gap={3}>
           {step === 3 ? (
-            <Typography>Yippie</Typography>
+            <>
+              <Typography>Success! Your recipe has been created!</Typography>
+              <Button variant={'contained'} color={'secondary'} onClick={() => navigate(`/recipe/${props.recipeId}`)}>
+                Check it out!
+              </Button>
+            </>
           ) : loading ? (
             <CircularProgress color={'secondary'} />
           ) : (
