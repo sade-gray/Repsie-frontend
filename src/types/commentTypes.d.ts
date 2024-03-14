@@ -1,5 +1,5 @@
 export interface Comment {
-  id: number;
+  id: string;
   userId: string;
   commentBody: string;
   // likeCount: number;

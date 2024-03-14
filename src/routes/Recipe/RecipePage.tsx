@@ -33,7 +33,6 @@ export function RecipePage() {
   // Check if the user likes this recipe
   const likedByUser = useMemo(() => {
     if (!user || !recipeId) return false;
-    console.log('checking if user likes this');
     return likedRecipes.includes(recipeId);
     // TODO: uncomment this should the api return recipe card data instead of just ids
     // return likedRecipes?.find(recipe => recipe.id === recipeId) !== undefined;
