@@ -1,12 +1,12 @@
-import React from 'react'
+
 import { useParams } from 'react-router-dom'
 import './UserProfile.css'
 
-import SingleBanner from '../../components/Banners/SingleBanner';
-import UserSidebar from '../../components/UserProfile/UserSidebar';
-import AccountSettings from '../../components/UserProfile/AccountSettings';
-import ChangePassword from '../../components/UserProfile/ChangePassword';
-import LegalNotice from '../../components/UserProfile/LegalNotice';
+import SingleBanner from './Components/Banners/SingleBanner';
+import UserSidebar from './Components/UserProfile/UserSidebar';
+import AccountSettings from './Components/UserProfile/AccountSettings';
+import ChangePassword from './Components/UserProfile/ChangePassword';
+import LegalNotice from './Components/UserProfile/LegalNotice';
 
 const UserProfile = () => {
 
@@ -15,7 +15,7 @@ const UserProfile = () => {
 
     // alert(activepage)
   return (
-    <div className='userprofile'>
+    <div className='UserProfile'>
      
         <SingleBanner 
         heading={`My Profile`}
@@ -24,7 +24,7 @@ const UserProfile = () => {
         {/* UserProfile , showing {activepage}
          */}
 
-         <div className='userprofilein'>
+        
             <div className='left'>
               <UserSidebar activepage={activepage ?? ''}/>
             </div>
@@ -34,7 +34,7 @@ const UserProfile = () => {
               {activepage === 'legalnotice' && <LegalNotice/>}
             </div>
             </div>
-    </div>
+ 
     
   )
 }
