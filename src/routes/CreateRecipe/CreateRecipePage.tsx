@@ -63,7 +63,7 @@ export function CreateRecipePage() {
     });
 
     // Step 2: Upload the image.
-    const recipeImageRef = ref(contentStorage, `recipes/${recipeId}/index.png`);
+    const recipeImageRef = ref(contentStorage, `recipes/${recipeId.current}/index.png`);
     // Upload image if there was an image provided
     if (coverImage) {
       await uploadBytes(recipeImageRef, coverImage)
@@ -81,7 +81,7 @@ export function CreateRecipePage() {
   };
 
   // Handle the user uploading an image from their device.
-  const handleImageUpload = (e: any) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     setCoverImage(e.target.files[0]);
   };
