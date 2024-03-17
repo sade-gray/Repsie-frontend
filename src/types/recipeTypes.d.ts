@@ -6,4 +6,5 @@ export interface RecipeCardData {
   skillRating: number;
   timeRating: number;
   userId: string;
+  removeRecipe: (id: string) => void;
 }

@@ -101,34 +101,6 @@ a {
   font-family: 'Inter', sans-serif;
 }
 
-.recipe--title--container {
-  display: flex;
-  // Puts the recipe title on the left
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.recipe--image--container {
-  margin-bottom: 1rem;
-}
-
-.recipe--publisher--container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 2rem;
-}
-
-.recipe--rating--container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
-
-.recipe--content--container {
-  // For mobile
-  flex-wrap: wrap;
-}
-
 .recipe--image {
   max-height: 300px;
   object-fit: cover;

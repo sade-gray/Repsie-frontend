@@ -154,3 +154,53 @@ export async function getCreatedRecipes(userId: string) {
       return [];
     });
 }
+
+/**
+ * Deletes a recipe.
+ * @param recipeId - The ID of the recipe to delete.
+ * @param userId - The ID of the user who created the recipe.
+ */
+export async function deleteRecipe(recipeId: string, userId: string) {
+  return fetch(`${apiUrl}/recipes?post=${recipeId}&user=${userId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      recipeId,
+      userId,
+    }),
+  })
+    .then(res => res.json())
+    .then(response => response)
+    .catch(err => console.error(err));
+}
+
+/**
+ * Edits a recipe.
+ * @param title - The new title of the recipe.
+ * @param recipe - The new recipe content.
+ * @param timeRating - The new time rating of the recipe.
+ * @param skillRating - The new skill rating of the recipe.
+ * @param recipeId - The ID of the recipe to edit.
+ */
+export async function editRecipe(title: string, recipe: string, timeRating: number, skillRating: number, recipeId: string) {
+  return fetch(`${apiUrl}/recipes?post=${recipeId}`, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: title,
+      id: recipeId,
+      recipe: recipe,
+      timeRating: timeRating,
+      skillRating: skillRating,
+    }),
+  })
+    .then(res => res.json())
+    .then(response => response)
+    .catch(err => console.error(err));
+}
