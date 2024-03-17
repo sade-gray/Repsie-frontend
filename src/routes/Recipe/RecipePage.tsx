@@ -83,29 +83,31 @@ export function RecipePage() {
       {recipe ? (
         <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} p={2}>
           <Typography variant={isNotTablet ? 'h4' : 'h5'}>{recipe?.title || 'Loading...'}</Typography>
-          <div className="recipe--image--container">
-            {coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}
-          </div>
-          <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />
+          <Box sx={{ mb: '1rem' }}>{coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}</Box>
+          <Box mb={1}>
+            <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />
+          </Box>
           <Divider sx={{ my: 1 }} />
           <Likes totalLikes={likes} liked={likedByUser} onClick={handleLikeClick} />
-          <section className="recipe--rating--container">
-            <div>
+
+          {/* Ratings */}
+          <Box display={'flex'} justifyContent={'space-between'} mb={4}>
+            <Box>
               <Typography color="text">Time rating</Typography>
               <TimeRating value={recipe?.timeRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
-            </div>
-            <div>
+            </Box>
+            <Box>
               <Typography color="text" align="right">
                 Skill rating
               </Typography>
               <SkillRating value={recipe?.skillRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
-            </div>
-          </section>
+            </Box>
+          </Box>
 
           {/* Recipe Content */}
-          <section className="recipe--content--container">
+          <Box flexWrap={'wrap'}>
             <Editor readOnly recipeData={JSON.parse(recipe.recipe || '')} />
-          </section>
+          </Box>
 
           {/* Comments Section */}
           <Box mb={10}>

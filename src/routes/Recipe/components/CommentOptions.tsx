@@ -44,7 +44,7 @@ export default function CommentOptions(props: any) {
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleClick}
-        sx={{ p: 0.2 }}
+        sx={{ borderRadius: 4, gap: 0.5 }}
       >
         <MoreVertIcon />
       </IconButton>
