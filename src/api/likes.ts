@@ -1,12 +1,11 @@
 // import { RecipeCardData } from 'types/recipeTypes';
-
-const apiUrl = 'https://us-central1-repsie.cloudfunctions.net/api';
+import { API_URL } from '@api/index.ts';
 
 /**
  * Gets the number of likes for a post
  */
 export async function getPostLikes(id: string) {
-  return fetch(`${apiUrl}/rating/post?post=${id}`)
+  return fetch(`${API_URL}/rating/post?post=${id}`)
     .then(res => res.json())
     .then(data => {
       if (data.error) {
@@ -23,7 +22,7 @@ export async function getPostLikes(id: string) {
  * @returns an array of ids?
  */
 export async function getUserLikes(id: string) {
-  return fetch(`${apiUrl}/rating/user?user=${id}`)
+  return fetch(`${API_URL}/rating/user?user=${id}`)
     .then(res => res.json())
     .then(data => {
       if (data.error) {
@@ -41,7 +40,7 @@ export async function getUserLikes(id: string) {
  * @returns whether the post was succesfully liked
  */
 export async function likeRecipe(recipeId: string, uid: string) {
-  return fetch(`${apiUrl}/rating?user=${uid}&post=${recipeId}`, {
+  return fetch(`${API_URL}/rating?user=${uid}&post=${recipeId}`, {
     method: 'POST',
   })
     .then(res => res.json())
@@ -61,7 +60,7 @@ export async function likeRecipe(recipeId: string, uid: string) {
  * @returns whether the post was succesfully liked
  */
 export async function unlikeRecipe(recipeId: string, uid: string) {
-  return fetch(`${apiUrl}/rating?user=${uid}&post=${recipeId}`, {
+  return fetch(`${API_URL}/rating?user=${uid}&post=${recipeId}`, {
     method: 'DELETE',
   })
     .then(res => res.json())

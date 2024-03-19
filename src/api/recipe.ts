@@ -12,7 +12,16 @@ const apiUrl = 'https://us-central1-repsie.cloudfunctions.net/api';
  * @param userId
  */
 export async function getSavedRecipes(userId: string) {
-  return fetch(`${apiUrl}/saved?user=${userId}`)
+  const IDToken = localStorage.getItem('id-token');
+  if (!IDToken) {
+    console.log('JWT Token not found. Is the user signed in?');
+    return [];
+  }
+  return fetch(`${apiUrl}/saved?user=${userId}`, {
+    headers: {
+      Authorization: `Bearer ${IDToken}`,
+    },
+  })
     .then(res => res.json())
     .then(savedRecipes => {
       if (savedRecipes.error) {
