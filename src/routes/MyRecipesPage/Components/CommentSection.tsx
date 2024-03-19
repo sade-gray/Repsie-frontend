@@ -1,8 +1,8 @@
-import { Comment /* CommentReply */ } from '../../../types/commentTypes';
+import { Comment } from '../../../types/commentTypes';
 import pic from '../../../assets/dummyPhotos/monke.png';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Input, Stack, Typography, useMediaQuery } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { ChatBubbleOutline, KeyboardArrowDown } from '@mui/icons-material';
 import { getComments, postComment } from '@api/comments.ts';
 import useAuth from '@context/AuthProvider';
@@ -107,6 +107,7 @@ function CommentComponent(props: Comment & any) {
   // TODO: Search message for any @s of other people and turn them into links
   const [isHovering, setIsHovering] = useState(false);
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
+  const { user } = useAuth();
 
   return (
     <Box display={'flex'} ml={5} gap={2} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
@@ -114,7 +115,7 @@ function CommentComponent(props: Comment & any) {
       {/* Comment body */}
       <Container sx={{ pl: 1, ml: 0 }}>
         <Typography color={'text'} variant={'body1'} overflow={'clip'} maxWidth={'60vw'}>
-          {props.userId}
+          {props.userId === user?.uid ? 'You' : props.userId}
         </Typography>
         <Typography color={'text'} variant={'body1'}>
           {props.commentBody}
