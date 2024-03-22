@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { auth } from '../../firebase.ts';
-import { User as FirebaseUser } from 'firebase/auth';
+import { User as FirebaseUser, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
 import useSnackBar from '@context/SnackBarProvider';
 import { useNavigate } from 'react-router-dom';
@@ -78,6 +78,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // TODO: Add update email and password functions
   // TODO: Add Google Auth.
 
+  /**
+   * Google Auth provider for signing in or up
+   */
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        const user = result.user;
+        console.log(user);
+      })
+      .catch(error => {
+        // error could happen when the user cancels the sign in. We do not need to worry about that.
+        console.log(error);
+      });
+  };
+
   // Adds an event listener to the user's authentication status
   // E.g. Makes the user object null when signed out and sets or removes the jwt token
   useEffect(() => {
@@ -103,6 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     emailSignUp,
     emailSignIn,
     signOut,
+    signInWithGoogle,
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
