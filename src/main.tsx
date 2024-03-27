@@ -53,7 +53,6 @@ const router = createBrowserRouter([
       {
         path: "/UserProfile/:activepage",
         async lazy() {
-          
           return { Component: UserProfile };
         },
       },
