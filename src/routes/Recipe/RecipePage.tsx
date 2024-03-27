@@ -2,9 +2,9 @@ import { PublisherContainer } from './components/PublisherContainer.tsx';
 import Wex from '../../assets/wex.png';
 import toastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
 import { getDownloadURL } from 'firebase/storage';
-import { Box, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Box, Container, Divider, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ref } from 'firebase/storage';
 import { contentStorage } from '../../firebase.ts';
 import Editor from '../CreateRecipe/components/Editor.tsx';
@@ -14,14 +14,29 @@ import TimeRating from '@component/Ratings/TimeRating/TimeRating.tsx';
 import CommentSection from '../MyRecipesPage/Components/CommentSection.tsx';
 import useSnackBar from '@context/SnackBarProvider';
 import { fetchRecipe } from '@api/recipe.ts';
+import Likes from '@component/Likes';
+import useUserData from '@context/UserDataProvider/useUserData.ts';
+import useAuth from '@context/AuthProvider/useAuth.ts';
+import { getPostLikes, likeRecipe, unlikeRecipe } from '@api/likes.ts';
 
 export function RecipePage() {
   const recipeId = useParams()['recipeId'] || '';
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
   const [recipe, setRecipe] = useState<any>();
+  const [likes, setLikes] = useState(0);
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const navigate = useNavigate();
   const { addSnack } = useSnackBar();
+  const { user } = useAuth();
+  const { likedRecipes, setLikedRecipes } = useUserData();
+
+  // Check if the user likes this recipe
+  const likedByUser = useMemo(() => {
+    if (!user || !recipeId) return false;
+    return likedRecipes.includes(recipeId);
+    // TODO: uncomment this should the api return recipe card data instead of just ids
+    // return likedRecipes?.find(recipe => recipe.id === recipeId) !== undefined;
+  }, [recipeId, user, likedRecipes, likes]);
 
   // Fetch the recipe content on load up and whenever the recipeId changes (for mobile)
   useEffect(() => {
@@ -33,10 +48,8 @@ export function RecipePage() {
         setRecipe(recipe);
       }
     });
-  }, [recipeId]);
 
-  // Update the cover image whenever the recipe changes (e.g. page refresh or recipe edit)
-  useEffect(() => {
+    // Update the cover image whenever the recipe changes (e.g. page refresh or recipe edit)
     const imageRef = ref(contentStorage, `recipes/${recipeId}/index.png`);
     getDownloadURL(imageRef)
       .then(url => setCoverImageUrl(url))
@@ -45,49 +58,66 @@ export function RecipePage() {
         console.error('Error getting image');
         setCoverImageUrl(toastie);
       });
-  }, [recipe]);
+
+    getPostLikes(recipeId).then(likes => setLikes(likes));
+  }, [recipeId]);
+
+  const handleLikeClick = async () => {
+    if (!user) {
+      addSnack('You must have an account to like this recipe.', 'warning');
+      return false;
+    }
+    if (likedByUser) {
+      setLikes(prevLikes => prevLikes - 1);
+      setLikedRecipes(prevRecipes => prevRecipes.filter(id => id !== recipeId));
+      return unlikeRecipe(recipeId, user.uid);
+    } else {
+      setLikes(prevLikes => prevLikes + 1);
+      setLikedRecipes(prevRecipes => [...prevRecipes, recipeId]);
+      return likeRecipe(recipeId, user.uid);
+    }
+  };
 
   return (
-    <main>
+    <Container maxWidth={'md'}>
       {recipe ? (
-        <div className="recipe--page--container">
-          <div className="recipe--container">
-            <div className="recipe--title--container">
-              <Typography variant={`${isNotTablet ? 'h3' : 'h4'}`}>{recipe?.title || 'Loading...'}</Typography>
-            </div>
-            <div className="recipe--image--container">
-              {coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}
-            </div>
-            <div className="recipe--publisher--container">
-              <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />
-            </div>
+        <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} p={2}>
+          <Typography variant={isNotTablet ? 'h4' : 'h5'}>{recipe?.title || 'Loading...'}</Typography>
+          <Box sx={{ mb: '1rem' }}>{coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}</Box>
+          <Box mb={1}>
+            <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />
+          </Box>
+          <Divider sx={{ my: 1 }} />
+          <Likes totalLikes={likes} liked={likedByUser} onClick={handleLikeClick} />
 
-            <section className="recipe--rating--container">
-              <div>
-                <Typography color="text">Time rating</Typography>
-                <TimeRating value={recipe?.timeRating} readOnly />
-              </div>
-              <div>
-                <Typography color="text">Skill rating</Typography>
-                <SkillRating value={recipe?.skillRating} readOnly />
-              </div>
-            </section>
-
-            {/* Recipe Content */}
-            <section className="recipe--content--container">
-              <Editor readOnly recipeData={JSON.parse(recipe.recipe || '')} />
-            </section>
-
-            {/* Comments Section */}
-            <Box mb={10}>
-              <CommentSection recipeId={recipeId} />
+          {/* Ratings */}
+          <Box display={'flex'} justifyContent={'space-between'} mb={4}>
+            <Box>
+              <Typography color="text">Time rating</Typography>
+              <TimeRating value={recipe?.timeRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
             </Box>
-          </div>
-        </div>
+            <Box>
+              <Typography color="text" align="right">
+                Skill rating
+              </Typography>
+              <SkillRating value={recipe?.skillRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
+            </Box>
+          </Box>
+
+          {/* Recipe Content */}
+          <Box flexWrap={'wrap'}>
+            <Editor readOnly recipeData={JSON.parse(recipe.recipe || '')} />
+          </Box>
+
+          {/* Comments Section */}
+          <Box mb={10}>
+            <CommentSection recipeId={recipeId} />
+          </Box>
+        </Box>
       ) : (
         <PageSkeleton />
       )}
-    </main>
+    </Container>
   );
 }
 

@@ -6,4 +6,5 @@ export interface AuthContextValues {
   emailSignUp: (email: string, password: string) => Promise<boolean>;
   emailSignIn: (email: string, password: string) => Promise<boolean>;
   signOut: () => void;
+  signInWithGoogle: () => void;
 }

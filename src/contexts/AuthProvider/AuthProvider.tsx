@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { auth } from '../../firebase.ts';
-import { User as FirebaseUser } from 'firebase/auth';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { User as FirebaseUser, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
 import useSnackBar from '@context/SnackBarProvider';
 import { useNavigate } from 'react-router-dom';
 import { AuthContextValues } from './authTypes';
+import { getTokenWithEmailAndPassword } from '@api/auth.ts';
 
 export const AuthContext = createContext({} as AuthContextValues);
 
@@ -41,17 +42,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   /**
-   * Signs user up with email and password
+   * Signs user in with email and password
    * @param email
    * @param password
    * @return whether the user was able to sign in
    */
   const emailSignIn = async (email: string, password: string) => {
-    return await signInWithEmailAndPassword(auth, email, password)
+    const token = await getTokenWithEmailAndPassword(email, password);
+    // If there was an issue signing in on the backend, return false
+    if (token === '') return false;
+
+    return signInWithCustomToken(auth, token)
       .then(userCredential => {
+        // Signed in
         const user = userCredential.user;
         if (user) {
-          setUser(user);
           addSnack(`Success! Logged in as ${user.displayName || user.email}`);
           navigate('/');
           return true;
@@ -73,11 +78,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // TODO: Add update email and password functions
   // TODO: Add Google Auth.
 
+  /**
+   * Google Auth provider for signing in or up
+   */
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        const user = result.user;
+        console.log(user);
+      })
+      .catch(error => {
+        // error could happen when the user cancels the sign in. We do not need to worry about that.
+        console.log(error);
+      });
+  };
+
   // Adds an event listener to the user's authentication status
-  // E.g. Makes the user object null when signed out.
+  // E.g. Makes the user object null when signed out and sets or removes the jwt token
   useEffect(() => {
     return onAuthStateChanged(auth, user => {
-      setUser(user);
+      if (user) {
+        // Generate the id token for the user and then update the app
+        user.getIdToken(true).then(idToken => {
+          localStorage.setItem('id-token', idToken);
+          setUser(user);
+        });
+      } else {
+        // Delete the id token on sign-out
+        localStorage.removeItem('id-token');
+        setUser(null);
+      }
       setLoading(false);
     });
   }, []);
@@ -88,6 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     emailSignUp,
     emailSignIn,
     signOut,
+    signInWithGoogle,
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;

@@ -1,29 +1,37 @@
-import { Button, Typography } from '@mui/material';
+import { Container, Grid, IconButton, Typography } from '@mui/material';
 import SignInForm from './components/SignInForm.tsx';
 import useAuth from '@context/AuthProvider';
 import { Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import EmailIcon from '@mui/icons-material/Email';
+import GoogleIcon from '../../assets/GoogleIcon.svg';
 
 export function SignIn() {
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
 
   if (user) {
     return <Navigate to={'/'} />;
-  } else {
-    return (
-      <main className={'sign--in--container'}>
-        <SignInForm />
-        <Typography color={'secondary'}>
-          Don't have an account?
-          <Link to={'/signup'}>
-            {' '}
-            <u>Sign up!</u>
-          </Link>
-        </Typography>
-        <Button variant={'outlined'} color={'secondary'}>
-          Sign in with Google
-        </Button>
-      </main>
-    );
   }
+
+  return (
+    <Container maxWidth={'xs'} sx={{ mt: 5 }}>
+      <Typography gutterBottom variant={'h4'} textAlign={'center'} fontWeight={'bold'}>
+        Sign in
+      </Typography>
+
+      <SignInForm />
+
+      <Grid container justifyContent={'center'} mt={10}>
+        <Typography>Or Sign Up using</Typography>
+        <Grid container justifyContent={'center'} alignItems={'centre'}>
+          <IconButton color={'secondary'} sx={{ width: 40 }} component={Link} to={'/signup'}>
+            <EmailIcon fontSize={'medium'} />
+          </IconButton>
+          <IconButton color={'secondary'} onClick={signInWithGoogle}>
+            <img src={GoogleIcon} alt={'Google Icon'} />
+          </IconButton>
+        </Grid>
+      </Grid>
+    </Container>
+  );
 }

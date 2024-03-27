@@ -1,8 +1,8 @@
-import { IconButton, Typography } from '@mui/material';
+import { Card, CardActionArea, CardMedia, Divider, Grid, IconButton, Typography } from '@mui/material';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import { PublisherContainer } from '../routes/Recipe/components/PublisherContainer.tsx';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { RecipeCardData } from '../types/recipeTypes';
 import useAuth from '@context/AuthProvider';
 import useSnackBar from '@context/SnackBarProvider';
@@ -14,13 +14,19 @@ import Wex from '../assets/wex.png';
 import toastie from '../assets/dummyPhotos/gourmet-toastie.jpg';
 import { contentStorage } from '../firebase.ts';
 import { getDownloadURL, ref } from 'firebase/storage';
+import Likes from './Likes/Likes.tsx';
+import { getPostLikes } from '@api/likes.ts';
+import { useNavigate } from 'react-router-dom';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 export default function FeedRecipeCard(props: RecipeCardData) {
   const [saved, setSaved] = useState(props.saved);
   const { user } = useAuth();
   const [image, setImage] = useState('');
+  const [likes, setLikes] = useState(0);
   const { addSnack } = useSnackBar();
-  const { setUserSavedRecipes } = useUserData();
+  const { setUserSavedRecipes, likedRecipes } = useUserData();
+  const navigate = useNavigate();
 
   // This usEffect is used to initialise the state of the save button from the cloud
   useEffect(() => {
@@ -35,7 +41,14 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       .catch(() => {
         setImage(toastie);
       });
+
+    getPostLikes(props.id).then(likes => setLikes(likes));
   }, []);
+
+  // Check if the user liked this recipe
+  const likedByUser = useMemo(() => {
+    return likedRecipes.find(recipeId => recipeId === props.id) !== undefined;
+  }, [likedRecipes, props.id]);
 
   const handleSaveToggle = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // Prevent from being redirected to the recipe page
@@ -68,11 +81,43 @@ export default function FeedRecipeCard(props: RecipeCardData) {
   };
 
   return (
-    <article className={'feed--recipe--container'}>
-      <div className={'feed--recipe--title--container'}>
-        <Typography variant={'h4'} className={'recipe--title'}>
+    <Card sx={{ p: 1, boxShadow: 'none' }}>
+      <Grid container justifyContent={'space-between'}>
+        <Typography variant={'h4'} m={0.5}>
           {props.title}
         </Typography>
+        <IconButton
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        >
+          <MoreHorizIcon />
+        </IconButton>
+      </Grid>
+      <CardActionArea onClick={() => navigate(`/recipe/${props.id}`)}>
+        <PublisherContainer
+          size={'small'}
+          // TODO: Update this when we have user profiles
+          publisherImageUrl={Wex}
+          publisherName={'Patriks'}
+        />
+
+        <CardMedia sx={{ borderRadius: 2 }} component={'img'} image={image} alt="food pic" />
+
+        {/* Time and skill rating section */}
+        <Grid container justifyContent={'space-between'} my={1}>
+          <Grid item>
+            <SkillRating value={props.skillRating} size="large" readOnly />
+          </Grid>
+          <Grid item>
+            <TimeRating value={props.timeRating} size="large" readOnly />
+          </Grid>
+        </Grid>
+      </CardActionArea>
+
+      {/* Action row */}
+      <Grid container justifyContent={'space-between'}>
+        <Likes totalLikes={likes} readOnly liked={likedByUser} />
         <IconButton sx={{ marginRight: '0.5rem' }} onClick={e => handleSaveToggle(e)}>
           {saved ? (
             <BookmarkOutlinedIcon color={'secondary'} fontSize={'large'} />
@@ -80,22 +125,8 @@ export default function FeedRecipeCard(props: RecipeCardData) {
             <BookmarkBorderOutlinedIcon color={'secondary'} fontSize={'large'} />
           )}
         </IconButton>
-      </div>
-      <PublisherContainer
-        size={'small'}
-        color={'gray'}
-        // TODO: Update this when we have user profiles
-        publisherImageUrl={props?.publisherImageUrl || Wex}
-        publisherName={props.publisherName || 'Patriks'}
-      />
-      <div className={'feed--recipe--image--container'}>
-        {/*TODO: Replace GourmetToastie with the recipe's image url*/}
-        <img src={image} alt={'food pic'} />
-      </div>
-      <div className={'feed--recipe--action--row'}>
-        <SkillRating value={props.skillRating} readOnly />
-        <TimeRating value={props.timeRating} readOnly />
-      </div>
-    </article>
+      </Grid>
+      <Divider />
+    </Card>
   );
 }

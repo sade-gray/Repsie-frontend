@@ -2,8 +2,6 @@ $theme1: #694fd0ff;
 $background: #252a38;
 $transparenttheme1: rgba(85, 69, 146, 55%);
 
-// TODO: Add breakpoint variables
-// Example
 $breakpoint-tablet: 768px;
 
 html,
@@ -11,20 +9,6 @@ body {
   font-weight: bolder;
   margin: 0;
   padding: 0;
-}
-
-.repsie--logo {
-  height: 35px;
-}
-
-.saved--recipe--drawer--icon--container {
-  width: 30px;
-  height: 37px;
-  margin-right: 5px;
-}
-
-.saved--recipe--drawer--icon {
-  height: 35px;
 }
 
 .footer {
@@ -75,57 +59,6 @@ body {
   flex: 1;
 }
 
-// The individual recipe container
-.feed--recipe--container {
-  //border: 1px solid gray;
-  border-radius: 1rem;
-  padding: 5px 20px;
-  margin-bottom: 20px;
-
-  @media only screen and (max-width: $breakpoint-tablet) {
-    padding: 25px 10px;
-  }
-}
-
-.feed--recipe--title--container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.recipe--title {
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
-}
-
-.feed--recipe--image--container {
-  border-radius: 1rem;
-  display: flex;
-  justify-content: center;
-  margin: 10px;
-
-  img {
-    max-width: 100%;
-    max-height: 30rem;
-    border-radius: 1rem;
-  }
-}
-
-.feed--recipe--action--row {
-  display: flex;
-  justify-content: space-between;
-}
-
-// myRecipes Page
-.my--recipes--section {
-  flex: 4;
-  padding: 0 1rem;
-
-  @media only screen and (max-width: $breakpoint-tablet) {
-    padding: 0;
-  }
-}
-
 a {
   text-decoration: none;
   color: inherit;
@@ -135,8 +68,7 @@ a {
   text-decoration: #039be5;
 }
 
-.sign--up--container,
-.sign--in--container {
+.sign--up--container {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -154,65 +86,9 @@ a {
   font-family: 'Inter', sans-serif;
 }
 
-// This centers the recipe content
-.recipe--page--container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media only screen and (max-width: $breakpoint-tablet) {
-    margin: 0 2em;
-  }
-}
-
-.recipe--title--container {
-  display: flex;
-  // Puts the recipe title on the left
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.recipe--image--container {
-  margin-bottom: 1rem;
-}
-
-.recipe--publisher--container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 2rem;
-}
-
-.recipe--rating--container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
-
-.recipe--content--container {
-  // For mobile
-  flex-wrap: wrap;
-}
-
-.recipe--container {
-  display: flex;
-  flex-direction: column;
-}
-
 .recipe--image {
   max-height: 300px;
   object-fit: cover;
   min-inline-size: 100%;
-  max-width: 90vw;
-}
-
-.publisher--container {
-  display: flex;
-  align-items: center;
-}
-
-.publisher--icon {
-  border-radius: 50%;
-  width: 40px;
-  margin: 0 10px;
-  aspect-ratio: 1;
+  max-width: 85vw;
 }

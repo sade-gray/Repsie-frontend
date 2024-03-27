@@ -12,9 +12,22 @@ const apiUrl = 'https://us-central1-repsie.cloudfunctions.net/api';
  * @param userId
  */
 export async function getSavedRecipes(userId: string) {
-  return fetch(`${apiUrl}/saved?user=${userId}`)
+  const IDToken = localStorage.getItem('id-token');
+  if (!IDToken) {
+    console.log('JWT Token not found. Is the user signed in?');
+    return [];
+  }
+  return fetch(`${apiUrl}/saved?user=${userId}`, {
+    headers: {
+      Authorization: `Bearer ${IDToken}`,
+    },
+  })
     .then(res => res.json())
     .then(savedRecipes => {
+      if (savedRecipes.error) {
+        console.error('Error getting saved Recipes:', savedRecipes.error);
+        return [];
+      }
       return savedRecipes as RecipeCardData[];
     });
 }
@@ -138,9 +151,65 @@ export async function createRecipe(userId: string, title: string, recipe: string
 export async function getCreatedRecipes(userId: string) {
   return fetch(`${apiUrl}/recipes/user?user=${userId}`)
     .then(response => response.json())
-    .then(createRecipes => createRecipes)
+    .then(data => {
+      if (data.error) {
+        console.log('Error getting created recipes:', data.error);
+        return [];
+      }
+      return data;
+    })
     .catch(err => {
       console.log('Error: ', err);
       return [];
     });
+}
+
+/**
+ * Deletes a recipe.
+ * @param recipeId - The ID of the recipe to delete.
+ * @param userId - The ID of the user who created the recipe.
+ */
+export async function deleteRecipe(recipeId: string, userId: string) {
+  return fetch(`${apiUrl}/recipes?post=${recipeId}&user=${userId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      recipeId,
+      userId,
+    }),
+  })
+    .then(res => res.json())
+    .then(response => response)
+    .catch(err => console.error(err));
+}
+
+/**
+ * Edits a recipe.
+ * @param title - The new title of the recipe.
+ * @param recipe - The new recipe content.
+ * @param timeRating - The new time rating of the recipe.
+ * @param skillRating - The new skill rating of the recipe.
+ * @param recipeId - The ID of the recipe to edit.
+ */
+export async function editRecipe(title: string, recipe: string, timeRating: number, skillRating: number, recipeId: string) {
+  return fetch(`${apiUrl}/recipes?post=${recipeId}`, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: title,
+      id: recipeId,
+      recipe: recipe,
+      timeRating: timeRating,
+      skillRating: skillRating,
+    }),
+  })
+    .then(res => res.json())
+    .then(response => response)
+    .catch(err => console.error(err));
 }
