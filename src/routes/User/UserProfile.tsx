@@ -8,7 +8,7 @@ import AccountSettings from './Components/UserProfile/AccountSettings';
 import ChangePassword from './Components/UserProfile/ChangePassword';
 import LegalNotice from './Components/UserProfile/LegalNotice';
 
-const UserProfile = () => {
+export const UserProfile = () => {
 
     const {activepage} = useParams()
 
@@ -40,4 +40,3 @@ const UserProfile = () => {
   )
 }
 
-export default UserProfile

@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.scss";
 import Home from "./routes/Home/Home.tsx";
 import RouteNotFound from "./routes/404Route/RouteNotFound.tsx";
-import UserProfile from "./routes/User/UserProfile.tsx";
+
 
 const router = createBrowserRouter([
   {
@@ -53,6 +53,7 @@ const router = createBrowserRouter([
       {
         path: "/UserProfile/:activepage",
         async lazy() {
+          const { UserProfile } = await import("./routes/User/UserProfile.tsx");
           return { Component: UserProfile };
         },
       },
