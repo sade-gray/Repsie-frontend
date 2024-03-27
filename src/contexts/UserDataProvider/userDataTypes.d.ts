@@ -6,4 +6,5 @@ export interface UserData {
   likedRecipes: string[];
   setLikedRecipes: React.Dispatch<React.SetStateAction<string[]>>;
   setUserSavedRecipes: (state?: any) => void;
+  username: string;
 }
