@@ -1,4 +1,4 @@
-import React from 'react'
+
 import './SingleBanner.css'
 
 const SingleBanner = ({bannerimage, heading}: {bannerimage: string, heading: string}) => {
