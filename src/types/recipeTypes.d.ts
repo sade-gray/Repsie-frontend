@@ -8,3 +8,7 @@ export interface RecipeCardData {
   userId: string;
   removeRecipe: (id: string) => void;
 }
+
+export interface RecipeData extends RecipeCardData {
+  recipe: string;
+}

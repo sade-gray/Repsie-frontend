@@ -24,7 +24,8 @@ export default function FeedRecipeCard(props: RecipeCardData) {
   const { user } = useAuth();
   const [image, setImage] = useState('');
   const [likes, setLikes] = useState(0);
-  const [username, setUsername] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [username] = useState('');
   const { addSnack } = useSnackBar();
   const { setUserSavedRecipes, likedRecipes } = useUserData();
   const navigate = useNavigate();

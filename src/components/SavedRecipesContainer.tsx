@@ -30,7 +30,7 @@ export default function SavedRecipesContainer(props: any) {
 export function SavedRecipeCard({ id, title, closeDrawer }: RecipeCardData & any) {
   const navigate = useNavigate();
   const [image, setImage] = useState('');
-  const [username, setUsername] = useState('');
+  const [username] = useState('');
 
   useEffect(() => {
     const imageRef = ref(contentStorage, `recipes/${id}/index.png`);

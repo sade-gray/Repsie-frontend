@@ -18,15 +18,14 @@ import Likes from '@component/Likes';
 import useUserData from '@context/UserDataProvider/useUserData.ts';
 import useAuth from '@context/AuthProvider/useAuth.ts';
 import { getPostLikes, likeRecipe, unlikeRecipe } from '@api/likes.ts';
-import { getUsernameAndNumber } from '@api/user.ts';
-import { RecipeCardData } from 'types/recipeTypes';
+import { RecipeData } from 'types/recipeTypes';
 
 export function RecipePage() {
   const recipeId = useParams()['recipeId'] || '';
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
-  const [recipe, setRecipe] = useState<RecipeCardData>();
+  const [recipe, setRecipe] = useState<RecipeData>();
   const [likes, setLikes] = useState(0);
-  const [username, setUsername] = useState('');
+  const [username] = useState('');
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const navigate = useNavigate();
   const { addSnack } = useSnackBar();
