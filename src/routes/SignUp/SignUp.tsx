@@ -18,17 +18,6 @@ export function SignUp() {
     <Box position={'relative'} overflow={'clip'}>
       <SignUpStage1 currStage={stage} goToNextStage={goToNextStage} />
       <SignUpStage2 currStage={stage} />
-      <Button color={'secondary'} onClick={goToNextStage}>
-        Next Stage
-      </Button>
-      <Button
-        color={'secondary'}
-        onClick={() => {
-          setStage(0);
-        }}
-      >
-        Previous stage
-      </Button>
     </Box>
   );
 }
