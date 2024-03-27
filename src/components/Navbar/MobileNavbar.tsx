@@ -1,12 +1,12 @@
 import { AppBar, Box, Fab, Grid, IconButton, styled } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import SavedRecipesDrawerMobile from '@component/SavedRecipesDrawerMobile.tsx';
 import useDrawer from '@context/DrawerProvider';
 import { AccountMenu } from '@component/Navbar/AccountMenu.tsx';
+import { MobileNavbarSearch } from './MobileNavbarSearch';
 
 export default function MobileNavbar() {
   const { drawerOpen, setDrawerOpen } = useDrawer();
@@ -18,7 +18,7 @@ export default function MobileNavbar() {
   return (
     <>
       <AppBar position="fixed" color="secondary" sx={{ top: 'auto', bottom: 0 }}>
-        <Grid container justifyContent={'space-around'} color={'primary'}>
+        <Grid container justifyContent={'space-around'} color={'primary'} alignItems={'center'}>
           {/* Home button */}
           <IconButton color={'inherit'} aria-label="open drawer" size={'large'}>
             <Link to={'/'} aria-label={'home'} style={{ lineHeight: 0 }}>
@@ -26,12 +26,10 @@ export default function MobileNavbar() {
             </Link>
           </IconButton>
           {/* Search Button */}
-          <IconButton color="inherit">
-            <SearchIcon fontSize={'large'} />
-          </IconButton>
+          <MobileNavbarSearch />
           {/* Create Recipe button */}
           <StyledFab color="secondary" aria-label="add">
-            <Link to={'/createRecipe'} style={{ lineHeight: 0 }}>
+            <Link to={'/createRecipe/new'} style={{ lineHeight: 0 }}>
               <AddIcon fontSize={'large'} />
             </Link>
           </StyledFab>
@@ -44,7 +42,7 @@ export default function MobileNavbar() {
           <AccountMenu />
         </Grid>
       </AppBar>
-      <SavedRecipesDrawerMobile />
+      <SavedRecipesDrawerMobile window={() => window} />
     </>
   );
 }
