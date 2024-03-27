@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: '/createRecipe',
+        path: '/createRecipe/:recipeId',
         async lazy() {
           const { CreateRecipePage } = await import('./routes/CreateRecipe/CreateRecipePage.tsx');
           return { Component: CreateRecipePage };

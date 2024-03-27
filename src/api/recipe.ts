@@ -3,9 +3,8 @@
  *
  * - List View and Single View of recipes, saved recipes, created recipes, list recipes
  */
+import { API_URL } from '@api/index.ts';
 import { RecipeCardData } from '../types/recipeTypes';
-
-const apiUrl = 'https://us-central1-repsie.cloudfunctions.net/api';
 
 /**
  * Gets a list of the user's saved recipes.
@@ -17,7 +16,7 @@ export async function getSavedRecipes(userId: string) {
     console.log('JWT Token not found. Is the user signed in?');
     return [];
   }
-  return fetch(`${apiUrl}/saved?user=${userId}`, {
+  return fetch(`${API_URL}/saved?user=${userId}`, {
     headers: {
       Authorization: `Bearer ${IDToken}`,
     },
@@ -40,7 +39,7 @@ export async function getSavedRecipes(userId: string) {
  * @return whether the recipe could be saved or not
  */
 export async function saveRecipe(recipeId: string, userId: string) {
-  return fetch(`${apiUrl}/saved?user=${userId}`, {
+  return fetch(`${API_URL}/saved?user=${userId}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -67,7 +66,7 @@ export async function saveRecipe(recipeId: string, userId: string) {
  * @return whether the recipe was unsaved or not.
  */
 export async function unsaveRecipe(recipeId: string, userId: string) {
-  return fetch(`${apiUrl}/saved?user=${userId}`, {
+  return fetch(`${API_URL}/saved?user=${userId}`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -94,7 +93,7 @@ export async function unsaveRecipe(recipeId: string, userId: string) {
  * @return An array of RecipeCardData (empty if there were errors)
  */
 export async function fetchRecipes(offset: number) {
-  return fetch(`${apiUrl}/recipes?offset=${offset}`)
+  return fetch(`${API_URL}/recipes?offset=${offset}`)
     .then(result => result.json())
     .then(recipes => {
       return recipes;
@@ -110,7 +109,7 @@ export async function fetchRecipes(offset: number) {
  * @param id
  */
 export async function fetchRecipe(id: string) {
-  return fetch(`${apiUrl}/recipes/recipe?post=${id}`)
+  return fetch(`${API_URL}/recipes/recipe?post=${id}`)
     .then(result => result.json())
     .then(recipe => {
       return recipe;
@@ -130,7 +129,7 @@ export async function fetchRecipe(id: string) {
  * @param timeRating
  */
 export async function createRecipe(userId: string, title: string, recipe: string, skillRating: number, timeRating: number) {
-  return fetch(`${apiUrl}/recipes?user=${userId}`, {
+  return fetch(`${API_URL}/recipes?user=${userId}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -149,7 +148,7 @@ export async function createRecipe(userId: string, title: string, recipe: string
 }
 
 export async function getCreatedRecipes(userId: string) {
-  return fetch(`${apiUrl}/recipes/user?user=${userId}`)
+  return fetch(`${API_URL}/recipes/user?user=${userId}`)
     .then(response => response.json())
     .then(data => {
       if (data.error) {
@@ -170,7 +169,7 @@ export async function getCreatedRecipes(userId: string) {
  * @param userId - The ID of the user who created the recipe.
  */
 export async function deleteRecipe(recipeId: string, userId: string) {
-  return fetch(`${apiUrl}/recipes?post=${recipeId}&user=${userId}`, {
+  return fetch(`${API_URL}/recipes?post=${recipeId}&user=${userId}`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json',
@@ -195,8 +194,8 @@ export async function deleteRecipe(recipeId: string, userId: string) {
  * @param recipeId - The ID of the recipe to edit.
  */
 export async function editRecipe(title: string, recipe: string, timeRating: number, skillRating: number, recipeId: string) {
-  return fetch(`${apiUrl}/recipes?post=${recipeId}`, {
-    method: 'PATCH',
+  return fetch(`${API_URL}/recipes?post=${recipeId}`, {
+    method: 'PUT',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

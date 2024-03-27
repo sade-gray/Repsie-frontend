@@ -6,11 +6,11 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { deleteRecipe, getCreatedRecipes } from '@api/recipe.ts';
 import { RecipeCardData } from '../../types/recipeTypes';
 import { contentStorage } from '../../firebase.ts';
-import { getDownloadURL, ref } from 'firebase/storage';
+import { deleteObject, getDownloadURL, ref } from 'firebase/storage';
 import toastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
 import SkillRating from '@component/Ratings/SkillRating';
 import TimeRating from '@component/Ratings/TimeRating';
-import { AddRounded, Delete } from '@mui/icons-material';
+import { AddRounded, Delete, Edit } from '@mui/icons-material';
 import { theme } from '../../theme.ts';
 import Likes from '@component/Likes/Likes.tsx';
 import { getPostLikes } from '@api/likes.ts';
@@ -93,6 +93,13 @@ function RecipeCard(props: RecipeCardData) {
         } else {
           addSnack('Recipe deleted', 'success');
           props.removeRecipe(props.id);
+          // Delete the image from storage
+          const imageRef = ref(contentStorage, `recipes/${props.id}/index.png`);
+          deleteObject(imageRef)
+            .then(() => {
+              setImage('');
+            })
+            .catch(e => console.error(e));
         }
       });
     }
@@ -101,20 +108,32 @@ function RecipeCard(props: RecipeCardData) {
   return (
     <Card sx={{ width: 350, borderRadius: 3 }} variant={'outlined'}>
       <CardActionArea sx={{ position: 'relative' }} onClick={() => navigate(`/recipe/${props.id}`)}>
+        {/* Recipe image */}
         <CardMedia component={'img'} height={150} image={image} />
+        {/* Likes */}
         <Box position={'absolute'} top={125} bgcolor={'white'} borderRadius={2} right={0}>
           <Likes totalLikes={likes} readOnly />
         </Box>
       </CardActionArea>
       <CardContent>
         <Box display={'flex'} justifyContent={'space-between'}>
-          <Typography gutterBottom variant={'h5'}>
-            {props.title || 'No title'}
-          </Typography>
-          <IconButton onClick={handleDelete}>
-            <Delete />
-          </IconButton>
+          {/* Title */}
+          <Box>
+            <Typography gutterBottom variant={'h5'}>
+              {props.title || 'No title'}
+            </Typography>
+          </Box>
+          {/* Edit and delete buttons */}
+          <Box>
+            <IconButton onClick={handleDelete} sx={{ borderRadius: 4, gap: 0.5 }}>
+              <Delete />
+            </IconButton>
+            <IconButton onClick={() => navigate(`/createRecipe/${props.id}`)} sx={{ borderRadius: 4, gap: 0.5 }}>
+              <Edit />
+            </IconButton>
+          </Box>
         </Box>
+        {/* Skill ratings */}
         <Grid container justifyContent={'space-between'}>
           <SkillRating value={props.skillRating} size={'small'} readOnly />
           <TimeRating value={props.timeRating} size={'small'} readOnly />
@@ -128,7 +147,7 @@ function CreateRecipeButton() {
   const navigate = useNavigate();
   return (
     <Card sx={{ width: 350, height: 245, borderRadius: 3 }} variant={'outlined'}>
-      <CardActionArea sx={{ height: '100%' }} onClick={() => navigate('/createrecipe')}>
+      <CardActionArea sx={{ height: '100%' }} onClick={() => navigate('/createRecipe/new')}>
         <Grid container alignItems={'center'} justifyContent={'center'} direction={'column'}>
           <AddRounded sx={{ width: '50%', height: '50%' }} color={'secondary'} />
           <Typography variant={'h4'} color={'secondary'}>

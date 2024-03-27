@@ -43,12 +43,6 @@
   }
 }
 
-.create--recipe--container {
-  margin: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
 .editor {
   font-weight: initial;
   p {
@@ -59,38 +53,4 @@
   h2 {
     margin: 5px;
   }
-}
-
-.editor--buttons {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  background-color: #eee;
-}
-
-.create--recipe--editor--container {
-  margin-bottom: 2rem;
-}
-
-.create--recipe--title--container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.create--recipe--image--container {
-  margin-bottom: 2rem;
-}
-
-.create--recipe--rating--container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.create--recipe--button--container {
-  display: flex;
-  justify-content: end;
-  margin-bottom: 2rem;
 }

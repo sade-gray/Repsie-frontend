@@ -1,12 +1,5 @@
-import React, { Dispatch, LazyExoticComponent, SetStateAction, useCallback, useState } from 'react';
-import {
-  BaseEditor,
-  createEditor,
-  Descendant,
-  Editor,
-  Transforms,
-  Element as SlateElement,
-} from 'slate';
+import React, { Dispatch, LazyExoticComponent, SetStateAction, useCallback, useMemo, useEffect } from 'react';
+import { BaseEditor, createEditor, Descendant, Editor, Transforms, Element as SlateElement } from 'slate';
 import { Slate, Editable, withReact, ReactEditor, useSlate } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { Box, Divider, Icon, IconButton } from '@mui/material';
@@ -42,7 +35,8 @@ interface CustomEditor extends BaseEditor, ReactEditor {
 }
 // Props for the Editor component
 type EditorProps = {
-  recipeData: Descendant[];
+  initRecipeData: Descendant[];
+  recipeData?: Descendant[];
   setRecipeData?: Dispatch<SetStateAction<Descendant[]>>;
   readOnly?: boolean;
 };
@@ -73,15 +67,23 @@ const BLOCK_HOTKEYS: { [key: string]: string } = {
  * @param {boolean} props.readOnly - Indicates if the editor is read-only.
  * @returns {JSX.Element} The rendered component.
  */
-export default function SlateEditor({ recipeData, setRecipeData, readOnly }: EditorProps) {
-  // Editor state
-  const [editor] = useState(() => withHistory(withReact(createEditor())));
+export default function SlateEditor({ initRecipeData, setRecipeData, readOnly }: EditorProps) {
+  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   // This is the logic for rendering every node according to its type
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
   // This is the logic for rendering every leaf according to its type
   const renderLeaf = useCallback((props: any) => {
     return <Leaf {...props} />;
   }, []);
+
+  useEffect(() => {
+    // Delete every node in the editor
+    editor.children.map(_ => {
+      Transforms.delete(editor, { at: [0] });
+    });
+    // Add the new content
+    Transforms.insertNodes(editor, initRecipeData);
+  }, [initRecipeData]);
 
   return (
     <div className="editor">
@@ -94,15 +96,15 @@ export default function SlateEditor({ recipeData, setRecipeData, readOnly }: Edi
       >
         <Slate
           editor={editor}
-          initialValue={recipeData}
+          initialValue={initRecipeData}
           // On change, set the recipe data if the editor is not read-only
           onChange={value => {
             !readOnly && setRecipeData?.(value);
           }}
         >
           {!readOnly && ( // If the editor is not read-only, render the buttons
-            <div>
-              <div className="editor--buttons">
+            <Box>
+              <Box className="editor--buttons" display={'flex'} justifyContent={'flex-start'} flexWrap={'wrap'} sx={{ backgroundColor: '#eee' }}>
                 <MarkButton format="bold" icon="FormatBold" />
                 <MarkButton format="italic" icon="FormatItalic" />
                 <MarkButton format="underline" icon="FormatUnderlined" />
@@ -114,9 +116,9 @@ export default function SlateEditor({ recipeData, setRecipeData, readOnly }: Edi
                 <BlockButton format="center" type="align" icon="FormatAlignCenter" />
                 <BlockButton format="right" type="align" icon="FormatAlignRight" />
                 <BlockButton format="justify" type="align" icon="FormatAlignJustify" />
-              </div>
+              </Box>
               <Divider color="secondary" />
-            </div>
+            </Box>
           )}
           {/* Input box */}
           <Box
@@ -159,10 +161,7 @@ export default function SlateEditor({ recipeData, setRecipeData, readOnly }: Edi
                   if (selection) {
                     const [start] = Editor.nodes(editor, {
                       at: selection,
-                      match: n =>
-                        !Editor.isEditor(n) &&
-                        SlateElement.isElement(n) &&
-                        n.type.startsWith('heading'),
+                      match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type.startsWith('heading'),
                     });
 
                     if (start) {
@@ -191,11 +190,7 @@ export default function SlateEditor({ recipeData, setRecipeData, readOnly }: Edi
                 }
 
                 // Check if the selection is at the start of the editor and if it is, exit the list
-                if (
-                  event.key === 'Backspace' &&
-                  selection &&
-                  Editor.start(editor, selection).offset === 0
-                ) {
+                if (event.key === 'Backspace' && selection && Editor.start(editor, selection).offset === 0) {
                   const [match] = Editor.nodes(editor, {
                     match: n => Editor.isBlock(editor, n) && n.type === 'list-item',
                   });
@@ -205,11 +200,7 @@ export default function SlateEditor({ recipeData, setRecipeData, readOnly }: Edi
                     const listItemPath = path.slice(0, path.length - 1); // Remove last index to get the list item
                     const listNode = Editor.node(editor, listItemPath);
 
-                    if (
-                      listNode &&
-                      SlateElement.isElement(listNode[0]) &&
-                      listNode[0].children.length === 1
-                    ) {
+                    if (listNode && SlateElement.isElement(listNode[0]) && listNode[0].children.length === 1) {
                       // If there is only one bullet, exit the list
                       event.preventDefault();
                       Transforms.unwrapNodes(editor, {
@@ -237,21 +228,13 @@ export default function SlateEditor({ recipeData, setRecipeData, readOnly }: Edi
  */
 const toggleBlock = (editor: CustomEditor, format: string) => {
   // Check if the block is active
-  const isActive = isBlockActive(
-    editor,
-    format,
-    TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
-  );
+  const isActive = isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type');
   // Check if the format is a list
   const isList = LIST_TYPES.includes(format);
 
   Transforms.unwrapNodes(editor, {
     // Unwrap the nodes if the format is a list
-    match: n =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      LIST_TYPES.includes(n.type) &&
-      !TEXT_ALIGN_TYPES.includes(format),
+    match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && LIST_TYPES.includes(n.type) && !TEXT_ALIGN_TYPES.includes(format),
     split: true,
   });
   // Set the properties of the nodes if the format is a text align type
@@ -310,10 +293,7 @@ const isBlockActive = (editor: CustomEditor, format: string, blockType: string =
   const [match] = Array.from(
     Editor.nodes<SlateElement>(editor, {
       at: Editor.unhangRange(editor, selection),
-      match: n =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        (n as { [key: string]: any })[blockType] === format,
+      match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && (n as { [key: string]: any })[blockType] === format,
     })
   );
 

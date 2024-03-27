@@ -22,29 +22,74 @@ import useAuth from '@context/AuthProvider';
 import { Descendant } from 'slate';
 import TimeRating from '@component/Ratings/TimeRating';
 import SkillRating from '@component/Ratings/SkillRating';
-import { createRecipe } from '@api/recipe.ts';
+import { createRecipe, editRecipe, fetchRecipe } from '@api/recipe.ts';
 import { contentStorage } from '../../firebase.ts';
-import { ref, uploadBytes } from 'firebase/storage';
-import { useNavigate } from 'react-router-dom';
-
-// The initial value for the recipe
-const initialValue = [{ type: 'paragraph', children: [{ text: 'This is your journey to creating a delicious recipe' }] }];
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useNavigate, useParams } from 'react-router-dom';
+import useSnackBar from '@context/SnackBarProvider';
 
 export function CreateRecipePage() {
+  // Get the user from the context
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { addSnack } = useSnackBar();
   // The state for the skill rating, time rating, title, image url, cover image url and recipe data
   const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
   const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
   const [title, setTitle] = useState<string>('');
   const [coverImage, setCoverImage] = useState<File | null>();
   const [coverPreview, setCoverPreview] = useState<string | undefined>();
+  const [initRecipeData, setInitRecipeData] = useState<Descendant[]>([
+    { type: 'paragraph', children: [{ text: 'This is your journey to creating a delicious recipe' }] } as Descendant,
+  ]);
+  const [recipeData, setRecipeData] = useState<Descendant[]>(initRecipeData);
   // Used for tracking the uploading progress
   const [recipeUploadStep, setRecipeUploadStep] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const recipeId = useRef('');
+  const [editing, setEditing] = useState(false);
+  const recipeId = useRef(useParams()['recipeId'] || '');
 
-  const [recipeData, setRecipeData] = useState<Descendant[]>(initialValue);
-  // Get the user from the context
-  const { user } = useAuth();
+  useEffect(() => {
+    if (recipeId.current !== 'new') {
+      fetchRecipe(recipeId.current)
+        .then(recipe => {
+          if (recipe.userId !== user?.uid) {
+            addSnack('You do not have permission to edit this recipe', 'warning');
+            navigate('/myRecipes');
+            return;
+          }
+          if (recipe.error) {
+            addSnack('Error editing recipe', 'error');
+            navigate('/myRecipes');
+          } else {
+            setTitle(recipe.title);
+            setSkillRatingValue(recipe.skillRating);
+            setTimeRatingValue(recipe.timeRating);
+
+            setRecipeData(JSON.parse(recipe.recipe));
+            setInitRecipeData(JSON.parse(recipe.recipe));
+
+            console.log('Inside: ', recipeData);
+            setEditing(true);
+          }
+        })
+        .catch(() => {
+          addSnack('Error editing recipe', 'error');
+          navigate('/myRecipes');
+        });
+
+      console.log('Outside: ', recipeData);
+
+      // Update the cover image whenever the recipe changes (e.g. page refresh or recipe edit)
+      const imageRef = ref(contentStorage, `recipes/${recipeId.current}/index.png`);
+      getDownloadURL(imageRef)
+        .then(url => setCoverPreview(url))
+        .catch(() => {
+          // Use default image if image not found
+          console.error('Error getting image');
+        });
+    }
+  }, []);
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,12 +100,31 @@ export function CreateRecipePage() {
     setIsUploading(true);
 
     // Step 1: Upload the data
-    await createRecipe(user.uid, title, JSON.stringify(recipeData), skillRatingValue, timeRatingValue).then(res => {
-      if (res.id) {
-        recipeId.current = res.id;
-        setRecipeUploadStep(1);
-      }
-    });
+    if (editing) {
+      await editRecipe(title, JSON.stringify(recipeData), timeRatingValue, skillRatingValue, recipeId.current).then(res => {
+        if (res.error) {
+          addSnack('Error editing recipe', 'error');
+          setIsUploading(false);
+        } else {
+          if (res.id) {
+            recipeId.current = res.id;
+            setRecipeUploadStep(1);
+          }
+        }
+      });
+    } else {
+      await createRecipe(user.uid, title, JSON.stringify(recipeData), skillRatingValue, timeRatingValue).then(res => {
+        if (res.error) {
+          addSnack('Error creating recipe', 'error');
+          setIsUploading(false);
+        } else {
+          if (res.id) {
+            recipeId.current = res.id;
+            setRecipeUploadStep(1);
+          }
+        }
+      });
+    }
 
     // Step 2: Upload the image.
     const recipeImageRef = ref(contentStorage, `recipes/${recipeId.current}/index.png`);
@@ -98,15 +162,18 @@ export function CreateRecipePage() {
   }, [coverImage]);
 
   return (
-    <div className="create--recipe--container">
+    <Box display={'flex'} justifyContent={'center'} m={'1rem'}>
+      {/* Recipe Form */}
       <form onSubmit={e => handleFormSubmit(e)}>
-        <div className="create--recipe--title--container">
+        {/* Title */}
+        <Box display={'flex'} justifyContent={'center'} flexDirection={'column'}>
           <TextField
             variant="outlined"
             label="Title"
             name="title"
             color="secondary"
             onChange={e => setTitle(e.target.value)}
+            value={title}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& > fieldset': {
@@ -120,50 +187,51 @@ export function CreateRecipePage() {
               marginBottom: '2rem',
             }}
           />
-        </div>
-        <div className="create--recipe--image--container">
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              paddingY: 2,
-              border: 'dashed 2px',
-              borderColor: 'secondary.main',
-            }}
-          >
-            <Button variant="contained" color="secondary" component="label" startIcon={<FileUpload />}>
-              Select Image
-              <input hidden accept="image/png, image/jpeg" type="file" onChange={handleImageUpload} />
-            </Button>
-            {coverPreview && (
-              <img src={coverPreview} alt="Uploaded Image" height="auto" width="300" style={{ marginTop: '1rem', minInlineSize: '100%' }} />
-            )}
+        </Box>
+        {/* Image select */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            paddingY: 2,
+            border: 'dashed 2px',
+            borderColor: 'secondary.main',
+            marginBottom: '2rem',
+          }}
+        >
+          <Button variant="contained" color="secondary" component="label" startIcon={<FileUpload />}>
+            Select Image
+            <input hidden accept="image/png, image/jpeg" type="file" onChange={handleImageUpload} />
+          </Button>
+          {coverPreview && (
+            <img src={coverPreview} alt="Uploaded Image" height="auto" width="300" style={{ marginTop: '1rem', minInlineSize: '100%' }} />
+          )}
+        </Box>
+        {/* Editor */}
+        <Box mb={'2rem'}>
+          <Editor initRecipeData={initRecipeData} recipeData={recipeData} setRecipeData={setRecipeData} />
+        </Box>
+        {/* Ratings */}
+        <Box display={'flex'} justifyContent={'space-between'} mb={'2rem'}>
+          <Box>
+            <Typography color="text">Time rating</Typography>
+            <TimeRating value={timeRatingValue} handleChange={(value: number) => setTimeRatingValue(value)} />
           </Box>
-        </div>
-        <div className="create--recipe--editor--container">
-          <Editor readOnly={false} recipeData={recipeData} setRecipeData={setRecipeData} />
-        </div>
-        <Box>
-          <div className="create--recipe--rating--container">
-            <div>
-              <Typography color="text">Time rating</Typography>
-              <TimeRating value={timeRatingValue} handleChange={(value: number) => setTimeRatingValue(value)} />
-            </div>
-            <div>
-              <Typography color="text">Skill rating</Typography>
-              <SkillRating value={skillRatingValue} handleChange={(value: number) => setSkillRatingValue(value)} />
-            </div>
-          </div>
-          <div className="create--recipe--button--container">
-            <Button color="secondary" variant="contained" size="medium" type="submit" startIcon={<Create />}>
-              Create
-            </Button>
-          </div>
+          <Box>
+            <Typography color="text">Skill rating</Typography>
+            <SkillRating value={skillRatingValue} handleChange={(value: number) => setSkillRatingValue(value)} />
+          </Box>
+        </Box>
+        {/* Submit button */}
+        <Box display={'flex'} justifyContent={'flex-end'} mb={'4rem'}>
+          <Button color="secondary" variant="contained" size="medium" type="submit" startIcon={<Create />}>
+            {editing ? 'Save' : 'Create'}
+          </Button>
         </Box>
       </form>
-      {isUploading && <RecipeUploadProgressDisplay step={recipeUploadStep} recipeId={recipeId.current} />}
-    </div>
+      {isUploading && <RecipeUploadProgressDisplay step={recipeUploadStep} recipeId={recipeId.current} editing={editing} />}
+    </Box>
   );
 }
 
@@ -197,7 +265,7 @@ function RecipeUploadProgressDisplay(props: any) {
         <Grid container justifyContent={'center'} height={400} alignContent={'center'} direction={'column'} gap={3}>
           {step === 3 ? (
             <>
-              <Typography>Success! Your recipe has been created!</Typography>
+              <Typography>Success! Your recipe has been {props.editing ? 'saved' : 'created'}!</Typography>
               <Button variant={'contained'} color={'secondary'} onClick={() => navigate(`/recipe/${props.recipeId}`)}>
                 Check it out!
               </Button>
