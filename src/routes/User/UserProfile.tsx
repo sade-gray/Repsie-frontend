@@ -24,7 +24,7 @@ const UserProfile = () => {
         {/* UserProfile , showing {activepage}
          */}
 
-        
+        <div className='userprofilein'>
             <div className='left'>
               <UserSidebar activepage={activepage ?? ''}/>
             </div>
@@ -32,6 +32,7 @@ const UserProfile = () => {
               {activepage === 'accountsettings' && <AccountSettings/>}
               {activepage === 'changepassword' && <ChangePassword/>}
               {activepage === 'legalnotice' && <LegalNotice/>}
+            </div>
             </div>
             </div>
  
