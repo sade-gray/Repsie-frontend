@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import { RestaurantMenuOutlined, Logout } from '@mui/icons-material';
 import { ListItemIcon } from '@mui/material';
 import useAuth from '@context/AuthProvider';
+import useUserData from '@context/UserDataProvider';
+import { deepOrange } from '@mui/material/colors';
 
 export default function HeaderProfileIcon() {
   const { user, signOut } = useAuth();
+  const { username } = useUserData();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleLogoutClick = () => {
@@ -25,8 +28,7 @@ export default function HeaderProfileIcon() {
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
           <IconButton sx={{ paddingRight: 1 }} onClick={handleOpenUserMenu}>
-            {/* TODO: Fetch avatar image from database */}
-            <Avatar src={user?.photoURL || ''} alt="user logo" />
+            <Avatar sx={{ bgcolor: deepOrange[500] }} src={user?.photoURL || ''} alt={username} />
           </IconButton>
         </Tooltip>
       </Box>
