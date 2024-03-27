@@ -1,64 +1,14 @@
-//$theme1: #3D5EBD;
-$theme1: rgb(85, 69, 146);
-$background: #252A38;
-$theme3: #551f0d;
-$theme4: #FFE400;
-$theme5: #14A76C;
+$theme1: #694fd0ff;
+$background: #252a38;
 $transparenttheme1: rgba(85, 69, 146, 55%);
 
-// TODO: Add breakpoint variables
-// Example
 $breakpoint-tablet: 768px;
 
+html,
 body {
-  font-weight:bolder;
+  font-weight: bolder;
   margin: 0;
-  min-height: 100vh;
-}
-
-.repsie--logo {
-  height: 35px;
-}
-
-.header {
-  width: 100vw;
-  position: sticky;
-  top:0;
-  background: $theme1;
-  border-radius: 0 0 1rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 10;
-
-  .header--left {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 0.5rem;
-    padding: 0.5rem;
-  }
-  
-  .header--search {
-    max-width: 30%;
-    padding: 0.5rem;
-  }
-}
-
-@media only screen and (min-width: 1200px) {
-  .header--left {
-    margin-left: 1.5rem;
-  }
-}
-
-.saved--recipe--drawer--icon--container {
-  width: 30px;
-  height: 37px;
-  margin-right: 5px;
-}
-
-.saved--recipe--drawer--icon {
-  height: 35px;
+  padding: 0;
 }
 
 .footer {
@@ -66,41 +16,16 @@ body {
   background-color: $theme1;
 }
 
-.saved--recipe--card {
-  border: 1px solid gray;
-  padding: 0.5em;
-  border-radius: 20px;
-  height: 8rem;
-  width: 100%;
-  color: white;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.saved--recipe--card--title {
-  background: $transparenttheme1;
-  border-radius: 1rem;
-  padding: 0.3rem;
-}
-
-.saved--recipe--title {
-  font-size: 1rem;
-  margin: 0 0.5rem;
-  color:black;
-  font-weight: bold;
-}
-
 .main--container {
   width: 100vw;
   display: flex;
+  justify-content: center;
 }
 
 .home--container > section {
-    padding: 5px 15px;
-}
+  padding: 5px 15px;
 
-@media only screen and (max-width: 600px) {
-  .home--container > section {
+  @media only screen and (max-width: 600px) {
     padding: 10px 5px;
   }
 }
@@ -110,35 +35,23 @@ body {
   flex: 1;
 }
 
-.saved--recipes--section--title {
-  margin: 0.2rem 1rem;
-}
-
 @media only screen and (max-width: 1200px) {
-  .saved--recipe--section, .chef--recommendation--container {
+  .chef--recommendation--container {
     display: none;
   }
-}
-
-.saved--recipes--list {
-  display: inline-block;
-  width: 100%;
 }
 
 // The whole feed's container
 .recipes--feed--container {
   flex: 2;
-  padding: 0 10%;
+  margin: 0 7%;
+  max-width: 630px;
 
-  h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2rem;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .recipes--feed--container {
-      padding: 0;
+  @media only screen and (max-width: $breakpoint-tablet) {
+    flex: auto;
+    padding: 0;
+    margin: 5px;
+    width: 100%;
   }
 }
 
@@ -146,79 +59,61 @@ body {
   flex: 1;
 }
 
-// The individual recipe container
-.feed--recipe--container {
-  border: 1px solid gray;
-  border-radius: 1rem;
-  padding: 15px 25px;
-  margin: 10px 0;
-}
-
-.recipe--title--container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.recipe--title {
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
-}
-
-.feed--recipe--image--container {
-  border-radius: 1rem;
-  display: flex;
-  justify-content: center;
-  margin: 10px;
-
-  img {
-    max-width: 100%;
-    max-height: 30rem;
-    border-radius: 1rem;
-  }
-}
-
-// myRecipes Page
-.my--recipes--section {
-  flex: 4;
-  padding: 0 1rem;
-  h2 {
-    margin: 0 0 0 1rem;
-    font-size: 2rem;
-  }
-}
-
-@media only screen and (max-width: $breakpoint-tablet) {
-  .my--recipes--section {
-    padding: 0;
-  }
-}
-
-.my--recipes--container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-}
-
-.my--recipe--item {
-  border: 1px solid gray;
-  background-size: cover;
-  background-repeat: round;
-  margin: 1rem;
-  border-radius: 1rem;
-  padding: 1rem;
-  width: 20rem;
-  height: 15rem;
-}
-
 a {
   text-decoration: none;
   color: inherit;
 }
 
-#create--recipe--button {
+.link--underlined {
+  text-decoration: #039be5;
+}
+
+.sign--up--container {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 1em;
+
+  form {
+    min-width: 300px;
+    margin: 1em;
+  }
+}
+
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+.recipe--image {
+  max-height: 300px;
+  object-fit: cover;
+  min-inline-size: 100%;
+  max-width: 85vw;
+}
+
+.scale-transition {
+  //transition: 'scale 0.5s linear'
+  transition: transform 0.5s;
+}
+
+.signup-stage1-show {
+  transform: scale(1);
+}
+
+.signup-stage1-hide {
+  transform: scale(0.8);
+}
+
+.slide-in-transition {
+  transition: transform 0.5s;
+}
+
+.signup-stage2-show {
+  transform: translateX(0%);
+}
+
+.signup-stage2-hide {
+  transform: translateX(100%);
 }

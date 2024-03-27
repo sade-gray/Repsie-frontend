@@ -1,0 +1,45 @@
+name: Continuous Integration
+# Triggers only on push, pull request to main and develop branches
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: write
+  id-token: write
+  pages: write
+  checks: write
+  deployments: write
+  actions: write
+  packages: write
+  statuses: write
+  security-events: write
+  repository-projects: write
+  pull-requests: write
+  issues: write
+  discussions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint:ci
+
+      - name: Run type check
+        run: npm run types:check

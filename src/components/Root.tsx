@@ -1,35 +1,31 @@
-import {Outlet} from "react-router-dom";
-import {Header} from "./Header/Header.tsx";
-import {ThemeProvider} from "@mui/material/styles";
-import {theme} from "../theme.ts";
-import Footer from "./Footer.tsx";
-import {Dispatch, SetStateAction, useState} from "react";
-import {createContext} from "react";
-
-
-interface IContextType {
-    drawerOpen: boolean;
-    setDrawerOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-export const DrawerContext = createContext<IContextType>({
-    drawerOpen: false,
-    setDrawerOpen: () => {},
-});
+import { Outlet } from 'react-router-dom';
+import { DesktopNavbar } from './Navbar/DesktopNavbar.tsx';
+import MobileNavbar from './Navbar/MobileNavbar.tsx';
+import { theme } from '../theme.ts';
+import { ThemeProvider } from '@mui/material/styles';
+import { AuthProvider } from '@context/AuthProvider';
+import { DrawerProvider } from '@context/DrawerProvider';
+import { SnackBarProvider } from '@context/SnackBarProvider/SnackBarContext.tsx';
+import { UserDataProvider } from '@context/UserDataProvider/UserDataContext.tsx';
+import { useMediaQuery } from '@mui/material';
+// import Footer from "./Footer.tsx";
 
 export function Root() {
-    const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-
-    return (
-        // Drawer Context is used by the Header component via the mobile drawer button
-        // It is also used by the home page (To be added)
-        <DrawerContext.Provider value={{drawerOpen, setDrawerOpen}}>
-            <ThemeProvider theme={theme}>
-                <Header/>
-                {/* Outlet is basically the child component to be rendered.*/}
-                <Outlet />
-                <Footer/>
-            </ThemeProvider>
-        </DrawerContext.Provider>
-    )
+  return (
+    <SnackBarProvider>
+      <AuthProvider>
+        <UserDataProvider>
+          <ThemeProvider theme={theme}>
+            {/* Drawer Context is only provided to the header to prevent refreshing the whole page.*/}
+            <DrawerProvider>
+              {useMediaQuery(theme.breakpoints.up('sm')) ? <DesktopNavbar /> : <MobileNavbar />}
+            </DrawerProvider>
+            {/* Outlet is the child component to be rendered.*/}
+            <Outlet />
+            {/*<Footer/>*/}
+          </ThemeProvider>
+        </UserDataProvider>
+      </AuthProvider>
+    </SnackBarProvider>
+  );
 }

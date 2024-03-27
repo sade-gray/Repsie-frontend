@@ -1,48 +1,56 @@
 .numbered--list {
-    list-style: none;
-    counter-reset: index;
+  list-style: none;
+  counter-reset: index;
 
-    li {
-        counter-increment: index;
-        margin: 0.25rem;
-        display: flex;
-        align-items: center;
-        
-    }
-    
-    li::before {
-        content: counter(index);
-        background: #662974;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        display: inline-block;
-        line-height: 2rem;
-        color: white;
-        text-align: center;
-        margin-right: 0.5rem;
-    }
+  li {
+    counter-increment: index;
+    margin: 0.25rem;
+    align-items: center;
+  }
+
+  li::before {
+    content: counter(index);
+    background: #694fd0ff;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 1.75rem;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+  }
 }
 
 .bulleted--list {
-    list-style: none;
+  list-style: none;
 
-    li {
-        margin: 0.25rem;
-        display: flex;
-        align-items: center;
-    }
-    
-    li::before {
-        content: "";
-        width: 1rem;
-        height: 1rem;
-        border: 2px solid black;
-        border-radius: 50%;
-        display: inline-block;
-        line-height: 2rem;
-        color: white;
-        text-align: center;
-        margin-right: 0.5rem;
-    }
+  li {
+    margin: 0.25rem;
+    align-items: center;
+  }
+
+  li::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 2px solid #694fd0ff;
+    border-radius: 50%;
+    display: inline-flex;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+  }
+}
+
+.editor {
+  font-weight: initial;
+  p {
+    margin: 0;
+  }
+
+  h1,
+  h2 {
+    margin: 5px;
+  }
 }

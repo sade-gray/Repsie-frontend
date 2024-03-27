@@ -1,291 +1,336 @@
-/*
- * Recipe Creation Page
- * This is where the Slate Editor is implented
- * Current features: Header (ctrl + 1), bold (ctrl + b), italic (ctrl + i) and paragraph (default)
- *
- */
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  Grid,
+  Step,
+  StepConnector,
+  stepConnectorClasses,
+  StepIconProps,
+  StepLabel,
+  Stepper,
+  styled,
+  TextField,
+  Typography,
+} from '@mui/material';
+import Editor from './components/Editor';
+import './styles.scss';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import { Check, CheckCircle, Create, FileUpload } from '@mui/icons-material';
+import useAuth from '@context/AuthProvider';
+import { Descendant } from 'slate';
+import TimeRating from '@component/Ratings/TimeRating';
+import SkillRating from '@component/Ratings/SkillRating';
+import { createRecipe, editRecipe, fetchRecipe } from '@api/recipe.ts';
+import { contentStorage } from '../../firebase.ts';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useNavigate, useParams } from 'react-router-dom';
+import useSnackBar from '@context/SnackBarProvider';
 
-import React, {useCallback, useState} from "react";
-import {BaseEditor, createEditor, Descendant, Editor, Transforms} from "slate";
-import {Slate, Editable, withReact, ReactEditor, useSlate} from "slate-react";
-import {withHistory} from "slate-history";
-import * as Icons from "@mui/icons-material";
-import {Box, Button, Divider, Icon, IconButton} from "@mui/material";
-import isHotkey from "is-hotkey";
-import "./styles.scss";
-import {Save} from "@mui/icons-material";
-import monke from "../../assets/dummyPhotos/monke.png";
+export function CreateRecipePage() {
+  // Get the user from the context
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { addSnack } = useSnackBar();
+  // The state for the skill rating, time rating, title, image url, cover image url and recipe data
+  const [skillRatingValue, setSkillRatingValue] = useState<number>(2);
+  const [timeRatingValue, setTimeRatingValue] = useState<number>(2);
+  const [title, setTitle] = useState<string>('');
+  const [coverImage, setCoverImage] = useState<File | null>();
+  const [coverPreview, setCoverPreview] = useState<string | undefined>();
+  const [initRecipeData, setInitRecipeData] = useState<Descendant[]>([
+    { type: 'paragraph', children: [{ text: 'This is your journey to creating a delicious recipe' }] } as Descendant,
+  ]);
+  const [recipeData, setRecipeData] = useState<Descendant[]>(initRecipeData);
+  // Used for tracking the uploading progress
+  const [recipeUploadStep, setRecipeUploadStep] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const recipeId = useRef(useParams()['recipeId'] || '');
 
-declare module "slate" {
-    export interface CustomTypes {
-        Editor: BaseEditor & ReactEditor;
-        Text: CustomText;
+  useEffect(() => {
+    if (recipeId.current !== 'new') {
+      fetchRecipe(recipeId.current)
+        .then(recipe => {
+          if (recipe.userId !== user?.uid) {
+            addSnack('You do not have permission to edit this recipe', 'warning');
+            navigate('/myRecipes');
+            return;
+          }
+          if (recipe.error) {
+            addSnack('Error editing recipe', 'error');
+            navigate('/myRecipes');
+          } else {
+            setTitle(recipe.title);
+            setSkillRatingValue(recipe.skillRating);
+            setTimeRatingValue(recipe.timeRating);
+
+            setRecipeData(JSON.parse(recipe.recipe));
+            setInitRecipeData(JSON.parse(recipe.recipe));
+
+            console.log('Inside: ', recipeData);
+            setEditing(true);
+          }
+        })
+        .catch(() => {
+          addSnack('Error editing recipe', 'error');
+          navigate('/myRecipes');
+        });
+
+      console.log('Outside: ', recipeData);
+
+      // Update the cover image whenever the recipe changes (e.g. page refresh or recipe edit)
+      const imageRef = ref(contentStorage, `recipes/${recipeId.current}/index.png`);
+      getDownloadURL(imageRef)
+        .then(url => setCoverPreview(url))
+        .catch(() => {
+          // Use default image if image not found
+          console.error('Error getting image');
+        });
     }
-}
+  }, []);
 
-export type CustomText = {
-    text: string;
-    bold?: boolean;
-    italic?: boolean;
-    underline?: boolean;
-    type?: string;
-};
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!user) {
+      return console.log('Must be logged in');
+    }
+    // Start showing the progress display
+    setIsUploading(true);
 
-const LIST_TYPES = ["numbered-list", "bulleted-list"];
-
-const FORMAT_HOTKEYS: {[key: string]: string} = {
-    "mod+b": "bold",
-    "mod+i": "italic",
-    "mod+u": "underline",
-};
-
-const BLOCK_HOTKEYS: {[key: string]: string} = {
-    "mod+1": "heading-one",
-    "mod+2": "heading-two",
-};
-
-// Initial text to be rendered inside the editor. This can be useful later when let users edit their pages.
-const initialValue = [
-    {
-        type: "paragraph",
-        children: [{text: "A line of text in a paragraph"}],
-    },
-];
-
-export default function CreateRecipePage() {
-    const [value, setValue] = useState<Descendant[]>(initialValue);
-
-    const handleSaveRecipe = async () => {
-        try {
-            const response = await fetch("http://localhost:8000/recipes", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title: "Pasta",
-                    imageUrl: "./",
-                    publisher: {
-                        name: "Patriks",
-                        iconUrl: monke,
-                    },
-                    recipe: JSON.stringify(value),
-                    timeRating: 2,
-                    skillRating: 1,
-                }),
-            });
-
-            const result = await response.json();
-            console.log("Success:", result);
-        } catch (error) {
-            console.error("Error:", error);
+    // Step 1: Upload the data
+    if (editing) {
+      await editRecipe(title, JSON.stringify(recipeData), timeRatingValue, skillRatingValue, recipeId.current).then(res => {
+        if (res.error) {
+          addSnack('Error editing recipe', 'error');
+          setIsUploading(false);
+        } else {
+          if (res.id) {
+            recipeId.current = res.id;
+            setRecipeUploadStep(1);
+          }
         }
-    };
-    const [editor] = useState(() => withReact(withHistory(createEditor())));
-    // This is the logic for rendering every node according to its type
-    const renderElement = useCallback((props: any) => <Element {...props} />, []);
-    const renderLeaf = useCallback((props: any) => {
-        return <Leaf {...props} />;
-    }, []);
+      });
+    } else {
+      await createRecipe(user.uid, title, JSON.stringify(recipeData), skillRatingValue, timeRatingValue).then(res => {
+        if (res.error) {
+          addSnack('Error creating recipe', 'error');
+          setIsUploading(false);
+        } else {
+          if (res.id) {
+            recipeId.current = res.id;
+            setRecipeUploadStep(1);
+          }
+        }
+      });
+    }
 
-    return (
-        <div
-            style={{
-                fontWeight: "initial",
-                margin: 10,
-            }}>
-            <Box
-                sx={{
-                    border: "2px solid",
-                    borderColor: "secondary.main",
-                }}>
-                {/*TODO: Componentize editor*/}
-                <Slate
-                    editor={editor}
-                    initialValue={value}
-                    onChange={(value) => {
-                        setValue(value);
-                        console.log(JSON.stringify(value));
-                    }}>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "start",
-                            flexWrap: "wrap",
-                            backgroundColor: "secondary.main",
-                        }}>
-                        <MarkButton format='bold' icon='FormatBold' />
-                        <MarkButton format='italic' icon='FormatItalic' />
-                        <MarkButton format='underline' icon='FormatUnderlined' />
-                        <BlockButton format='heading-one' icon='LooksOne' />
-                        <BlockButton format='heading-two' icon='LooksTwo' />
-                        <BlockButton format='bulleted-list' icon='FormatListBulleted' />
-                        <BlockButton format='numbered-list' icon='FormatListNumbered' />
-                    </Box>
-                    <Divider />
-                    <Box>
-                        <Editable
-                            style={{outline: 0}}
-                            renderElement={renderElement}
-                            renderLeaf={renderLeaf}
-                            onKeyDown={(event) => {
-                                for (const hotkey in FORMAT_HOTKEYS) {
-                                    if (isHotkey(hotkey, event)) {
-                                        event.preventDefault();
-                                        const mark = FORMAT_HOTKEYS[hotkey];
-                                        toggleMark(editor, mark);
-                                    }
-                                }
-                                for (const hotkey in BLOCK_HOTKEYS) {
-                                    if (isHotkey(hotkey, event)) {
-                                        event.preventDefault();
-                                        const mark = BLOCK_HOTKEYS[hotkey];
-                                        toggleBlock(editor, mark);
-                                    }
-                                }
-                            }}
-                        />
-                    </Box>
-                </Slate>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        margin: 5,
-                        padding: 3,
-                    }}>
-                    <Button
-                        color='secondary'
-                        type='submit'
-                        variant='contained'
-                        size='large'
-                        startIcon={<Save />}
-                        onClick={handleSaveRecipe}>
-                        Save
-                    </Button>
-                </div>
-            </Box>
-        </div>
-    );
+    // Step 2: Upload the image.
+    const recipeImageRef = ref(contentStorage, `recipes/${recipeId.current}/index.png`);
+    // Upload image if there was an image provided
+    if (coverImage) {
+      await uploadBytes(recipeImageRef, coverImage)
+        .then(() => {
+          setRecipeUploadStep(2);
+        })
+        .catch(error => {
+          console.error(error);
+          setIsUploading(false);
+        });
+    }
+
+    // Success: We can tell the user that the recipe is uploaded
+    setRecipeUploadStep(3);
+  };
+
+  // Handle the user uploading an image from their device.
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    setCoverImage(e.target.files[0]);
+  };
+
+  // Update the image preview on every image upload
+  useEffect(() => {
+    if (!coverImage) {
+      setCoverPreview(undefined);
+      return;
+    }
+    // Create the image url from the file
+    const objectUrl = URL.createObjectURL(coverImage);
+    setCoverPreview(objectUrl);
+  }, [coverImage]);
+
+  return (
+    <Box display={'flex'} justifyContent={'center'} m={'1rem'}>
+      {/* Recipe Form */}
+      <form onSubmit={e => handleFormSubmit(e)}>
+        {/* Title */}
+        <Box display={'flex'} justifyContent={'center'} flexDirection={'column'}>
+          <TextField
+            variant="outlined"
+            label="Title"
+            name="title"
+            color="secondary"
+            onChange={e => setTitle(e.target.value)}
+            value={title}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& > fieldset': {
+                  border: 'solid 2px',
+                  borderColor: 'secondary.main',
+                },
+              },
+              '& .MuiOutlinedInput-root:hover': {
+                '& > fieldset': { borderColor: 'secondary.main' },
+              },
+              marginBottom: '2rem',
+            }}
+          />
+        </Box>
+        {/* Image select */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            paddingY: 2,
+            border: 'dashed 2px',
+            borderColor: 'secondary.main',
+            marginBottom: '2rem',
+          }}
+        >
+          <Button variant="contained" color="secondary" component="label" startIcon={<FileUpload />}>
+            Select Image
+            <input hidden accept="image/png, image/jpeg" type="file" onChange={handleImageUpload} />
+          </Button>
+          {coverPreview && (
+            <img src={coverPreview} alt="Uploaded Image" height="auto" width="300" style={{ marginTop: '1rem', minInlineSize: '100%' }} />
+          )}
+        </Box>
+        {/* Editor */}
+        <Box mb={'2rem'}>
+          <Editor initRecipeData={initRecipeData} recipeData={recipeData} setRecipeData={setRecipeData} />
+        </Box>
+        {/* Ratings */}
+        <Box display={'flex'} justifyContent={'space-between'} mb={'2rem'}>
+          <Box>
+            <Typography color="text">Time rating</Typography>
+            <TimeRating value={timeRatingValue} handleChange={(value: number) => setTimeRatingValue(value)} />
+          </Box>
+          <Box>
+            <Typography color="text">Skill rating</Typography>
+            <SkillRating value={skillRatingValue} handleChange={(value: number) => setSkillRatingValue(value)} />
+          </Box>
+        </Box>
+        {/* Submit button */}
+        <Box display={'flex'} justifyContent={'flex-end'} mb={'4rem'}>
+          <Button color="secondary" variant="contained" size="medium" type="submit" startIcon={<Create />}>
+            {editing ? 'Save' : 'Create'}
+          </Button>
+        </Box>
+      </form>
+      {isUploading && <RecipeUploadProgressDisplay step={recipeUploadStep} recipeId={recipeId.current} editing={editing} />}
+    </Box>
+  );
 }
 
-const toggleBlock = (editor: BaseEditor & ReactEditor, format: string) => {
-    const isActive = isBlockActive(editor, format);
-    const isList = LIST_TYPES.includes(format);
+const steps = ['Uploading your recipe content', 'Uploading your cover image', 'Success!'];
 
-    Transforms.unwrapNodes(editor, {
-        // @ts-ignore
-        match: (n) => LIST_TYPES.includes(n.type),
-        split: true,
-    });
+function RecipeUploadProgressDisplay(props: any) {
+  const [open] = useState(true);
+  const [step, setStep] = useState(props.step);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-    Transforms.setNodes(editor, {
-        type: isActive ? "paragraph" : isList ? "list-item" : format,
-    });
+  useEffect(() => {
+    setStep(props.step);
+    setLoading(false);
 
-    if (!isActive && isList) {
-        const block = {type: format, children: []};
-        Transforms.wrapNodes(editor, block);
-    }
-};
+    setTimeout(() => {
+      setLoading(true);
+    }, 500);
+  }, [props.step]);
 
-const toggleMark = (editor: BaseEditor & ReactEditor, format: string) => {
-    const isActive = isMarkActive(editor, format);
+  return (
+    <Dialog open={open}>
+      <Box sx={{ margin: 2 }}>
+        <Stepper activeStep={step} connector={<QontoConnector />} alternativeLabel>
+          {steps.map(label => (
+            <Step key={label}>
+              <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        <Grid container justifyContent={'center'} height={400} alignContent={'center'} direction={'column'} gap={3}>
+          {step === 3 ? (
+            <>
+              <Typography>Success! Your recipe has been {props.editing ? 'saved' : 'created'}!</Typography>
+              <Button variant={'contained'} color={'secondary'} onClick={() => navigate(`/recipe/${props.recipeId}`)}>
+                Check it out!
+              </Button>
+            </>
+          ) : loading ? (
+            <CircularProgress color={'secondary'} />
+          ) : (
+            <CheckCircle color={'secondary'} fontSize={'large'} />
+          )}
+        </Grid>
+      </Box>
+    </Dialog>
+  );
+}
 
-    if (isActive) {
-        Editor.removeMark(editor, format);
-    } else {
-        Editor.addMark(editor, format, true);
-    }
-};
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 10,
+    left: 'calc(-50% + 16px)',
+    right: 'calc(50% + 16px)',
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: '#784af4',
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: '#784af4',
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    borderColor: theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#eaeaf0',
+    borderTopWidth: 3,
+    borderRadius: 1,
+  },
+}));
 
-const isBlockActive = (editor: BaseEditor & ReactEditor, format: string) => {
-    const [match] = Editor.nodes(editor, {
-        // @ts-ignore
-        match: (n) => n.type === format,
-    });
+const QontoStepIconRoot = styled('div')<{ ownerState: { active?: boolean } }>(({ theme, ownerState }) => ({
+  color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#eaeaf0',
+  display: 'flex',
+  height: 22,
+  alignItems: 'center',
+  ...(ownerState.active && {
+    color: '#784af4',
+  }),
+  '& .QontoStepIcon-completedIcon': {
+    color: '#784af4',
+    zIndex: 1,
+    fontSize: 18,
+  },
+  '& .QontoStepIcon-circle': {
+    width: 8,
+    height: 8,
+    borderRadius: '50%',
+    backgroundColor: 'currentColor',
+  },
+}));
 
-    return !!match;
-};
+function QontoStepIcon(props: StepIconProps) {
+  const { active, completed, className } = props;
 
-const isMarkActive = (editor: BaseEditor & ReactEditor, format: string) => {
-    const marks: any = Editor.marks(editor);
-    return marks ? marks[format] === true : false;
-};
-
-type ButtonProps = {
-    icon: keyof typeof Icons;
-    format: string;
-};
-
-const MarkButton = ({icon, format}: ButtonProps) => {
-    const editor = useSlate();
-    return (
-        <IconButton
-            onMouseDown={(event) => {
-                event.preventDefault();
-                toggleMark(editor, format);
-            }}>
-            <Icon color={isMarkActive(editor, format) ? "primary" : "disabled"}>
-                {React.createElement(Icons[icon])}
-            </Icon>
-        </IconButton>
-    );
-};
-
-const BlockButton = ({icon, format}: ButtonProps) => {
-    const editor = useSlate();
-    return (
-        <IconButton
-            onMouseDown={(event) => {
-                event.preventDefault();
-                toggleBlock(editor, format);
-            }}>
-            <Icon color={isBlockActive(editor, format) ? "primary" : "disabled"}>
-                {React.createElement(Icons[icon])}
-            </Icon>
-        </IconButton>
-    );
-};
-
-const Element = ({attributes, children, element}: any) => {
-    switch (element.type) {
-        case "heading-one":
-            return <h1 {...attributes}>{children}</h1>;
-        case "heading-two":
-            return <h2 {...attributes}>{children}</h2>;
-        case "bulleted-list":
-            return (
-                <ul className='bulleted--list' {...attributes}>
-                    {children}
-                </ul>
-            );
-        case "numbered-list":
-            return (
-                <ol className='numbered--list' {...attributes}>
-                    {children}
-                </ol>
-            );
-        case "list-item":
-            return <li {...attributes}>{children}</li>;
-        default:
-            return <p {...attributes}>{children}</p>;
-    }
-};
-
-const Leaf = ({attributes, children, leaf}: any) => {
-    if (leaf.bold) {
-        children = <strong>{children}</strong>;
-    }
-
-    if (leaf.italic) {
-        children = <em>{children}</em>;
-    }
-
-    if (leaf.underline) {
-        children = <u>{children}</u>;
-    }
-
-    return <span {...attributes}>{children}</span>;
-};
+  return (
+    <QontoStepIconRoot ownerState={{ active }} className={className}>
+      {completed ? <Check className="QontoStepIcon-completedIcon" /> : <div className="QontoStepIcon-circle" />}
+    </QontoStepIconRoot>
+  );
+}
