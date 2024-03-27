@@ -1,6 +1,6 @@
 import useDrawer from '@context/DrawerProvider';
 import { useTheme, useMediaQuery, useScrollTrigger, AppBar, IconButton, Grid, Box } from '@mui/material';
-import { HeaderSearchBox } from './HeaderSearchBox.tsx';
+import { HeaderSearch } from './HeaderSearch.tsx';
 import HeaderProfileIcon from './HeaderProfileIcon.tsx';
 import SavedRecipesDrawer from '../SavedRecipesDrawer.tsx';
 import React, { ReactElement } from 'react';
@@ -32,11 +32,13 @@ export function DesktopNavbar() {
               )}
               <RepsieLogo />
             </Box>
-            <Grid item>
-              <HeaderSearchBox />
-            </Grid>
-            <Grid item>
-              <HeaderProfileIcon />
+            <Grid display={'flex'} alignItems={'center'} flexDirection={'row'}>
+              <Grid item>
+                <HeaderSearch />
+              </Grid>
+              <Grid item>
+                <HeaderProfileIcon />
+              </Grid>
             </Grid>
           </Grid>
         </AppBar>
