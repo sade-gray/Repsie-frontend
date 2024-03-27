@@ -18,12 +18,15 @@ import Likes from '@component/Likes';
 import useUserData from '@context/UserDataProvider/useUserData.ts';
 import useAuth from '@context/AuthProvider/useAuth.ts';
 import { getPostLikes, likeRecipe, unlikeRecipe } from '@api/likes.ts';
+import { getUsernameAndNumber } from '@api/user.ts';
+import { RecipeCardData } from 'types/recipeTypes';
 
 export function RecipePage() {
   const recipeId = useParams()['recipeId'] || '';
   const [coverImageUrl, setCoverImageUrl] = useState<string>();
-  const [recipe, setRecipe] = useState<any>();
+  const [recipe, setRecipe] = useState<RecipeCardData>();
   const [likes, setLikes] = useState(0);
+  const [username, setUsername] = useState('');
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const navigate = useNavigate();
   const { addSnack } = useSnackBar();
@@ -60,6 +63,7 @@ export function RecipePage() {
       });
 
     getPostLikes(recipeId).then(likes => setLikes(likes));
+    // getUsernameAndNumber(recipe?.userId).then(data => setUsername(data.name));
   }, [recipeId]);
 
   const handleLikeClick = async () => {
@@ -85,7 +89,7 @@ export function RecipePage() {
           <Typography variant={isNotTablet ? 'h4' : 'h5'}>{recipe?.title || 'Loading...'}</Typography>
           <Box sx={{ mb: '1rem' }}>{coverImageUrl && <img className="recipe--image" src={coverImageUrl} alt="Recipe cover image" />}</Box>
           <Box mb={1}>
-            <PublisherContainer publisherImageUrl={Wex} publisherName="Patriks Baller" />
+            <PublisherContainer publisherImageUrl={Wex} publisherName={username || 'Unknown'} />
           </Box>
           <Divider sx={{ my: 1 }} />
           <Likes totalLikes={likes} liked={likedByUser} onClick={handleLikeClick} />
@@ -97,16 +101,14 @@ export function RecipePage() {
               <TimeRating value={recipe?.timeRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
             </Box>
             <Box>
-              <Typography color="text" align="right">
-                Skill rating
-              </Typography>
+              <Typography color="text">Skill rating</Typography>
               <SkillRating value={recipe?.skillRating} size={isNotTablet ? 'large' : 'medium'} readOnly />
             </Box>
           </Box>
 
           {/* Recipe Content */}
           <Box flexWrap={'wrap'}>
-            <Editor readOnly recipeData={JSON.parse(recipe.recipe || '')} />
+            <Editor readOnly initRecipeData={JSON.parse(recipe.recipe || '')} />
           </Box>
 
           {/* Comments Section */}

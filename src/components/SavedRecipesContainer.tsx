@@ -30,13 +30,14 @@ export default function SavedRecipesContainer(props: any) {
 export function SavedRecipeCard({ id, title, closeDrawer }: RecipeCardData & any) {
   const navigate = useNavigate();
   const [image, setImage] = useState('');
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const imageRef = ref(contentStorage, `recipes/${id}/index.png`);
     getDownloadURL(imageRef)
       .then(url => setImage(url))
       .catch(() => setImage(toastie));
-  }, []);
+  }, [id]);
 
   return (
     <Card sx={{ borderRadius: 2, backgroundColor: 'secondary.main', maxWidth: 400 }} variant={'outlined'}>
@@ -52,7 +53,7 @@ export function SavedRecipeCard({ id, title, closeDrawer }: RecipeCardData & any
             {title}
           </Typography>
           <Typography variant={'body2'} component={'span'} fontSize={10} color={'primary.dark'}>
-            by {'Bob'}
+            by {username || 'Unknown'}
           </Typography>
         </CardContent>
       </CardActionArea>

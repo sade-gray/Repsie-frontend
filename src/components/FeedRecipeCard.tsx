@@ -10,7 +10,6 @@ import useUserData from '@context/UserDataProvider';
 import { saveRecipe, unsaveRecipe } from '@api/recipe.ts';
 import SkillRating from './Ratings/SkillRating';
 import TimeRating from './Ratings/TimeRating';
-import Wex from '../assets/wex.png';
 import toastie from '../assets/dummyPhotos/gourmet-toastie.jpg';
 import { contentStorage } from '../firebase.ts';
 import { getDownloadURL, ref } from 'firebase/storage';
@@ -18,12 +17,14 @@ import Likes from './Likes/Likes.tsx';
 import { getPostLikes } from '@api/likes.ts';
 import { useNavigate } from 'react-router-dom';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { getUsernameAndNumber } from '@api/user.ts';
 
 export default function FeedRecipeCard(props: RecipeCardData) {
   const [saved, setSaved] = useState(props.saved);
   const { user } = useAuth();
   const [image, setImage] = useState('');
   const [likes, setLikes] = useState(0);
+  const [username, setUsername] = useState('');
   const { addSnack } = useSnackBar();
   const { setUserSavedRecipes, likedRecipes } = useUserData();
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       });
 
     getPostLikes(props.id).then(likes => setLikes(likes));
+    // getUsernameAndNumber(props.userId).then(data => setUsername(data.name));
   }, []);
 
   // Check if the user liked this recipe
@@ -95,12 +97,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
         </IconButton>
       </Grid>
       <CardActionArea onClick={() => navigate(`/recipe/${props.id}`)}>
-        <PublisherContainer
-          size={'small'}
-          // TODO: Update this when we have user profiles
-          publisherImageUrl={Wex}
-          publisherName={'Patriks'}
-        />
+        <PublisherContainer size={'small'} publisherName={username || 'Unknown'} />
 
         <CardMedia sx={{ borderRadius: 2 }} component={'img'} image={image} alt="food pic" />
 
