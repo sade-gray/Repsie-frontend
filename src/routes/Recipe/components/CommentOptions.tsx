@@ -8,7 +8,6 @@ import { deleteComment } from '@api/comments.ts';
 import { ListItemIcon, ListItemText } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReportIcon from '@mui/icons-material/Report';
-import EditIcon from '@mui/icons-material/Edit';
 import useSnackBar from '@context/SnackBarProvider';
 
 export default function CommentOptions(props: any) {
@@ -30,6 +29,7 @@ export default function CommentOptions(props: any) {
     deleteComment(props.recipeId, props.id).then(success => {
       if (success) {
         props.removeComment(props.id);
+        addSnack('Comment deleted', 'success');
       } else {
         addSnack('There was a problem deleting your comment', 'error');
       }
@@ -58,13 +58,7 @@ export default function CommentOptions(props: any) {
         {/*  Options if the user is the commenter */}
         {user?.uid === props.userId ? (
           [
-            <MenuItem key={0} onClick={handleClose}>
-              <ListItemIcon>
-                <EditIcon />
-              </ListItemIcon>
-              <ListItemText>Edit</ListItemText>
-            </MenuItem>,
-            <MenuItem key={1} onClick={handleDeleteClick}>
+            <MenuItem key={0} onClick={handleDeleteClick}>
               <ListItemIcon>
                 <DeleteIcon />
               </ListItemIcon>
@@ -73,7 +67,7 @@ export default function CommentOptions(props: any) {
           ]
         ) : (
           // Options if the user is NOT the commenter
-          <MenuItem key={2} color={'error'}>
+          <MenuItem key={1} color={'error'}>
             <ListItemIcon>
               <ReportIcon />
             </ListItemIcon>
