@@ -92,3 +92,28 @@ a {
   min-inline-size: 100%;
   max-width: 85vw;
 }
+
+.scale-transition {
+  //transition: 'scale 0.5s linear'
+  transition: transform 0.5s;
+}
+
+.signup-stage1-show {
+  transform: scale(1);
+}
+
+.signup-stage1-hide {
+  transform: scale(0.8);
+}
+
+.slide-in-transition {
+  transition: transform 0.5s;
+}
+
+.signup-stage2-show {
+  transform: translateX(0%);
+}
+
+.signup-stage2-hide {
+  transform: translateX(100%);
+}

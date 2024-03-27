@@ -1,11 +1,11 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { auth } from '../../firebase.ts';
 import { User as FirebaseUser, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
+import { onAuthStateChanged, signInWithCustomToken, signInWithEmailAndPassword } from 'firebase/auth';
 import useSnackBar from '@context/SnackBarProvider';
 import { useNavigate } from 'react-router-dom';
 import { AuthContextValues } from './authTypes';
-import { getTokenWithEmailAndPassword } from '@api/auth.ts';
+import { getTokenWithEmailAndPassword, signUpWithEmailAndPassword } from '@api/auth.ts';
 
 export const AuthContext = createContext({} as AuthContextValues);
 
@@ -25,20 +25,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * @param password
    */
   const emailSignUp = async (email: string, password: string) => {
-    return await createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-        if (user) {
-          setUser(user);
-          addSnack(`Success! Logged in as ${user.displayName || user.email}`);
-          return true;
-        }
-        return false;
-      })
-      .catch(error => {
-        console.log(error.message);
-        return false;
-      });
+    // Make a request to the backend auth api to create a user.
+    return await signUpWithEmailAndPassword(email, password).then(res => {
+      if (res.success) {
+        signInWithEmailAndPassword(auth, email, password);
+      }
+      return res;
+    });
   };
 
   /**
@@ -69,18 +62,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
   };
 
-  /**
-   * Signs the user out
-   */
+  /** Signs the user out */
   const signOut = () => {
     return auth.signOut();
   };
-  // TODO: Add update email and password functions
-  // TODO: Add Google Auth.
 
-  /**
-   * Google Auth provider for signing in or up
-   */
+  /** Google Auth provider for signing in or up */
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)

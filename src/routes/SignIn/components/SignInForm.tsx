@@ -1,4 +1,5 @@
-import { Button, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, TextField, Typography } from '@mui/material';
+import { Button, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, TextField } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import React, { useState } from 'react';
@@ -11,16 +12,13 @@ export default function SignInForm() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
-  // TODO: Add type.a
   const { emailSignIn } = useAuth();
-  // TODO: Disable sign up button until form is valid.
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const navigate = useNavigate();
-  // TODO: Redirect only if succesful.
   const handleClickShowPassword = () => setShowPassword(show => !show);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -85,7 +83,11 @@ export default function SignInForm() {
             </Button>
           </Grid>
         </Grid>
-        {loginError !== '' && <Typography color={'error'}>{loginError}</Typography>}
+        {loginError !== '' && (
+          <Alert variant={'outlined'} severity={'error'}>
+            {loginError}
+          </Alert>
+        )}
 
         {/* Sign in Button */}
         <Button
