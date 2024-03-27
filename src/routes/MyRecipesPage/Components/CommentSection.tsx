@@ -1,5 +1,4 @@
 import { Comment } from '../../../types/commentTypes';
-import pic from '../../../assets/dummyPhotos/monke.png';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Avatar, Box, Button, Container, Divider, Grid, IconButton, Input, Stack, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import useAuth from '@context/AuthProvider';
 import useSnackBar from '@context/SnackBarProvider';
 import CommentOptions from '../../Recipe/components/CommentOptions.tsx';
 import { theme } from '../../../theme.ts';
+// import { getUsernameAndNumber } from '@api/user.ts';
 
 /**
  * This is the comments section of a specific recipe's page.
@@ -66,7 +66,7 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
       <Box display={'flex'} flexDirection={'column'} mb={4} gap={2}>
         <form method="post" onSubmit={e => handleFormSubmit(e)}>
           <Box display={'flex'} gap={2}>
-            <Avatar src={pic} alt="User Avatar" />
+            <Avatar alt="User Avatar" />
             <Input
               type={'text'}
               placeholder={'Add a comment...'}
@@ -111,7 +111,7 @@ function CommentComponent(props: Comment & any) {
 
   return (
     <Box display={'flex'} ml={5} gap={2} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-      <Avatar src={pic} alt={'Modglio'} />
+      <Avatar alt={'User Avatar'} />
       {/* Comment body */}
       <Container sx={{ pl: 1, ml: 0 }}>
         <Typography color={'text'} variant={'body1'} overflow={'clip'} maxWidth={'60vw'}>

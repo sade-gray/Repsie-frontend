@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
-import { Logout, Settings, Login } from '@mui/icons-material';
+import { Logout, Settings, Login, RestaurantMenu } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '@context/AuthProvider';
 
@@ -29,7 +29,7 @@ export function AccountMenu() {
             aria-expanded={open ? 'true' : undefined}
           >
             {/* TODO: Add user icon here*/}
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }} />
           </IconButton>
         </Tooltip>
       </Box>
@@ -69,7 +69,7 @@ export function AccountMenu() {
         anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
       >
         {user ? (
-          <>
+          <Box>
             <MenuItem
               onClick={() => {
                 navigate('/profile');
@@ -81,6 +81,18 @@ export function AccountMenu() {
 
             <MenuItem onClick={handleClose}>
               <Avatar /> My account
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                navigate('/myRecipes');
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <RestaurantMenu />
+              </ListItemIcon>
+              My recipes
             </MenuItem>
 
             <Divider />
@@ -103,9 +115,9 @@ export function AccountMenu() {
               </ListItemIcon>
               Logout
             </MenuItem>
-          </>
+          </Box>
         ) : (
-          <>
+          <Box>
             <MenuItem
               onClick={() => {
                 navigate('/signin');
@@ -129,7 +141,7 @@ export function AccountMenu() {
               </ListItemIcon>
               Sign up
             </MenuItem>
-          </>
+          </Box>
         )}
       </Menu>
     </>

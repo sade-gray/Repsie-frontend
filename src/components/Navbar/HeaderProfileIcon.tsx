@@ -1,14 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import avatar from '../../assets/wex.png';
+import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RestaurantMenuOutlined, Logout } from '@mui/icons-material';
@@ -36,7 +26,7 @@ export default function HeaderProfileIcon() {
         <Tooltip title="Open settings">
           <IconButton sx={{ paddingRight: 1 }} onClick={handleOpenUserMenu}>
             {/* TODO: Fetch avatar image from database */}
-            <Avatar src={user?.photoURL || avatar} alt="user logo" />
+            <Avatar src={user?.photoURL || ''} alt="user logo" />
           </IconButton>
         </Tooltip>
       </Box>
@@ -77,10 +67,7 @@ export default function HeaderProfileIcon() {
             <Divider />
             <Link to="/myRecipes">
               <MenuItem onClick={handleCloseUserMenu}>
-                <RestaurantMenuOutlined
-                  sx={{ width: '35px', height: '35px', mr: 1 }}
-                  color="secondary"
-                />
+                <RestaurantMenuOutlined sx={{ width: '35px', height: '35px', mr: 1 }} color="secondary" />
                 <Typography color="text">My Recipes</Typography>
               </MenuItem>
             </Link>

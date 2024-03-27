@@ -5,7 +5,7 @@ interface PublisherProps {
   outline?: 'bold';
   size?: 'x-small' | 'small' | 'medium' | 'large' | '';
   publisherName: string;
-  publisherImageUrl: string;
+  publisherImageUrl?: string;
   color?: string | '';
 }
 
@@ -39,7 +39,7 @@ export function PublisherContainer(props: PublisherProps) {
 
   return (
     <Grid container alignItems={'center'} fontSize={props.size} my={0.5}>
-      <Avatar src={props.publisherImageUrl} alt="Wex" sx={{ width: size(), height: size(), mx: 1 }} />
+      <Avatar alt="Avatar" sx={{ width: size(), height: size(), mx: 1 }} />
       <Typography variant="body2" color={'primary.dark'} fontSize={fontSize()}>
         {props.publisherName}
       </Typography>
