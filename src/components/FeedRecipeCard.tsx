@@ -17,15 +17,14 @@ import Likes from './Likes/Likes.tsx';
 import { getPostLikes } from '@api/likes.ts';
 import { useNavigate } from 'react-router-dom';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-// import { getUsernameAndNumber } from '@api/user.ts';
+import { getUsernameAndNumber } from '@api/user.ts';
 
 export default function FeedRecipeCard(props: RecipeCardData) {
   const [saved, setSaved] = useState(props.saved);
   const { user } = useAuth();
   const [image, setImage] = useState('');
   const [likes, setLikes] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [username] = useState('');
+  const [username, setUsername] = useState('');
   const { addSnack } = useSnackBar();
   const { setUserSavedRecipes, likedRecipes } = useUserData();
   const navigate = useNavigate();
@@ -45,7 +44,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       });
 
     getPostLikes(props.id).then(likes => setLikes(likes));
-    // getUsernameAndNumber(props.userId).then(data => setUsername(data.name));
+    getUsernameAndNumber(props.userId).then(data => setUsername(data.name));
   }, [props.id]);
 
   // Check if the user liked this recipe
