@@ -49,18 +49,18 @@ export default function Home() {
   }, [userSavedRecipes]);
 
   // Fetch more recipes when user is near bottom of page
-  useEffect(() => {
-    const handleScroll = () => {
-      const winDoc = document.documentElement;
-      const scrolledToBottom = winDoc.scrollHeight === winDoc.scrollTop + winDoc.clientHeight;
-      if (scrolledToBottom) {
-        getMoreRecipes();
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const winDoc = document.documentElement;
+  //     const scrolledToBottom = winDoc.scrollHeight === winDoc.scrollTop + winDoc.clientHeight;
+  //     if (scrolledToBottom) {
+  //       getMoreRecipes();
+  //     }
+  //   };
+  //   window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
 
   // Turn the recipe data into components for rendering
   const recipeComponents = recipeData?.map((recipe, idx) => {
@@ -78,7 +78,7 @@ export default function Home() {
           {recipeComponents?.length === 0 ? <HomePageSkeleton /> : recipeComponents}
         </div>
       </section>
-      <section className={'chef--recommendation--container'}>Chefs to follow</section>
+      <section className={'chef--recommendation--container'}></section>
     </div>
   );
 }
