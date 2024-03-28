@@ -3,6 +3,7 @@ import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip
 import { Logout, Settings, Login, RestaurantMenu } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '@context/AuthProvider';
+import { deepOrange } from '@mui/material/colors';
 
 export function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -29,7 +30,7 @@ export function AccountMenu() {
             aria-expanded={open ? 'true' : undefined}
           >
             {/* TODO: Add user icon here*/}
-            <Avatar sx={{ width: 32, height: 32 }} />
+            <Avatar sx={{ bgcolor: deepOrange[500] }} src={user?.photoURL || ''} alt={'User profile picture'} />
           </IconButton>
         </Tooltip>
       </Box>
