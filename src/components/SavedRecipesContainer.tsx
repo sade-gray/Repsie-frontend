@@ -6,6 +6,7 @@ import { contentStorage } from '../firebase.ts';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { RecipeCardData } from '../types/recipeTypes';
 import { useNavigate } from 'react-router-dom';
+import { getUsernameAndNumber } from '@api/user.ts';
 
 /**
  * The list component used to display the saved recipes.
@@ -27,16 +28,17 @@ export default function SavedRecipesContainer(props: any) {
   );
 }
 
-export function SavedRecipeCard({ id, title, closeDrawer }: RecipeCardData & any) {
+export function SavedRecipeCard({ id, title, closeDrawer, userId }: RecipeCardData & any) {
   const navigate = useNavigate();
   const [image, setImage] = useState('');
-  const [username] = useState('');
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const imageRef = ref(contentStorage, `recipes/${id}/index.png`);
     getDownloadURL(imageRef)
       .then(url => setImage(url))
       .catch(() => setImage(toastie));
+    getUsernameAndNumber(userId).then(data => setUsername(data.name));
   }, [id]);
 
   return (
