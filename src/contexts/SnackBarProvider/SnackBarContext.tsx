@@ -28,7 +28,7 @@ export function SnackBarProvider({ children }: { children: ReactNode }) {
     setOpen(true);
   };
 
-  const value: snackContextValues = {addSnack};
+  const value: snackContextValues = { addSnack };
 
   const handleClose = () => {
     setOpen(false);
@@ -36,9 +36,7 @@ export function SnackBarProvider({ children }: { children: ReactNode }) {
 
   return (
     <SnackBarContext.Provider value={value}>
-      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
         <Alert severity={snack.severity} onClose={handleClose}>
           {snack.message}
         </Alert>
