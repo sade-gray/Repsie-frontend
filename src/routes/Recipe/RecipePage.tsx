@@ -1,5 +1,4 @@
 import { PublisherContainer } from './components/PublisherContainer.tsx';
-import Wex from '../../assets/wex.png';
 import toastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
 import { getDownloadURL } from 'firebase/storage';
 import { Box, Container, Divider, Skeleton, Stack, Typography, useMediaQuery } from '@mui/material';
