@@ -14,9 +14,5 @@ export const DrawerContext = createContext<IContextType>({
 export function DrawerProvider({ children }: { children: ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
-  return (
-    <DrawerContext.Provider value={{ drawerOpen, setDrawerOpen }}>
-      {children}
-    </DrawerContext.Provider>
-  );
+  return <DrawerContext.Provider value={{ drawerOpen, setDrawerOpen }}>{children}</DrawerContext.Provider>;
 }

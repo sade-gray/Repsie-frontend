@@ -17,9 +17,7 @@ export function Root() {
         <UserDataProvider>
           <ThemeProvider theme={theme}>
             {/* Drawer Context is only provided to the header to prevent refreshing the whole page.*/}
-            <DrawerProvider>
-              {useMediaQuery(theme.breakpoints.up('sm')) ? <DesktopNavbar /> : <MobileNavbar />}
-            </DrawerProvider>
+            <DrawerProvider>{useMediaQuery(theme.breakpoints.up('sm')) ? <DesktopNavbar /> : <MobileNavbar />}</DrawerProvider>
             {/* Outlet is the child component to be rendered.*/}
             <Outlet />
             {/*<Footer/>*/}
