@@ -1,32 +1,31 @@
-
-
+import SaveIcon from '@mui/icons-material/Save';
 
 const ChangePassword = () => {
-    return (
-        <div className='accountsettings'>
-            <h1 className='mainhead1'>Change Password</h1>
+  return (
+    <div className="accountsettings">
+      <h1 className="mainhead1">Change Password</h1>
 
-            <div className='form'>
-                <div className='form-group'>
-                    <label htmlFor='oldpass'>Old Password <span>*</span></label>
-                    <input type="password"
-                    />
-                </div>
-
-                <div className='form-group'>
-                    <label htmlFor='newpass'>New Password <span>*</span></label>
-                    <input type="password"
-                    />
-                </div>
-
-
-            </div>
-
-            <button className='mainbutton1'
-
-            >Save Changes</button>
+      <div className="form">
+        <div className="form-group">
+          <label htmlFor="oldpass">
+            Old Password <span>*</span>
+          </label>
+          <input type="password" />
         </div>
-    )
-}
 
-export default ChangePassword
+        <div className="form-group">
+          <label htmlFor="newpass">
+            New Password <span>*</span>
+          </label>
+          <input type="password" />
+        </div>
+      </div>
+
+      <button className="mainbutton1">
+        <SaveIcon />
+      </button>
+    </div>
+  );
+};
+
+export default ChangePassword;

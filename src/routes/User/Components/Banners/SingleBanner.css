@@ -7,20 +7,20 @@
 
 .singlebanner img {
     width: 100%;
-    height: 100%;
+    height: 60%;
     object-fit: cover;
 }
 
 .singlebanner .bannerimgfilter {
     background-color: rgba(0, 0, 0, 0.476);
     width: 100%;
-    height: 100%;
+    height: 60%;
     position: absolute;
 }
 
 .singlebanner .bannerheading {
     position: absolute;
-    top: 50%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
 
