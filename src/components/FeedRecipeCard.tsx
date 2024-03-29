@@ -99,7 +99,7 @@ export default function FeedRecipeCard(props: RecipeCardData) {
       <CardActionArea onClick={() => navigate(`/recipe/${props.id}`)}>
         <PublisherContainer size={'small'} publisherName={username || 'Unknown'} />
 
-        <CardMedia sx={{ borderRadius: 2 }} component={'img'} image={image} alt="food pic" />
+        <CardMedia sx={{ borderRadius: 2, maxHeight: 400, objectFit: 'contain' }} component={'img'} image={image} alt="food pic" />
 
         {/* Time and skill rating section */}
         <Grid container justifyContent={'space-between'} my={1}>
