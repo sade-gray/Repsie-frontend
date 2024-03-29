@@ -1,11 +1,11 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { auth } from '../../firebase.ts';
 import { User as FirebaseUser, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { onAuthStateChanged, signInWithCustomToken, signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import useSnackBar from '@context/SnackBarProvider';
 import { useNavigate } from 'react-router-dom';
 import { AuthContextValues } from './authTypes';
-import { getTokenWithEmailAndPassword, signUpWithEmailAndPassword } from '@api/auth.ts';
+import { signUpWithEmailAndPassword } from '@api/auth.ts';
 
 export const AuthContext = createContext({} as AuthContextValues);
 
@@ -41,11 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * @return whether the user was able to sign in
    */
   const emailSignIn = async (email: string, password: string) => {
-    const token = await getTokenWithEmailAndPassword(email, password);
-    // If there was an issue signing in on the backend, return false
-    if (token === '') return false;
-
-    return signInWithCustomToken(auth, token)
+    return signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         // Signed in
         const user = userCredential.user;
