@@ -7,11 +7,12 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export default function SignUpForm(props: any) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  /** Password field is made up of its value, valid state and error message all in one variable */
+  const [password, setPassword] = useState({ value: '', valid: false, errorMessage: '' });
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [signupError, setSignupError] = useState('');
-  const [waitingForSignup, setWaitingForSignup] = useState(false);
+  const [pendingSignup, setPendingSignup] = useState(false);
 
   const { emailSignUp } = useAuth();
 
@@ -19,16 +20,17 @@ export default function SignUpForm(props: any) {
     setEmail(e.target.value);
   };
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const res = isValidPassword(e.target.value);
+    setPassword({
+      value: e.target.value,
+      valid: res.valid,
+      errorMessage: res.message,
+    });
+  };
+
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value);
-    // Check if passwords match after 2 seconds.
-    setTimeout(() => {
-      if (confirmPassword !== '' && password !== confirmPassword) {
-        setSignupError('Passwords do not match');
-      } else {
-        setSignupError('');
-      }
-    }, 2000);
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -38,10 +40,14 @@ export default function SignUpForm(props: any) {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (password.value !== confirmPassword) {
+      setSignupError('Passwords do not match.');
+      return;
+    }
     // Try to sign up with the current credentials.
-    setWaitingForSignup(true);
-    const authResponse = await emailSignUp(email, password);
-    setWaitingForSignup(false);
+    setPendingSignup(true);
+    const authResponse = await emailSignUp(email, password.value);
+    setPendingSignup(false);
     // Go to the username & pfp stage if successful, show error otherwise
     if (authResponse.success) {
       console.log('Successfully signed up!');
@@ -73,8 +79,8 @@ export default function SignUpForm(props: any) {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 id="password-field"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                value={password.value}
+                onChange={handlePasswordChange}
                 fullWidth
                 required
                 endAdornment={
@@ -91,6 +97,14 @@ export default function SignUpForm(props: any) {
                 }
               />
             </FormControl>
+          </Grid>
+          <Grid container justifyContent={'left'} px={6}>
+            {/* Password Error Message */}
+            {!password.valid && password.errorMessage !== '' && (
+              <Typography variant={'body2'} color={'error'}>
+                {password.errorMessage}
+              </Typography>
+            )}
           </Grid>
         </Grid>
 
@@ -138,15 +152,43 @@ export default function SignUpForm(props: any) {
           fullWidth
           sx={{ borderRadius: 5, mx: 5 }}
           // button is enabled only if all fields are filled, passwords match and the user has not pressed sign up already
-          disabled={email === '' || password === '' || confirmPassword === '' || password !== confirmPassword || waitingForSignup}
+          disabled={
+            email === '' || password.value === '' || !password.valid || confirmPassword === '' || password.value !== confirmPassword || pendingSignup
+          }
           size={'large'}
           variant={'contained'}
           color={'secondary'}
           type={'submit'}
         >
-          {waitingForSignup ? <CircularProgress size={25} /> : 'Sign up'}
+          {pendingSignup ? <CircularProgress size={25} /> : 'Sign up'}
         </Button>
       </Grid>
     </form>
   );
+}
+
+interface PasswordValidationResponse {
+  valid: boolean;
+  message: string;
+}
+
+function isValidPassword(password: string) {
+  const res: PasswordValidationResponse = {
+    valid: false,
+    message: '',
+  };
+
+  if (password.length < 8) {
+    res.message = 'Password must be at least 8 characters';
+  } else if (password.search(/[a-z]/) < 0) {
+    res.message = 'Password must contain at least one lowercase letter';
+  } else if (password.search(/[A-Z]/) < 0) {
+    res.message = 'Password must contain at least one uppercase letter';
+  } else if (password.search(/[0-9]/) < 0) {
+    res.message = 'Password must contain at least one number';
+  } else {
+    res.valid = true;
+  }
+
+  return res;
 }
