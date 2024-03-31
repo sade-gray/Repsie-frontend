@@ -40,7 +40,7 @@ export function PublisherContainer(props: PublisherProps) {
   return (
     <Grid container alignItems={'center'} fontSize={props.size} my={0.5}>
       <Avatar alt="Avatar" sx={{ width: size(), height: size(), mx: 1, color: 'secondary.main' }} />
-      <Typography variant="body2" color={'black'} fontSize={fontSize()}>
+      <Typography variant="body2" fontSize={fontSize()}>
         {props.publisherName}
       </Typography>
     </Grid>

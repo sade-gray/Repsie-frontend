@@ -61,7 +61,7 @@ export default function HeaderProfileIcon() {
         <Link to={user ? '/UserProfile/accountsettings' : '/signin'}>
           <MenuItem onClick={handleCloseUserMenu}>
             <Avatar sx={{ width: '35px', height: '35px' }} />
-            <Typography color="text">{user ? 'Profile' : 'Sign in'}</Typography>
+            <Typography>{user ? 'Profile' : 'Sign in'}</Typography>
           </MenuItem>
         </Link>
         {user && (
@@ -69,14 +69,14 @@ export default function HeaderProfileIcon() {
             <Divider />
             <Link to="/myRecipes">
               <MenuItem onClick={handleCloseUserMenu}>
-                <RestaurantMenuOutlined sx={{ width: '35px', height: '35px', mr: 1 }} color="secondary" />
+                <RestaurantMenuOutlined sx={{ width: '35px', height: '35px', mr: 1 }} color="primary" />
                 <Typography color="text">My Recipes</Typography>
               </MenuItem>
             </Link>
             <Divider />
             <MenuItem onClick={handleLogoutClick}>
               <ListItemIcon>
-                <Logout sx={{ width: '35px', height: '35px', mr: 1 }} color="secondary" />
+                <Logout color="primary" sx={{ width: '35px', height: '35px', mr: 1 }} />
               </ListItemIcon>
               <Typography color="text">Logout</Typography>
             </MenuItem>

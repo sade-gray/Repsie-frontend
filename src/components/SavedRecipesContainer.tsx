@@ -42,7 +42,7 @@ export function SavedRecipeCard({ id, title, closeDrawer, userId }: RecipeCardDa
   }, [id]);
 
   return (
-    <Card sx={{ borderRadius: 2, backgroundColor: 'secondary.main', maxWidth: 400 }} variant={'outlined'}>
+    <Card sx={{ borderRadius: 2, backgroundColor: 'secondary', maxWidth: 400 }} variant={'outlined'}>
       <CardActionArea
         onClick={() => {
           navigate(`/recipe/${id}`);
@@ -50,11 +50,11 @@ export function SavedRecipeCard({ id, title, closeDrawer, userId }: RecipeCardDa
         }}
       >
         <CardMedia component={'img'} height={100} image={image} alt={`Recipe image from ${title}`} />
-        <CardContent sx={{ padding: 1, color: 'primary.main' }}>
+        <CardContent sx={{ padding: 1, color: 'primary' }}>
           <Typography variant={'subtitle1'} mr={1}>
             {title}
           </Typography>
-          <Typography variant={'body2'} component={'span'} fontSize={10} color={'primary.dark'}>
+          <Typography variant={'body2'} component={'span'} fontSize={10}>
             by {username || 'Unknown'}
           </Typography>
         </CardContent>

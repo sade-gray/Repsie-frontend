@@ -1,21 +1,51 @@
-import { createTheme } from '@mui/material/styles';
+import { grey, deepPurple } from '@mui/material/colors';
+import { PaletteMode } from '@mui/material';
 
-// TODO: Add Dark mode baby
-export const theme = createTheme({
+/* 
+About theme:
+This is where the website's theme is defined. It currently has two modes: light and dark
+For both light and dark mode, the primary color is purple.
+*/
+
+export const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
-    text: {
-      primary: '#040316',
-    },
-    primary: {
-      main: '#FFFFFF',
-      dark: '#acaaaf',
-    },
-    secondary: {
-      main: '#694FD0',
-      dark: '#baaeea',
-    },
-    background: {
-      default: '#FFFFFF',
-    },
+    mode,
+    ...(mode === 'light'
+      ? {
+          primary: {
+            main: deepPurple[500],
+            dark: deepPurple[600],
+          },
+          secondary: {
+            main: grey[50],
+            dark: grey[200],
+          },
+          text: {
+            primary: grey[900],
+          },
+          background: {
+            default: grey[50],
+            paper: grey[50],
+          },
+        }
+      : {
+          // palette values for dark mode
+          primary: {
+            main: deepPurple[500],
+            dark: deepPurple[600],
+          },
+          secondary: {
+            main: grey[50],
+            dark: grey[200],
+          },
+          background: {
+            default: grey[900],
+            paper: grey[700],
+          },
+          text: {
+            primary: grey[50],
+            secondary: grey[200],
+          },
+        }),
   },
 });

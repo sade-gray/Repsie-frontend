@@ -14,7 +14,7 @@ function TimeRating({ value, readOnly, handleChange, size = 'large' }: ratingPro
       value={value}
       name="time-rating"
       size={size}
-      icon={<AccessTime fontSize={size} color="secondary" />}
+      icon={<AccessTime fontSize={size} color="primary" />}
       emptyIcon={<AccessTime fontSize={size} />}
       onChange={(e, newValue) => {
         e.preventDefault();

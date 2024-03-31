@@ -47,7 +47,7 @@ export function HeaderSearch() {
     <Box display={'flex'} alignContent={'center'} flexDirection={'column'}>
       {/* Search icon */}
       <Tooltip title="Search for recipes">
-        <IconButton onClick={handleToggle} color="primary" size="medium">
+        <IconButton onClick={handleToggle} color="secondary" size="medium">
           <Search />
         </IconButton>
       </Tooltip>

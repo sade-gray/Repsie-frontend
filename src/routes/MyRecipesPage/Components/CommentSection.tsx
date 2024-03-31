@@ -7,7 +7,7 @@ import { getComments, postComment } from '@api/comments.ts';
 import useAuth from '@context/AuthProvider';
 import useSnackBar from '@context/SnackBarProvider';
 import CommentOptions from '../../Recipe/components/CommentOptions.tsx';
-import { theme } from '../../../theme.ts';
+import { useTheme } from '@mui/material/styles';
 // import { getUsernameAndNumber } from '@api/user.ts';
 
 /**
@@ -58,7 +58,7 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
   return (
     <Box>
       {/* Comments header */}
-      <Typography variant={'h4'} color={'text'}>
+      <Typography variant={'h4'}>
         {commentCount} Comment{(commentCount > 1 || commentCount == 0) && 's'}
       </Typography>
       <Divider variant={'fullWidth'} sx={{ my: 1, mb: 3 }} />
@@ -70,7 +70,7 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
             <Input
               type={'text'}
               placeholder={'Add a comment...'}
-              color={'secondary'}
+              color={'primary'}
               onFocus={() => setShowControls(true)}
               value={commentDraft}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCommentDraft(e.target.value)}
@@ -81,10 +81,10 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
           {/* Comment controls (cancel, comment) */}
           {showControls && (
             <Box display={'flex'} gap={2} justifyContent={'flex-end'}>
-              <Button variant={'text'} color={'secondary'} onClick={() => setShowControls(false)}>
+              <Button variant={'text'} color={'primary'} onClick={() => setShowControls(false)}>
                 Cancel
               </Button>
-              <Button variant={'text'} color={'secondary'} disabled={commentDraft.length === 0} type="submit">
+              <Button variant={'text'} color={'primary'} disabled={commentDraft.length === 0} type="submit">
                 Comment
               </Button>
             </Box>
@@ -101,6 +101,7 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
 }
 
 function CommentComponent(props: Comment & any) {
+  const theme = useTheme();
   // const [repliesOpen, setRepliesOpen] = useState(false);
   // const [replying, setIsReplying] = useState(false);
   // const replyCount = props.replies.length;
@@ -114,16 +115,14 @@ function CommentComponent(props: Comment & any) {
       <Avatar alt={'User Avatar'} />
       {/* Comment body */}
       <Container sx={{ pl: 1, ml: 0 }}>
-        <Typography color={'text'} variant={'body1'} overflow={'clip'} maxWidth={'60vw'}>
+        <Typography variant={'body1'} overflow={'clip'} maxWidth={'60vw'}>
           {props.userId === user?.uid ? 'You' : props.userId}
         </Typography>
-        <Typography color={'text'} variant={'body1'}>
-          {props.commentBody}
-        </Typography>
+        <Typography variant={'body1'}>{props.commentBody}</Typography>
         {/* Like and Reply Bar */}
         <Grid container gap={1} mt={1} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton sx={{ borderRadius: 4, gap: 0.5 }}>
-            <FavoriteBorderIcon color={'secondary'} />
+            <FavoriteBorderIcon color={'primary'} />
             {/* <Typography color={'text'}>{!props.likeCount && '0'}</Typography> */}
           </IconButton>
           {(!isNotTablet || isHovering) && <CommentOptions {...props} />}

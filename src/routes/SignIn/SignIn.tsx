@@ -24,10 +24,10 @@ export function SignIn() {
       <Grid container justifyContent={'center'} mt={10}>
         <Typography>Or Sign Up using</Typography>
         <Grid container justifyContent={'center'} alignItems={'centre'}>
-          <IconButton color={'secondary'} sx={{ width: 40 }} component={Link} to={'/signup'}>
+          <IconButton color="primary" sx={{ width: 40 }} component={Link} to={'/signup'}>
             <EmailIcon fontSize={'medium'} />
           </IconButton>
-          <IconButton color={'secondary'} onClick={signInWithGoogle}>
+          <IconButton onClick={signInWithGoogle}>
             <img src={GoogleIcon} alt={'Google Icon'} />
           </IconButton>
         </Grid>

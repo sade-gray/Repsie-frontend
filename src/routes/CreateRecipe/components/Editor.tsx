@@ -78,7 +78,7 @@ export default function SlateEditor({ initRecipeData, setRecipeData, readOnly }:
 
   useEffect(() => {
     // Delete every node in the editor
-    editor.children.map(_ => {
+    editor.children.map(() => {
       Transforms.delete(editor, { at: [0] });
     });
     // Add the new content
@@ -91,7 +91,7 @@ export default function SlateEditor({ initRecipeData, setRecipeData, readOnly }:
         // Set the border if the editor is not read-only
         sx={{
           border: !readOnly ? '2px solid' : 'none',
-          borderColor: 'secondary.main',
+          borderColor: 'primary.main',
         }}
       >
         <Slate
@@ -104,7 +104,7 @@ export default function SlateEditor({ initRecipeData, setRecipeData, readOnly }:
         >
           {!readOnly && ( // If the editor is not read-only, render the buttons
             <Box>
-              <Box className="editor--buttons" display={'flex'} justifyContent={'flex-start'} flexWrap={'wrap'} sx={{ backgroundColor: '#eee' }}>
+              <Box className="editor--buttons" display={'flex'} justifyContent={'flex-start'} flexWrap={'wrap'} color={'primary'}>
                 <MarkButton format="bold" icon="FormatBold" />
                 <MarkButton format="italic" icon="FormatItalic" />
                 <MarkButton format="underline" icon="FormatUnderlined" />

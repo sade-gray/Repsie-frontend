@@ -30,16 +30,16 @@ export default function Likes({ totalLikes, readOnly, liked, onClick }: LikesPro
     <Box display={'flex'} alignItems={'center'} m={0.5}>
       {readOnly ? (
         _liked ? (
-          <FavoriteIcon color="secondary" fontSize="medium" />
+          <FavoriteIcon color="primary" fontSize="medium" />
         ) : (
-          <FavoriteBorderIcon color="secondary" fontSize="medium" />
+          <FavoriteBorderIcon color="primary" fontSize="medium" />
         )
       ) : (
-        <IconButton sx={{ p: 0 }} color={'secondary'} onClick={onClick ? e => handleClick(e, onClick) : undefined}>
+        <IconButton sx={{ p: 0 }} color={'primary'} onClick={onClick ? e => handleClick(e, onClick) : undefined}>
           {_liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </IconButton>
       )}
-      <Typography ml={0.5} color={'secondary.dark'} variant={'body1'}>
+      <Typography ml={0.5} variant={'body1'}>
         {totalLikes}
       </Typography>
     </Box>

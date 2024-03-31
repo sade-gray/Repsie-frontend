@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ref } from 'firebase/storage';
 import { contentStorage } from '../../firebase.ts';
 import Editor from '../CreateRecipe/components/Editor.tsx';
-import { theme } from '../../theme.ts';
+import { useTheme } from '@mui/material/styles';
 import SkillRating from '@component/Ratings/SkillRating';
 import TimeRating from '@component/Ratings/TimeRating/TimeRating.tsx';
 import CommentSection from '../MyRecipesPage/Components/CommentSection.tsx';
@@ -26,7 +26,7 @@ export function RecipePage() {
   const [recipe, setRecipe] = useState<RecipeData>();
   const [likes, setLikes] = useState(0);
   const [username, setUsername] = useState('');
-  const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
+  const isNotTablet = useMediaQuery(useTheme().breakpoints.up('lg'));
   const navigate = useNavigate();
   const { addSnack } = useSnackBar();
   const { user } = useAuth();

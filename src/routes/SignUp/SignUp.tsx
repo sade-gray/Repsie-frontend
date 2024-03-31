@@ -37,7 +37,7 @@ function SignUpStage1(props: any) {
       <Grid container justifyContent={'center'} mt={10}>
         <Typography>Or Sign Up using</Typography>
         <Grid container justifyContent={'center'} alignItems={'centre'}>
-          <IconButton color={'secondary'} onClick={signInWithGoogle}>
+          <IconButton onClick={signInWithGoogle}>
             <img src={GoogleIcon} alt={'Google Icon'} />
           </IconButton>
         </Grid>
@@ -72,7 +72,7 @@ function SignUpStage2(props: any) {
   return (
     <>
       <Box
-        sx={{ position: 'absolute', top: 0, left: 0, bgcolor: 'primary.main', width: '100vw', height: '80vh' }}
+        sx={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '80vh', backgroundColor: 'secondary.main' }}
         className={`slide-in-transition ${props.currStage === 1 ? 'signup-stage2-show' : 'signup-stage2-hide'}`}
       >
         <Container maxWidth={'xs'}>
@@ -93,7 +93,6 @@ function SignUpStage2(props: any) {
                     label="Username"
                     placeholder={'BexyChef123'}
                     variant="standard"
-                    color={'secondary'}
                     required
                     fullWidth
                   />
@@ -106,8 +105,8 @@ function SignUpStage2(props: any) {
                 // button is enabled only if all fields are filled, passwords match and the user has not pressed sign up already
                 disabled={username === ''}
                 size={'large'}
+                color="primary"
                 variant={'contained'}
-                color={'secondary'}
                 type={'submit'}
               >
                 {waitingForSubmission ? <CircularProgress size={25} /> : 'Submit'}
@@ -120,7 +119,7 @@ function SignUpStage2(props: any) {
       {success && (
         <Backdrop sx={{ zIndex: theme => theme.zIndex.drawer + 1 }} open={true}>
           <Container maxWidth={'xs'}>
-            <Grid container alignItems={'center'} justifyContent={'center'} bgcolor={'primary.dark'} p={4} gap={1} borderRadius={4}>
+            <Grid container alignItems={'center'} justifyContent={'center'} bgcolor={'secondary.dark'} p={4} gap={1} borderRadius={4}>
               <Typography variant={'h4'}>Thank you!</Typography>
             </Grid>
           </Container>

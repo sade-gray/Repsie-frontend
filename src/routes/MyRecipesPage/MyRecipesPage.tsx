@@ -11,12 +11,13 @@ import toastie from '../../assets/dummyPhotos/gourmet-toastie.jpg';
 import SkillRating from '@component/Ratings/SkillRating';
 import TimeRating from '@component/Ratings/TimeRating';
 import { AddRounded, Delete, Edit } from '@mui/icons-material';
-import { theme } from '../../theme.ts';
+import { useTheme } from '@mui/material/styles';
 import Likes from '@component/Likes/Likes.tsx';
 import { getPostLikes } from '@api/likes.ts';
 import useSnackBar from '@context/SnackBarProvider';
 
 export function MyRecipesPage() {
+  const theme = useTheme();
   const [createdRecipes, setCreatedRecipes] = useState<RecipeCardData[]>([]);
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const { user } = useAuth();
@@ -149,8 +150,8 @@ function CreateRecipeButton() {
     <Card sx={{ width: 350, height: 245, borderRadius: 3 }} variant={'outlined'}>
       <CardActionArea sx={{ height: '100%' }} onClick={() => navigate('/createRecipe/new')}>
         <Grid container alignItems={'center'} justifyContent={'center'} direction={'column'}>
-          <AddRounded sx={{ width: '50%', height: '50%' }} color={'secondary'} />
-          <Typography variant={'h4'} color={'secondary'}>
+          <AddRounded sx={{ width: '50%', height: '50%' }} color="primary" />
+          <Typography variant={'h4'} color="primary">
             Create
           </Typography>
         </Grid>

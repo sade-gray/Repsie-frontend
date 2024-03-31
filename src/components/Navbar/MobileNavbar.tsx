@@ -17,8 +17,8 @@ export default function MobileNavbar() {
 
   return (
     <>
-      <AppBar position="fixed" color="secondary" sx={{ top: 'auto', bottom: 0 }}>
-        <Grid container justifyContent={'space-around'} color={'primary'} alignItems={'center'}>
+      <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
+        <Grid container justifyContent={'space-around'} alignItems={'center'}>
           {/* Home button */}
           <IconButton color={'inherit'} aria-label="open drawer" size={'large'}>
             <Link to={'/'} aria-label={'home'} style={{ lineHeight: 0 }}>
@@ -28,7 +28,7 @@ export default function MobileNavbar() {
           {/* Search Button */}
           <MobileNavbarSearch />
           {/* Create Recipe button */}
-          <StyledFab color="secondary" aria-label="add">
+          <StyledFab color="primary" aria-label="add">
             <Link to={'/createRecipe/new'} style={{ lineHeight: 0 }}>
               <AddIcon fontSize={'large'} />
             </Link>

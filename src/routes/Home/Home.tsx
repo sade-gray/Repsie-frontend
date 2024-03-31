@@ -4,11 +4,12 @@ import { Divider, Skeleton, Stack, Typography, useMediaQuery } from '@mui/materi
 import { useEffect, useRef, useState } from 'react';
 import { RecipeCardData } from '../../types/recipeTypes';
 import useUserData from '@context/UserDataProvider';
+import { useTheme } from '@mui/material/styles';
 
 import { fetchRecipes } from '@api/recipe.ts';
-import { theme } from '../../theme.ts';
 
 export default function Home() {
+  const theme = useTheme();
   const [recipeData, setRecipeData] = useState<RecipeCardData[]>([]);
   const { userSavedRecipes } = useUserData();
   // We use useRef as this variable should not trigger re-renders.

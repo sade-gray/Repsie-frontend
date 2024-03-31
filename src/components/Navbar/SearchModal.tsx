@@ -21,7 +21,7 @@ function SearchModal({ open, setOpen, search, setSearch, searchResults, handleSe
             width: isNotTablet ? 400 : 300,
             minHeight: 400,
             maxHeight: 600,
-            bgcolor: 'primary.main',
+            bgcolor: 'background.paper',
             boxShadow: 24,
             p: 3,
             borderRadius: 2,
@@ -36,7 +36,6 @@ function SearchModal({ open, setOpen, search, setSearch, searchResults, handleSe
               placeholder={'Search for recipes'}
               variant={'outlined'}
               size={'small'}
-              color="secondary"
               fullWidth
               onSubmit={() => handleSearch(search)}
               sx={{
@@ -44,16 +43,16 @@ function SearchModal({ open, setOpen, search, setSearch, searchResults, handleSe
                 '& .MuiOutlinedInput-root': {
                   '& > fieldset': {
                     border: 'solid 2px',
-                    borderColor: 'secondary.main',
+                    borderColor: 'primary.main',
                   },
                 },
                 '& .MuiOutlinedInput-root:hover': {
-                  '& > fieldset': { borderColor: 'secondary.main' },
+                  '& > fieldset': { borderColor: 'primary' },
                 },
               }}
             ></TextField>
             {/* Search button */}
-            <Button onClick={() => handleSearch(search)} color="secondary" size="medium" variant="contained">
+            <Button onClick={() => handleSearch(search)} color="primary" size="medium" variant="contained">
               {loading ? <CircularProgress size={20} /> : <Search />}
             </Button>
           </Box>

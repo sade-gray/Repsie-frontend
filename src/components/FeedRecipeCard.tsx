@@ -117,9 +117,9 @@ export default function FeedRecipeCard(props: RecipeCardData) {
         <Likes totalLikes={likes} readOnly liked={likedByUser} />
         <IconButton sx={{ marginRight: '0.5rem' }} onClick={e => handleSaveToggle(e)}>
           {saved ? (
-            <BookmarkOutlinedIcon color={'secondary'} fontSize={'large'} />
+            <BookmarkOutlinedIcon color={'primary'} fontSize={'large'} />
           ) : (
-            <BookmarkBorderOutlinedIcon color={'secondary'} fontSize={'large'} />
+            <BookmarkBorderOutlinedIcon color={'primary'} fontSize={'large'} />
           )}
         </IconButton>
       </Grid>

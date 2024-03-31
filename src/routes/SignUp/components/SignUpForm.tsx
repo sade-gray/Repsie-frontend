@@ -64,7 +64,7 @@ export default function SignUpForm(props: any) {
         <Grid container alignItems={'flex-end'}>
           <EmailIcon sx={{ color: 'action.active', mr: 3, my: 0.5 }} />
           <Grid item xs={9} md={10}>
-            <TextField onChange={handleEmailChange} id="email-field" label="Email" variant="standard" color={'secondary'} required fullWidth />
+            <TextField onChange={handleEmailChange} id="email-field" label="Email" variant="standard" required fullWidth />
           </Grid>
         </Grid>
 
@@ -72,7 +72,7 @@ export default function SignUpForm(props: any) {
         <Grid container alignItems={'flex-end'}>
           <LockIcon sx={{ color: 'action.active', mr: 2, my: 1.5 }} />
           <Grid item xs={9} md={10}>
-            <FormControl sx={{ m: 1 }} variant={'standard'} color={'secondary'} fullWidth>
+            <FormControl sx={{ m: 1 }} variant={'standard'} fullWidth>
               <InputLabel htmlFor="password-field" required>
                 Password
               </InputLabel>
@@ -112,7 +112,7 @@ export default function SignUpForm(props: any) {
         <Grid container alignItems={'flex-end'}>
           <LockIcon sx={{ color: 'action.active', mr: 2, my: 1.5 }} />
           <Grid item xs={9} md={10}>
-            <FormControl sx={{ m: 1 }} variant={'standard'} color={'secondary'} fullWidth>
+            <FormControl sx={{ m: 1 }} variant={'standard'} fullWidth>
               <InputLabel htmlFor="confirm-password-field" required>
                 Confirm Password
               </InputLabel>
@@ -157,7 +157,6 @@ export default function SignUpForm(props: any) {
           }
           size={'large'}
           variant={'contained'}
-          color={'secondary'}
           type={'submit'}
         >
           {pendingSignup ? <CircularProgress size={25} /> : 'Sign up'}
