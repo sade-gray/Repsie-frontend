@@ -1,7 +1,7 @@
 import { grey, deepPurple } from '@mui/material/colors';
 import { PaletteMode } from '@mui/material';
 
-/* 
+/*
 About theme:
 This is where the website's theme is defined. It currently has two modes: light and dark
 For both light and dark mode, the primary color is purple.
@@ -18,7 +18,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
           },
           secondary: {
             main: grey[50],
-            dark: grey[200],
+            dark: grey[500],
           },
           text: {
             primary: grey[900],
@@ -36,7 +36,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
           },
           secondary: {
             main: grey[50],
-            dark: grey[200],
+            dark: grey[500],
           },
           background: {
             default: grey[900],
@@ -44,7 +44,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
           },
           text: {
             primary: grey[50],
-            secondary: grey[200],
+            dark: grey[200],
           },
         }),
   },

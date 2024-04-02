@@ -9,6 +9,7 @@ import useSnackBar from '@context/SnackBarProvider';
 import CommentOptions from '../../Recipe/components/CommentOptions.tsx';
 import { useTheme } from '@mui/material/styles';
 import { getUsernameAndNumber } from '@api/user.ts';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 /**
  * This is the comments section of a specific recipe's page.
@@ -124,6 +125,7 @@ function CommentComponent(props: Comment & any) {
   // const replyCount = props.replies.length;
   // TODO: Search message for any @s of other people and turn them into links
   const [username, setUsername] = useState('Anonymous');
+  const [liked, setLiked] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const { user } = useAuth();
@@ -139,14 +141,14 @@ function CommentComponent(props: Comment & any) {
       <Avatar alt={'User Avatar'} />
       {/* Comment body */}
       <Container sx={{ pl: 1, ml: 0 }}>
-        <Typography variant={'body1'} overflow={'clip'} maxWidth={'60vw'}>
+        <Typography variant={'body1'} overflow={'clip'} maxWidth={'60vw'} color={'secondary.dark'}>
           {username === user?.uid ? 'You' : username}
         </Typography>
         <Typography variant={'body1'}>{props.commentBody}</Typography>
         {/* Like and Reply Bar */}
         <Grid container gap={1} mt={1} alignItems={'center'} justifyContent={'space-between'}>
-          <IconButton sx={{ borderRadius: 4, gap: 0.5 }}>
-            <FavoriteBorderIcon color={'primary'} />
+          <IconButton sx={{ borderRadius: 4, gap: 0.5 }} onClick={() => setLiked(prev => !prev)}>
+            {liked ? <FavoriteIcon color={'primary'} /> : <FavoriteBorderIcon color={'primary'} />}
             {/* <Typography color={'text'}>{!props.likeCount && '0'}</Typography> */}
           </IconButton>
           {(!isNotTablet || isHovering) && <CommentOptions {...props} />}
