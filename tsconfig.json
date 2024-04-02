@@ -24,6 +24,7 @@
       "@component/*": ["components/*"],
       "@context/*": ["contexts/*"],
       "@api/*": ["api/*"],
+      "@routes/*": ["routes/*"]
     }
   },
   "include": [
