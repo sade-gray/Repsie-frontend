@@ -171,18 +171,18 @@ export function CreateRecipePage() {
             variant="outlined"
             label="Title"
             name="title"
-            color="secondary"
+            color="primary"
             onChange={e => setTitle(e.target.value)}
             value={title}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& > fieldset': {
                   border: 'solid 2px',
-                  borderColor: 'secondary.main',
+                  borderColor: 'primary.main',
                 },
               },
               '& .MuiOutlinedInput-root:hover': {
-                '& > fieldset': { borderColor: 'secondary.main' },
+                '& > fieldset': { borderColor: 'primary.main' },
               },
               marginBottom: '2rem',
             }}
@@ -196,11 +196,11 @@ export function CreateRecipePage() {
             alignItems: 'center',
             paddingY: 2,
             border: 'dashed 2px',
-            borderColor: 'secondary.main',
+            borderColor: 'primary.main',
             marginBottom: '2rem',
           }}
         >
-          <Button variant="contained" color="secondary" component="label" startIcon={<FileUpload />}>
+          <Button variant="contained" color="primary" component="label" startIcon={<FileUpload />}>
             Select Image
             <input hidden accept="image/png, image/jpeg" type="file" onChange={handleImageUpload} />
           </Button>
@@ -225,7 +225,7 @@ export function CreateRecipePage() {
         </Box>
         {/* Submit button */}
         <Box display={'flex'} justifyContent={'flex-end'} mb={'4rem'}>
-          <Button color="secondary" variant="contained" size="medium" type="submit" startIcon={<Create />}>
+          <Button color="primary" variant="contained" size="medium" type="submit" startIcon={<Create />}>
             {editing ? 'Save' : 'Create'}
           </Button>
         </Box>
@@ -266,14 +266,14 @@ function RecipeUploadProgressDisplay(props: any) {
           {step === 3 ? (
             <>
               <Typography>Success! Your recipe has been {props.editing ? 'saved' : 'created'}!</Typography>
-              <Button variant={'contained'} color={'secondary'} onClick={() => navigate(`/recipe/${props.recipeId}`)}>
+              <Button variant={'contained'} color={'primary'} onClick={() => navigate(`/recipe/${props.recipeId}`)}>
                 Check it out!
               </Button>
             </>
           ) : loading ? (
             <CircularProgress color={'secondary'} />
           ) : (
-            <CheckCircle color={'secondary'} fontSize={'large'} />
+            <CheckCircle color={'primary'} fontSize={'large'} />
           )}
         </Grid>
       </Box>
