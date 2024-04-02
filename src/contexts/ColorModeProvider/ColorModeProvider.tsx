@@ -6,7 +6,7 @@ import { getDesignTokens } from '../../theme';
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export function ColorModeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = React.useState<PaletteMode>('dark');
+  const [mode, setMode] = React.useState<PaletteMode>('light');
   // Function that toggles between dark mode and light mode.
   const colorMode = React.useMemo(
     () => ({
