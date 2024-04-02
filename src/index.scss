@@ -87,8 +87,8 @@ a {
 }
 
 .recipe--image {
-  max-height: 300px;
-  object-fit: cover;
+  max-height: 350px;
+  object-fit: contain;
   min-inline-size: 100%;
   max-width: 85vw;
 }
