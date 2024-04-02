@@ -62,22 +62,35 @@ export default function FeedRecipeCard(props: RecipeCardData) {
     }
 
     if (!saved) {
+      // Optimistically save recipe on the client
+      setSaved(true);
+      setUserSavedRecipes((prevUserSavedRecipes: RecipeCardData[]) => {
+        return [...prevUserSavedRecipes, props];
+      });
+      // Try save recipe on the backend
       const success = await saveRecipe(props.id, user.uid);
-      if (success) {
-        setUserSavedRecipes((prevUserSavedRecipes: RecipeCardData[]) => {
-          // we append the props as if it's a recipe card.
-          return [...prevUserSavedRecipes, props];
-        });
-        addSnack('Success! Saved the recipe.', 'success');
-      }
-      setSaved(prevSaved => !prevSaved);
-    } else {
-      const success = await unsaveRecipe(props.id, user.uid);
-      if (success) {
+      // Revert changes on failure
+      if (!success) {
+        addSnack('There was a problem saving the recipe', 'error');
         setUserSavedRecipes((prevUserSavedRecipes: RecipeCardData[]) => {
           return prevUserSavedRecipes.filter(recipe => recipe.id !== props.id);
         });
-        addSnack('Success! Unsaved the recipe.', 'success');
+        setSaved(false);
+      }
+    } else {
+      // Optimistically unsave recipe on the client
+      setSaved(false);
+      setUserSavedRecipes((prevUserSavedRecipes: RecipeCardData[]) => {
+        return prevUserSavedRecipes.filter(recipe => recipe.id !== props.id);
+      });
+      // Try unsave recipe on the backend
+      const success = await unsaveRecipe(props.id, user.uid);
+      // Revert Changes on failure
+      if (!success) {
+        setUserSavedRecipes((prevUserSavedRecipes: RecipeCardData[]) => {
+          return [...prevUserSavedRecipes, props];
+        });
+        addSnack('There was a problem unsaving the recipe', 'error');
       }
     }
   };
