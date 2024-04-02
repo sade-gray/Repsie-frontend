@@ -8,7 +8,7 @@ import useAuth from '@context/AuthProvider';
 import useSnackBar from '@context/SnackBarProvider';
 import CommentOptions from '../../Recipe/components/CommentOptions.tsx';
 import { useTheme } from '@mui/material/styles';
-// import { getUsernameAndNumber } from '@api/user.ts';
+import { getUsernameAndNumber } from '@api/user.ts';
 
 /**
  * This is the comments section of a specific recipe's page.
@@ -30,24 +30,39 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
   const commentCount = comments?.length;
 
   // Handles the submission of a comment
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) {
       addSnack('You must be logged in to comment', 'error');
       return;
     }
+    const newComment: Comment = {
+      // Add a temporary id to comment (it gets updated after api call)
+      id: 'pendingComment' + Math.random() * 2,
+      userId: user.uid,
+      commentBody: commentDraft,
+    };
+    // Optimistically add the new comment
+    addComment(newComment);
+    setCommentDraft('');
+    setShowControls(false);
 
-    postComment(recipeId, commentDraft, user.uid).then(success => {
-      // If the comment was successfully posted, fetch the comments again to update the comments list
-      if (success) {
-        getComments(recipeId).then(newComments => {
-          setComments(newComments);
-          setCommentDraft('');
-          setShowControls(false);
-        });
-        addSnack('Comment posted', 'success');
-      }
-    });
+    // TODO: Update backend api to return the id of the new comment (for optimistic updating)
+    const success = await postComment(recipeId, commentDraft, user.uid);
+    // If the comment was successfully posted, fetch the comments again to update the comments list
+    if (!success) {
+      removeComment(newComment.id);
+      addSnack('There was a problem posting your comment', 'success');
+    } else {
+      // re-render the component to include the new comment with the real id
+      getComments(recipeId).then(newComments => {
+        setComments(newComments);
+      });
+    }
+  };
+
+  const addComment = (newComment: Comment) => {
+    setComments(prevComments => [newComment, ...prevComments]);
   };
 
   // Removes a comment from the list of comments
@@ -94,7 +109,9 @@ export default function CommentSection({ recipeId }: { recipeId: string }) {
       {/* List of comments from each user */}
       <Stack spacing={3}>
         {/* Comment component. Contains the comment and its replies*/}
-        {comments?.map(comment => <CommentComponent {...comment} recipeId={recipeId} removeComment={removeComment} key={comment.id} />)}
+        {comments?.map(comment => (
+          <CommentComponent {...comment} recipeId={recipeId} removeComment={removeComment} addComment={addComment} key={comment.id} />
+        ))}
       </Stack>
     </Box>
   );
@@ -106,9 +123,16 @@ function CommentComponent(props: Comment & any) {
   // const [replying, setIsReplying] = useState(false);
   // const replyCount = props.replies.length;
   // TODO: Search message for any @s of other people and turn them into links
+  const [username, setUsername] = useState('Anonymous');
   const [isHovering, setIsHovering] = useState(false);
   const isNotTablet = useMediaQuery(theme.breakpoints.up('lg'));
   const { user } = useAuth();
+
+  useEffect(() => {
+    getUsernameAndNumber(props.userId).then(response => {
+      setUsername(response?.name || 'Anonymous');
+    });
+  }, [props.userId]);
 
   return (
     <Box display={'flex'} ml={5} gap={2} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
@@ -116,7 +140,7 @@ function CommentComponent(props: Comment & any) {
       {/* Comment body */}
       <Container sx={{ pl: 1, ml: 0 }}>
         <Typography variant={'body1'} overflow={'clip'} maxWidth={'60vw'}>
-          {props.userId === user?.uid ? 'You' : props.userId}
+          {username === user?.uid ? 'You' : username}
         </Typography>
         <Typography variant={'body1'}>{props.commentBody}</Typography>
         {/* Like and Reply Bar */}
