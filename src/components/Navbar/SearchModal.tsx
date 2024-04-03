@@ -46,14 +46,11 @@ function SearchModal({ open, setOpen, search, setSearch, searchResults, handleSe
                     borderColor: 'primary.main',
                   },
                 },
-                '& .MuiOutlinedInput-root:hover': {
-                  '& > fieldset': { borderColor: 'primary' },
-                },
               }}
             ></TextField>
             {/* Search button */}
             <Button onClick={() => handleSearch(search)} color="primary" size="medium" variant="contained">
-              {loading ? <CircularProgress size={20} /> : <Search />}
+              {loading ? <CircularProgress size={20} color="secondary" /> : <Search />}
             </Button>
           </Box>
           {/* Search results */}

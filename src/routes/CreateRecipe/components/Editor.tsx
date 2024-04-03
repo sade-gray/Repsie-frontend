@@ -104,7 +104,7 @@ export default function SlateEditor({ initRecipeData, setRecipeData, readOnly }:
         >
           {!readOnly && ( // If the editor is not read-only, render the buttons
             <Box>
-              <Box className="editor--buttons" display={'flex'} justifyContent={'flex-start'} flexWrap={'wrap'} color={'primary'}>
+              <Box display={'flex'} justifyContent={'flex-start'} flexWrap={'wrap'} color={'primary'}>
                 <MarkButton format="bold" icon="FormatBold" />
                 <MarkButton format="italic" icon="FormatItalic" />
                 <MarkButton format="underline" icon="FormatUnderlined" />
@@ -117,7 +117,7 @@ export default function SlateEditor({ initRecipeData, setRecipeData, readOnly }:
                 <BlockButton format="right" type="align" icon="FormatAlignRight" />
                 <BlockButton format="justify" type="align" icon="FormatAlignJustify" />
               </Box>
-              <Divider color="secondary" />
+              <Divider />
             </Box>
           )}
           {/* Input box */}
@@ -371,7 +371,7 @@ const MarkButton = ({ icon, format }: ButtonProps) => {
         toggleMark(editor, format);
       }}
     >
-      <Icon color={isMarkActive(editor, format) ? 'secondary' : 'disabled'}>
+      <Icon color={isMarkActive(editor, format) ? 'primary' : 'disabled'}>
         <DynamicIcon name={icon as string} />
       </Icon>
     </IconButton>
@@ -394,7 +394,7 @@ const BlockButton = ({ icon, format, type }: ButtonProps) => {
         toggleBlock(editor, format);
       }}
     >
-      <Icon color={isBlockActive(editor, format, type) ? 'secondary' : 'disabled'}>
+      <Icon color={isBlockActive(editor, format, type) ? 'primary' : 'disabled'}>
         <DynamicIcon name={icon as string} />
       </Icon>
     </IconButton>

@@ -1,11 +1,10 @@
 import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { RestaurantMenuOutlined, Logout } from '@mui/icons-material';
+import { RestaurantMenuOutlined, Logout, Person } from '@mui/icons-material';
 import { ListItemIcon } from '@mui/material';
 import useAuth from '@context/AuthProvider';
 import useUserData from '@context/UserDataProvider';
-import { deepOrange } from '@mui/material/colors';
 
 export default function HeaderProfileIcon() {
   const { user, signOut } = useAuth();
@@ -28,7 +27,7 @@ export default function HeaderProfileIcon() {
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="Open settings">
           <IconButton sx={{ paddingRight: 1 }} onClick={handleOpenUserMenu}>
-            <Avatar sx={{ bgcolor: deepOrange[500] }} src={user?.photoURL || ''} alt={username} />
+            <Avatar sx={{ bgcolor: 'secondary' }} src={user?.photoURL || ''} alt={username} />
           </IconButton>
         </Tooltip>
       </Box>
@@ -46,21 +45,10 @@ export default function HeaderProfileIcon() {
         }}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
-        // This is the styling for the menu options
-        slotProps={{
-          paper: {
-            sx: {
-              '& .MuiAvatar-root': {
-                mr: 1,
-                height: 35,
-              },
-            },
-          },
-        }}
       >
         <Link to={user ? '/UserProfile/accountsettings' : '/signin'}>
           <MenuItem onClick={handleCloseUserMenu}>
-            <Avatar sx={{ width: '35px', height: '35px' }} />
+            <Person sx={{ width: '35px', height: '35px', mr: 1, color: 'primary.dark' }} />
             <Typography>{user ? 'Profile' : 'Sign in'}</Typography>
           </MenuItem>
         </Link>

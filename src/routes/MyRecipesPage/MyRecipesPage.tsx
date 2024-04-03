@@ -112,7 +112,7 @@ function RecipeCard(props: RecipeCardData) {
         {/* Recipe image */}
         <CardMedia component={'img'} height={150} image={image} />
         {/* Likes */}
-        <Box position={'absolute'} top={125} bgcolor={'white'} borderRadius={2} right={0}>
+        <Box position={'absolute'} top={125} borderRadius={2} right={0}>
           <Likes totalLikes={likes} readOnly />
         </Box>
       </CardActionArea>
