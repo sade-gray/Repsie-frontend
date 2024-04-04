@@ -7,9 +7,10 @@ import './styles.css';
 import { EditorProps } from './editorTypes';
 import ActionBar from './ActionBar';
 import { handleKeyDown } from './helpers';
-
+import { Leaf } from './Leaf';
+import { Element } from './Element';
 /**
- * Component for rendering a Slate editor.
+ * Component for editing a recipe
  *
  * @param {EditorProps} props - The component props.
  * @param {any} props.recipeData - The recipe data.
@@ -54,72 +55,3 @@ export default function RecipeEditor({ initRecipeData, setRecipeData }: EditorPr
     </div>
   );
 }
-
-/**
- * Renders an element based on its type.
- *
- * @param attributes - The attributes to be applied to the element.
- * @param children - The children elements of the element.
- * @param element - The element object containing the type and align properties.
- * @returns The rendered element based on its type.
- */
-const Element = ({ attributes, children, element }: any) => {
-  const style = { textAlign: element.align };
-  switch (element.type) {
-    case 'heading-one':
-      return (
-        <h1 style={style} {...attributes}>
-          {children}
-        </h1>
-      );
-    case 'heading-two':
-      return (
-        <h2 style={style} {...attributes}>
-          {children}
-        </h2>
-      );
-    case 'bulleted-list':
-      return (
-        <ul className="bulleted--list" {...attributes}>
-          {children}
-        </ul>
-      );
-    case 'numbered-list':
-      return (
-        <ol className="numbered--list" {...attributes}>
-          {children}
-        </ol>
-      );
-    case 'list-item':
-      return <li {...attributes}>{children}</li>;
-    default:
-      return (
-        <p style={style} {...attributes}>
-          {children}
-        </p>
-      );
-  }
-};
-
-/**
- * Renders a leaf node in the editor.
- * @param {Object} attributes - The attributes for the leaf node.
- * @param {ReactNode} children - The children of the leaf node.
- * @param {Object} leaf - The properties of the leaf node.
- * @returns {ReactNode} The rendered leaf node.
- */
-const Leaf = ({ attributes, children, leaf }: any) => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>;
-  }
-
-  if (leaf.italic) {
-    children = <em>{children}</em>;
-  }
-
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
-
-  return <span {...attributes}>{children}</span>;
-};

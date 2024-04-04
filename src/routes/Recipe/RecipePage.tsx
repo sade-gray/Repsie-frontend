@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { ref } from 'firebase/storage';
 import { contentStorage } from '../../firebase.ts';
-import Editor from '../CreateRecipe/components/Editor.tsx';
+import Editor from '@component/RecipeViewer';
 import { useTheme } from '@mui/material/styles';
 import SkillRating from '@component/Ratings/SkillRating';
 import TimeRating from '@component/Ratings/TimeRating/TimeRating.tsx';
@@ -106,8 +106,8 @@ export function RecipePage() {
           </Box>
 
           {/* Recipe Content */}
-          <Box flexWrap={'wrap'}>
-            <Editor readOnly initRecipeData={JSON.parse(recipe.recipe || '')} />
+          <Box my={2}>
+            <Editor initRecipeData={JSON.parse(recipe.recipe || '')} />
           </Box>
 
           {/* Comments Section */}
