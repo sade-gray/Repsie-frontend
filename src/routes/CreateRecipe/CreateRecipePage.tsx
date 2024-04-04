@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Editor from './components/Editor';
+import RecipeEditor from '../../components/RecipeEditor';
 import './styles.scss';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Check, CheckCircle, Create, FileUpload } from '@mui/icons-material';
@@ -210,7 +210,7 @@ export function CreateRecipePage() {
         </Box>
         {/* Editor */}
         <Box mb={'2rem'}>
-          <Editor initRecipeData={initRecipeData} recipeData={recipeData} setRecipeData={setRecipeData} />
+          <RecipeEditor initRecipeData={initRecipeData} recipeData={recipeData} setRecipeData={setRecipeData} />
         </Box>
         {/* Ratings */}
         <Box display={'flex'} justifyContent={'space-between'} mb={'2rem'}>
