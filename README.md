@@ -1,5 +1,8 @@
 # React + TypeScript + Vite
 
+## Demo
+Live production build can be accessed [here](https://repsie.web.app/).
+
 ## How to run
 1. cd frontend
 2. run `npm install`
